@@ -48,7 +48,21 @@ class CallBackForm {
 
     public function addCallBackRequest() {
 	$unixtime = time();
-	$values = array(
+	
+	$user = array(
+	    array('name' => $this->_fname, 'email' => $this->_email, 'telephone' => $this->_tel,)
+	);
+	
+	$this->_crud->dbSelect('callbackuser', email, $this->_email);
+	
+	$enquiry = array(
+	    array('user_id' => '1', 'instanceId' => $this->_instId, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
+	);
+	
+	$this->_crud->dbInsert('callbackuser', $user);
+	$this->_crud->dbInsert('callbackuserenquiry', $enquiry);
+	
+	/*$values = array(
 	    array('instanceId' => $this->_instId, 'name' => $this->_fname, 'email' => $this->_email,
 		'telephone' => $this->_tel, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
 	);
@@ -57,7 +71,7 @@ class CallBackForm {
 	    echo "Row successfuly inserted!<br />";
 	} else {
 	    echo "Unable to insert the row! <br />";
-	}
+	}*/
     }
 
     private function setInstId() {
