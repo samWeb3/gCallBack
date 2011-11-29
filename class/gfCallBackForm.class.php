@@ -49,29 +49,45 @@ class CallBackForm {
     public function addCallBackRequest() {
 	$unixtime = time();
 	
-	$user = array(
-	    array('name' => $this->_fname, 'email' => $this->_email, 'telephone' => $this->_tel,)
-	);
+	$result = $this->_crud->dbSelect('callbackuser', 'email', $this->_email);
+	foreach ($result as $r){	    
+	    $email = $r[email];
+	}
 	
-	$this->_crud->dbSelect('callbackuser', email, $this->_email);
-	
-	$enquiry = array(
-	    array('user_id' => '1', 'instanceId' => $this->_instId, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
-	);
-	
-	$this->_crud->dbInsert('callbackuser', $user);
-	$this->_crud->dbInsert('callbackuserenquiry', $enquiry);
-	
-	/*$values = array(
-	    array('instanceId' => $this->_instId, 'name' => $this->_fname, 'email' => $this->_email,
-		'telephone' => $this->_tel, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
-	);
-	$result = $this->_crud->dbInsert('gccallback', $values);
-	if ($result){
-	    echo "Row successfuly inserted!<br />";
+	if ($email == $this->_email){ //if email exist
+	    echo "Email exist <br>";
+	    
+	    //get the user id of the existing user
+	    $user_id = $r[user_id]; 
+	    echo "User Id of the email address $email is $user_id <br>";
+	    
+	    //use the id of existing user to insert into the $enquiry database
+	    $enquiry = array(
+		array('user_id' => $user_id, 'instanceId' => $this->_instId, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
+	    );
+	    $this->_crud->dbInsert('callbackuserenquiry', $enquiry);	    
 	} else {
-	    echo "Unable to insert the row! <br />";
-	}*/
+	    echo "Email doesn't exist <br>";
+	    
+	    //Insert new user into the callbackuser table
+	    $user = array(
+		array('name' => $this->_fname, 'email' => $this->_email, 'telephone' => $this->_tel)
+	    );	    
+	    $this->_crud->dbInsert('callbackuser', $user);
+
+	    //Get the user Id of the inserted user
+	    $result = $this->_crud->dbSelect('callbackuser', 'email', $this->_email);	
+	    foreach ($result as $r){
+		$user_id = $r[user_id];
+		echo "<br />user ID: " .$user_id."<br />";	    
+	    }
+
+	    //Used the retrieved user id to insert rest of info in enquiry table
+	    $enquiry = array(
+		array('user_id' => $user_id, 'instanceId' => $this->_instId, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
+	    );
+	    $this->_crud->dbInsert('callbackuserenquiry', $enquiry);	    
+	}
     }
 
     private function setInstId() {
