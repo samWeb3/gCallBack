@@ -18,21 +18,35 @@ class CRUD {
 	switch ($name) {
 	    case 'username':
 		$this->username = $value;
-		echo "Username Set: " . $value . "<br />";
+		//echo "Username Set: " . $value . "<br />";
 		break;
 
 	    case 'password':
 		$this->password = $value;
-		echo "Password Set: " . $value . "<br />";
+		//echo "Password Set: " . $value . "<br />";
 		break;
 
 	    case 'dsn':
 		$this->dsn = $value;
-		echo "DSN Set: " . $value . "<br />";
+		//echo "DSN Set: " . $value . "<br />";
 		break;
 
 	    default:
 		throw new Exception("$name is invalid");
+	}
+    }
+    
+    public function getDbConn(){
+	return $this->_dbConn;
+    }
+    
+    //To Test and Delete if not working
+    public function __get($name){
+	switch (strtolower($name)) {
+	    case 'dbConn';
+		//echo $this->_dbConn;
+		return $this->_dbConn;
+		break;
 	}
     }
 
@@ -63,8 +77,8 @@ class CRUD {
 	if (!$this->_dbConn instanceof PDO) {
 	    $this->_dbConn = new PDO($this->dsn, $this->username, $this->password);
 	    $this->_dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	}
-	echo "Connection successful!";
+	}	
+	//echo "Connection successful!";
     }
     
 
@@ -78,16 +92,14 @@ class CRUD {
      * @param array $values  values retrieved from the array
      */
     public function dbInsert($table, $values) {
-	$this->conn();
-	echo "inside insert";
+	$this->conn();	
 
 	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
 	echo "Fieldnames: " . $fieldnames . "<br>";
-
-	foreach ($fieldnames as $fn) {
+	/*foreach ($fieldnames as $fn) {
 	    echo $fn . "<br>";
-	}
+	}*/
 
 	$sql = "INSERT INTO $table";
 
@@ -155,6 +167,50 @@ class CRUD {
 	  } else {
 	  echo "Row doesn't exist!";
 	  } */
+    }
+    
+    /**
+     *
+     * @execute a raw query
+     *
+     * @access public
+     *
+     * @param string $sql
+     *
+     * @return array
+     *
+     */
+    public function rawSelect($sql) {
+	$this->conn();
+	return $this->_dbConn->query($sql);
+    }
+    
+    public function dbJoinTable($tablenames, $fieldnames, $id){
+	print_r($tablenames);
+	echo "<br>";
+	print_r($fieldnames);
+	echo "<br>ID: ".$id;
+	
+	$fields = implode(', ', $fieldnames);
+	echo "<br />Fields: " . $fields."<br />";
+	
+	$tables = implode(', ', $tablenames);
+	echo "<br />Tables: " .$tables."<br />";
+	
+	//$tablePlusId = implode('.'.user_id.', ', $tablenames).".id".$id;
+	
+	foreach ($tablenames as $tn){
+	    echo $tn.".".$id."<br>";
+	}
+	
+	//for ($i = 0; $i < count($tablenames); $i++){
+	    echo $tablenames[1];
+	//}
+	
+	echo "<br /> Table plus Id: ". $tablePlusId."<br>";
+	
+	$sql = "SELECT ".$fields." FROM ".$tables. " WHERE ";
+	echo "SQL So far: ".$sql;
     }
     
     //***********************************************************************

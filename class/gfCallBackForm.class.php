@@ -15,19 +15,7 @@ class CallBackForm {
     private $_enquiry;    
 
     public function __construct($fname, $email, $tel, $enquiry) {
-	if (!$fname) {
-	    throw new Exception("Plese supply first name");
-	}
-	if (!$email) {
-	    throw new Exception("Plese supply email");
-	}
-	if (!$tel) {
-	    throw new Exception("Plese supply telephone");
-	}
-	if (!$enquiry) {
-	    throw new Exception("Plese supply your enquiry");
-	}
-
+	
 	$this->_fname = $fname;
 	$this->_email = $email;
 	$this->_tel = $tel;
@@ -55,7 +43,7 @@ class CallBackForm {
 	}
 	
 	if ($email == $this->_email){ //if email exist
-	    echo "Email exist <br>";
+	    echo "Email exist: <br>";
 	    
 	    //get the user id of the existing user
 	    $user_id = $r[user_id]; 
@@ -67,7 +55,7 @@ class CallBackForm {
 	    );
 	    $this->_crud->dbInsert('callbackuserenquiry', $enquiry);	    
 	} else {
-	    echo "Email doesn't exist <br>";
+	    echo "Email doesn't exist: <br>";
 	    
 	    //Insert new user into the callbackuser table
 	    $user = array(
@@ -105,7 +93,7 @@ class CallBackForm {
 
     private function sendEmail() {
 	$ow_email = $this->getOwnerEmail();
-	echo "Email to be sent to : $ow_email using gfEmailPostmark class";
+	echo "Email to be sent to : $ow_email using gfEmailPostmark class<br />";
 	/* $subject = "Hey Son!";
 	  $message = "Did you receive my message";
 	  $email = new gfEmailPostmark();
