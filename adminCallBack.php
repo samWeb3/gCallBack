@@ -1,9 +1,9 @@
 <?php
-require_once 'class/gfAdminCallBack.class.php';
-
-
-
-?>
+    //Include the PS_Pagination class
+    require_once 'class/gfAdminCallBack.class.php';    
+    require_once 'FirePHP/firePHP.php';
+    ob_start();
+?>   
 
 <!DOCTYPE html>
 <html>
@@ -39,60 +39,29 @@ require_once 'class/gfAdminCallBack.class.php';
 		font-weight: bold;
 	    }
 
-
 	</style>
-	
+
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/application.js" type="text/javascript" charset="utf-8"></script>
-
+	<script src="js/recordFilter.js" type="text/javascript" charset="utf-8"></script>
     </head>
-    
     <body>
-	
-	
-	<?php
-	try {
-	    $acb = new AdminCallBack();
-	    $result = $acb->viewCallBacks();
-	?>
-	
-	Total Call Backs: <?php echo count($result) ?>
-	
-	
-	<div id="middle">
-	    <div id="search">
-	    <label for="filter">Filter Record: </label> <input type="text" name="filter" value="" id="filter" />
-	</div>
-	<table cellpadding="1" cellspacing="1" id="resultTable">
-	    <thead>
-	    <tr>
-		<th>Date: </th>
-		<th>Name: </th>
-		<th>Email: </th>
-		<th>Phone No: </th>
-		<th>Enquiry</th>
-	    </tr>
-	    </thead>
-	<?php
-	    
-	
-	    foreach ($result as $r) {
-		//echo $r[callBackDate]."<br/>";
-		$date = date('d.M.Y', $r[callBackDate])."<br/>";
-		echo "<tr><td>".$date."</td><td>".$r[name]."</td><td>".$r[email]."</td><td>".$r[telephone]."</td><td>".$r[enquiry]."</td></tr>";
-		/*foreach ($r as $k => $v) {	    
-		   echo $k . " = " . $v;
-		   echo "<br>";
-		}
-		echo "<br>";*/
-	    }
-	    
-	} catch (Exception $ex) {
-	    $ex->getMessage();
-	}
-	?>
-	</table>
-	</div>
+<?php
+
+    $firephp = FirePHP::getInstance(true);
+    fb($var);
+    fb($var, 'Label');
+    Fb::log("log message");
+    Fb::info("information");
+    Fb::warn("Warning");
+
+    try {
+	$adminCallBack = new AdminCallBack();
+	$result = $adminCallBack->viewPaginateCallBacks(6, 5);	
+    } catch (Exception $ex){
+	echo $ex->getMessage();
+    }
+?>
     </body>
 </html>
+

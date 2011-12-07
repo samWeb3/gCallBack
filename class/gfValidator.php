@@ -471,7 +471,7 @@ class Validator
             } else {
                 $this->_errors[$fieldName] = ucfirst($fieldName) . " must be a minimum of $min characters.";
             }
-        }
+        } 
         // If a maximum has been set, and the string is too long, create error message
         if (is_numeric($max) && strlen($text) > $max) {
             if ($min == 0) {
@@ -479,7 +479,7 @@ class Validator
             } else {
                 $this->_errors[$fieldName] = ucfirst($fieldName) . " must be between $min and $max characters.";
             }
-        }
+        } 
     }
 
     /**

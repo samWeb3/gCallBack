@@ -44,8 +44,6 @@ th.sorted-asc, th.sorted-desc  { color: black; }
 
 td {
     background-color: white;
-    font-size: 12px;
-    padding: 5px;
 }
 td.odd {
     background-color: #666;
