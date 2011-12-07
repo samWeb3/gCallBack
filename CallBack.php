@@ -1,5 +1,10 @@
 <?php
 require_once 'class/gfCallBackForm.class.php';
+require_once 'FirePHP/firePHP.php';
+//ob_start();
+
+//Set the Debugging mode to True
+Debug::setDebug(true);
 ?>
 
 <!DOCTYPE html>
@@ -44,19 +49,20 @@ require_once 'class/gfCallBackForm.class.php';
     
     $missing = null;
     $errors = null;
+    $success = null;
     
     if (filter_has_var(INPUT_POST, request_callback)){	//better than isset as it returns true even in case of an empty string 	
 	try {
 	    require_once 'class/gfValidator.php';
 	    
-	    $required = array('user_fname', 'user_email', 'user_tel', 'user_enquiry');
+	    $required = array('user_name', 'user_email', 'user_tel', 'user_enquiry');
 	    
 	    //retrieve the input and check whether any fields are missing	    
 	    $val = new Validator($required);
 	    
 	    //Validate each field and generate errror
-	    $val->checkTextLength('user_fname', 3, 30);			   
-	    $val->removeTags('user_fname');
+	    $val->checkTextLength('user_name', 3, 30);			   
+	    $val->removeTags('user_name');
 	    $val->isEmail('user_email');	    
 	    $val->matches('user_tel', '/[0-9][3,11]/');
 	    $val->checkTextLength('user_enquiry', 5, 500);
@@ -65,7 +71,7 @@ require_once 'class/gfCallBackForm.class.php';
 	    //check the validation test has been set for each required field
 	    $filtered = $val->validateInput();
 	    
-	    $fname = $filtered['user_fname'];
+	    $fname = $filtered['user_name'];
 	    $email = $filtered['user_email'];
 	    $tel = $filtered['user_tel'];
 	    $enquiry = $filtered['user_enquiry'];
@@ -75,8 +81,14 @@ require_once 'class/gfCallBackForm.class.php';
 	    
 	    //if nothing is mission or no errors is thrown
 	    if (!$missing && !$errors){
-		try {
-		    $cbf = new CallBackForm($fname, $email, $tel, $enquiry);
+		try {	    
+		   
+		    $cbf = new CallBackForm($fname, $email, $tel, $enquiry);		    
+		    
+		    $submitted = "CallBack: Congratulation! Your Form has been submitted!";	
+		    Fb::info($submitted);		    
+		    unset($_POST['user_name'], $_POST['user_email'], $_POST['user_tel'], $_POST['user_enquiry']);
+		    
 		} catch (Exception $e) {
 		    echo $e->getMessage();
 		}		
@@ -100,18 +112,18 @@ require_once 'class/gfCallBackForm.class.php';
 	    <ul>
 		<li>
 		    <?php 
-			if (isset($errors['user_fname'])) { 
-			    echo '<span class="warning">' . $errors['user_fname'] . '</span><br />'; 				
+			if (isset($errors['user_name'])) { 
+			    echo '<span class="warning">' . $errors['user_name'] . '</span><br />'; 				
 			} 
 		    ?>
 		    <span class="leftWidth">First Name:</span>
-			<input type="text" maxlength="32" size="20" name="user_fname"
+			<input type="text" maxlength="32" size="20" name="user_name"
 			   <?php
 				//Sticky Form: The Essential Guide to Dreamweaver CS4 with CSS, Ajax, and PHP
 				if (isset($missing)) { //if any field a are missing retain the info
 				    //ENT_COMPAT: converts double quote to $quote; but lives single quote alone
-				    echo 'value ="'.htmlentities($_POST['user_fname'], ENT_COMPAT, 'UTF-8').'"';
-				}
+				    echo 'value ="'.htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8').'"';
+				}				
 			    ?>
 			/>
 		</li>		

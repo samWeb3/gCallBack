@@ -3,6 +3,8 @@
 /**
  * http://www.phpro.org/classes/PDO-CRUD.html
  */
+require_once 'gfDebug.php';
+
 class CRUD {
 
     private $_dbConn;
@@ -18,17 +20,23 @@ class CRUD {
 	switch ($name) {
 	    case 'username':
 		$this->username = $value;
-		//echo "Username Set: " . $value . "<br />";
+		if (Debug::getDebug()){
+		    fb($value, "Username", FirePHP::INFO);		    
+		}
 		break;
 
 	    case 'password':
 		$this->password = $value;
-		//echo "Password Set: " . $value . "<br />";
+		if (Debug::getDebug()){
+		    fb($value, "Password", FirePHP::INFO);		    
+		}
 		break;
 
 	    case 'dsn':
 		$this->dsn = $value;
-		//echo "DSN Set: " . $value . "<br />";
+		if (Debug::getDebug()){
+		    fb($value, "DSN Set", FirePHP::INFO);		    
+		}		
 		break;
 
 	    default:
@@ -43,8 +51,7 @@ class CRUD {
     //To Test and Delete if not working
     public function __get($name){
 	switch (strtolower($name)) {
-	    case 'dbConn';
-		//echo $this->_dbConn;
+	    case 'dbConn';		
 		return $this->_dbConn;
 		break;
 	}
@@ -78,7 +85,9 @@ class CRUD {
 	    $this->_dbConn = new PDO($this->dsn, $this->username, $this->password);
 	    $this->_dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}	
-	//echo "Connection successful!";
+	if (Debug::getDebug()){
+	    FB::info("Connection successful!");	    
+	}
     }
     
 
@@ -96,7 +105,10 @@ class CRUD {
 
 	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
-	echo "Fieldnames: " . $fieldnames . "<br>";
+	if (Debug::getDebug()){
+	    fb($fieldnames, "Fieldnames", FirePHP::INFO);
+	    //echo "Fieldnames: " . $fieldnames . "<br>";
+	}
 	/*foreach ($fieldnames as $fn) {
 	    echo $fn . "<br>";
 	}*/
@@ -105,23 +117,32 @@ class CRUD {
 
 	//set the field name
 	$fields = '(' . implode(', ', $fieldnames) . ')';
-	echo "Fields: " . $fields . "<br>";
+	if (Debug::getDebug()){
+	    fb($fields, "Fields", FirePHP::INFO);	    
+	}
 	//set the placeholder values
 	$bound = '(:' . implode(', :', $fieldnames) . ')';
-	echo "Bounds: " . $bound . "<br>";
+	if (Debug::getDebug()){
+	    fb($bound, "Bounds", FirePHP::INFO);
+	    //echo "Bounds: " . $bound . "<br>";
+	}
 
 	//put the query together
 	$sql .= $fields . ' VALUES ' . $bound;
-	echo "Sql: " . $sql . "<br>";
+	if (Debug::getDebug()){
+	    fb($sql, "SQL Query", FirePHP::INFO);	    
+	}	
 	//Prepare statement
 	$stmt = $this->_dbConn->prepare($sql);
 
 	/* Iterate through multi-dimentional array and execute statement */
 	foreach ($values as $vals) {
 	    foreach ($vals as $v) {
-		echo $v;
+		if (Debug::getDebug()){
+		    fb($v, "Values", FirePHP::INFO);
+		}		
 	    }
-	    echo "<br>";
+	    
 	    $result = $stmt->execute($vals);
 	}
 	
@@ -186,31 +207,43 @@ class CRUD {
     }
     
     public function dbJoinTable($tablenames, $fieldnames, $id){
-	print_r($tablenames);
-	echo "<br>";
+	
+	
+	print_r($tablenames);	
 	print_r($fieldnames);
-	echo "<br>ID: ".$id;
+	
 	
 	$fields = implode(', ', $fieldnames);
-	echo "<br />Fields: " . $fields."<br />";
+	if (Debug::getDebug()){
+	   echo "<br />Fields: " . $fields."<br />"; 
+	}	
 	
 	$tables = implode(', ', $tablenames);
-	echo "<br />Tables: " .$tables."<br />";
+	if (Debug::getDebug()){
+	    echo "<br />Tables: " .$tables."<br />";
+	}
 	
 	//$tablePlusId = implode('.'.user_id.', ', $tablenames).".id".$id;
 	
 	foreach ($tablenames as $tn){
-	    echo $tn.".".$id."<br>";
+	    if (Debug::getDebug()){
+		echo $tn.".".$id."<br>";
+	    }	    
 	}
 	
 	//for ($i = 0; $i < count($tablenames); $i++){
 	    echo $tablenames[1];
 	//}
 	
-	echo "<br /> Table plus Id: ". $tablePlusId."<br>";
+	if (Debug::getDebug()){    
+	    echo "<br /> Table plus Id: ". $tablePlusId."<br>";
+	}
 	
 	$sql = "SELECT ".$fields." FROM ".$tables. " WHERE ";
-	echo "SQL So far: ".$sql;
+	
+	if (Debug::getDebug()){
+	    echo "SQL So far: ".$sql;
+	}
     }
     
     //***********************************************************************
@@ -218,9 +251,12 @@ class CRUD {
     //***********************************************************************
     public function dbUpdate($table, $fieldname, $value, $pk, $id){
 	$this->conn();	
-	echo "Tablename: ".$table."<br>";
-	echo "Fieldname: ".$pk."<br>";
-	echo "ID: ".$id."<br>";
+	
+	if (Debug::getDebug()){
+	    echo "Tablename: ".$table."<br>";
+	    echo "Fieldname: ".$pk."<br>";
+	    echo "ID: ".$id."<br>";
+	}
 	
 	$result = $this->chkRowExist($table, $pk, $id);
 	if (!$result){
@@ -233,7 +269,9 @@ class CRUD {
 	
 	if ($stmt->rowCount() > 0) {
 	    //return $this->_success = true;
-	    echo "Row $id successfully updated! ";
+	    if (Debug::getDebug()){
+		echo "Row $id successfully updated! ";
+	    }	    
 	}
 	
 	/*if ($stmt->rowCount() > 0) {
@@ -266,8 +304,9 @@ class CRUD {
 	$stmt->bindParam(':id', $id); //use parameterized sql stmt to prevent sql injection
 	$stmt->execute();
 	if ($stmt->rowCount() > 0) {
-	    //return $this->_success = true;
-	    echo "Row $id Deleted ";
+	    if (Debug::getDebug()){
+		echo "Row $id Deleted ";
+	    }
 	}
     }
 
@@ -280,14 +319,18 @@ class CRUD {
 		echo ("Row $id Doesn't Exist <br>");
 	    } else {
 	    //if ($result) {
-		echo "Row " . $id . " Exists!!! <br>";
+		if (Debug::getDebug()){
+		    echo "Row " . $id . " Exists!!! <br>";
+		}
 		$sql = "DELETE FROM $table WHERE $fieldname = :id";
 		$stmt = $this->_dbConn->prepare($sql);
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0) {
-		    //return $this->_success = true;
-		    echo "Row $id Deleted <br>";
+		    if (Debug::getDebug()){
+			//return $this->_success = true;
+			echo "Row $id Deleted <br>";
+		    }
 		}
 	    }
 		//echo "Row " . $id . " Deleted!<br>";
