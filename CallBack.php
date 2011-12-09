@@ -1,7 +1,6 @@
 <?php
 require_once 'class/gfCallBackForm.class.php';
 require_once 'FirePHP/firePHP.php';
-//ob_start();
 
 //Set the Debugging mode to True
 Debug::setDebug(true);

@@ -1,7 +1,7 @@
 <?php
     //Include the PS_Pagination class
-    require_once '../class/gfAdminCallBack_pre.class.php';
-    require_once '../class/ps_pagination_bak.php';
+    require_once 'gfAdminCallBack_pre.class.php';
+    require_once 'ps_pagination_bak.php';
     
     //Connect to mysql db
 	$conn = mysql_connect('localhost','root','root123');

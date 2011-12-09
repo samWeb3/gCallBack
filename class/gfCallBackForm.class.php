@@ -1,6 +1,6 @@
 <?php
 
-require_once 'gfDebug.php';
+//require_once 'gfDebug.php';
 require_once 'gfCRUD.class.php';
 require_once 'gfInstances.class.php';
 require_once 'gfOwnersManage.class.php';
@@ -14,7 +14,6 @@ class CallBackForm {
     private $_email;
     private $_tel;
     private $_enquiry;   
-    //private static $_debug = false;
 
     public function __construct($name, $email, $tel, $enquiry) {
 	
@@ -34,6 +33,7 @@ class CallBackForm {
 	$this->_crud->username = 'root';
 	$this->_crud->password = 'root123';
 	$this->_crud->dsn = "mysql:dbname=griff;host=localhost";
+	$this->_crud->conn();
     }
 
     public function addCallBackRequest() {
@@ -42,6 +42,7 @@ class CallBackForm {
 	$result = $this->_crud->dbSelect('callbackuser', 'email', $this->_email);
 	foreach ($result as $r){	    
 	    $email = $r[email];
+	    $tel = $r[telephone];
 	}
 	
 	if ($email == $this->_email){ //if email exist
@@ -53,7 +54,7 @@ class CallBackForm {
 	    $user_id = $r[user_id]; 
 	    
 	    if (Debug::getDebug()){
-		$message = "CallBackForm: User Id of the email address".$email." is ".$user_id;
+		$message = "CallBackForm: User Id of the email address".$email." is ".$user_id."and Tel is: ".$tel;
 		Fb::info($message);
 	    }
 	    
@@ -61,7 +62,25 @@ class CallBackForm {
 	    $enquiry = array(
 		array('user_id' => $user_id, 'instanceId' => $this->_instId, 'enquiry' => $this->_enquiry, 'callBackDate' => $unixtime)
 	    );
-	    $this->_crud->dbInsert('callbackuserenquiry', $enquiry);	    
+	    
+	    $this->_crud->dbInsert('callbackuserenquiry', $enquiry);
+	    
+	    //if telephone retrived from database is not equal to one passed on the form
+	    if ($tel != $this->_tel){
+		if (Debug::getDebug()){
+		    Fb::warn("Need to update the database!");
+		    fb($user_id, "User ID");
+		    fb($this->_tel, "New Telephone");
+		    fb($tel, "Old Telephone");
+		    $this->_crud->dbUpdate('callbackuser', 'telephone', $this->_tel, 'user_id', $user_id);
+		    
+		}		
+	    } else {
+		if (Debug::getDebug()){
+		    Fb::info("Telephone no is same");
+		}		
+	    }
+	    
 	} else {
 	    if (Debug::getDebug()){
 		Fb::info("CallBackForm: Email doesn't exist:");
@@ -126,8 +145,8 @@ class CallBackForm {
      * @param bool $debug Set to TRUE to enable debug messages
      * @return void
      */
-    public static function setDebug($debug) {
+    /*public static function setDebug($debug) {
 	self::$_debug = $debug;
-    }
+    }*/
 }
 ?>

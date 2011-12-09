@@ -1,0 +1,78 @@
+ul, ol, dl{padding:0;}
+
+#container{    
+    margin:0 auto;
+    width:818px;
+    text-align:left;
+    position:relative;
+    padding:2em 0;
+}
+p.dashboard{
+    position: relative;
+    width: 240px;
+    height: 135px;   
+    margin: 5px 10px;
+}
+span.data{
+    position: absolute;
+    display: table-cell;
+    font-size: 100px;
+    top: 58px;
+    width: 220px;
+}
+ul#items{		
+    margin:1em 0;
+    width:auto;
+    height:205px;
+    overflow:hidden;
+}
+ul#items li{
+    list-style:none;
+    float:left;
+    height:200px;
+    overflow:hidden;
+    margin:0 4px;
+    background:#DBDAE0;
+    color:#fff;
+    text-align:center;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    -moz-box-shadow:0 1px 1px #777;
+    -webkit-box-shadow:0 1px 1px #777;
+    box-shadow:0 1px 1px #777;
+    color:#555;
+}
+ul#items li:hover{color:#333;}
+ul#items li .image{
+    margin:20px 20px 10px 20px;
+    width:220px;
+    height:150px;
+    overflow:hidden;
+    border:2px solid #fff;
+    -moz-box-shadow:0 1px 1px #bbb;
+    -webkit-box-shadow:0 1px 1px #bbb;
+    box-shadow:0 1px 1px #bbb;
+}	
+ul#items h3{text-transform:uppercase;font-size:14px;font-weight:bold;margin:.25em 0;text-shadow:#f1f1f1 0 1px 0;}	
+ul#items .info{color:#999;text-shadow:#f1f1f1 0 1px 0;}	
+ol#pagination{position:relative;text-align:center;}
+ol#pagination li{
+    display:inline-block;
+    width:16px;
+    height:16px;
+    background:url(../images/bg_buttons.png) no-repeat 0 0;
+    text-align:left;
+    text-indent:-8000px;
+    list-style:none;
+    cursor:pointer;
+    margin:0 2px;
+}
+ol#pagination li:hover{background:url(../images/bg_buttons.png) no-repeat 0 -16px;}
+ol#pagination li.current{color:#f00;font-weight:bold;background:url(../images/bg_buttons.png) no-repeat 0 -32px;}
+ol#pagination li.prev, ol#pagination li.next{
+    position:absolute;
+    top:-125px;
+}
+ol#pagination li.prev{left:-63px;background:url(../images/bg_buttons.png) no-repeat 0 -64px;}
+ol#pagination li.next{right:-30px;background:url(../images/bg_buttons.png) no-repeat 0 -48px;}	

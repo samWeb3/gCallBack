@@ -1,5 +1,7 @@
 <?php
-require_once '../class/gfAdminCallBack_pre.class.php';
+//Include the PS_Pagination class
+    require_once 'gfAdminCallBack_pre.class.php';
+    require_once 'ps_pagination_bak.php';
 ?>
 
 <!DOCTYPE html>

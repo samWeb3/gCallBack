@@ -38,7 +38,6 @@ class CRUD {
 		    fb($value, "DSN Set", FirePHP::INFO);		    
 		}		
 		break;
-
 	    default:
 		throw new Exception("$name is invalid");
 	}
@@ -86,7 +85,7 @@ class CRUD {
 	    $this->_dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}	
 	if (Debug::getDebug()){
-	    FB::info("Connection successful!");	    
+	    FB::info("CRUD class: Connection successful!");	    
 	}
     }
     
@@ -101,17 +100,13 @@ class CRUD {
      * @param array $values  values retrieved from the array
      */
     public function dbInsert($table, $values) {
-	$this->conn();	
+	//$this->conn();	
 
 	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
 	if (Debug::getDebug()){
-	    fb($fieldnames, "Fieldnames", FirePHP::INFO);
-	    //echo "Fieldnames: " . $fieldnames . "<br>";
-	}
-	/*foreach ($fieldnames as $fn) {
-	    echo $fn . "<br>";
-	}*/
+	    fb($fieldnames, "Fieldnames", FirePHP::INFO);	    
+	}	
 
 	$sql = "INSERT INTO $table";
 
@@ -123,8 +118,7 @@ class CRUD {
 	//set the placeholder values
 	$bound = '(:' . implode(', :', $fieldnames) . ')';
 	if (Debug::getDebug()){
-	    fb($bound, "Bounds", FirePHP::INFO);
-	    //echo "Bounds: " . $bound . "<br>";
+	    fb($bound, "Bounds", FirePHP::INFO);	    
 	}
 
 	//put the query together
@@ -151,10 +145,6 @@ class CRUD {
 	} else {
 	    return $this->_success = false;
 	}
-
-	/*if (!$result) {
-	    throw new Exception("Unable to execute query");
-	}*/
     }
     
     //***********************************************************************
@@ -170,8 +160,7 @@ class CRUD {
      * @return array on success or throw PDOExcepton on failure 
      */
     public function dbSelect($table, $fieldname=null, $id=null) {
-	$this->conn();
-	//$sql="SELECT * FROM $table WHERE $fieldname = :id";
+	//$this->conn();	
 	if ($fieldname && $id != null) {
 	    $sql = "SELECT * FROM $table WHERE $fieldname =:id";
 	} else {
@@ -183,21 +172,14 @@ class CRUD {
 	$stmt->execute();
 
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
-	/* if ($stmt->rowCount()>0){
-	  echo "Row Exists!";
-	  } else {
-	  echo "Row doesn't exist!";
-	  } */
     }
     
     /**
      *
      * @execute a raw query
      *
-     * @access public
-     *
-     * @param string $sql
-     *
+     * @access public     
+     * @param string $sql  
      * @return array
      *
      */
@@ -206,8 +188,7 @@ class CRUD {
 	return $this->_dbConn->query($sql);
     }
     
-    public function dbJoinTable($tablenames, $fieldnames, $id){
-	
+    public function dbJoinTable($tablenames, $fieldnames, $id){	
 	
 	print_r($tablenames);	
 	print_r($fieldnames);
@@ -229,11 +210,7 @@ class CRUD {
 	    if (Debug::getDebug()){
 		echo $tn.".".$id."<br>";
 	    }	    
-	}
-	
-	//for ($i = 0; $i < count($tablenames); $i++){
-	    echo $tablenames[1];
-	//}
+	}	
 	
 	if (Debug::getDebug()){    
 	    echo "<br /> Table plus Id: ". $tablePlusId."<br>";
@@ -249,20 +226,29 @@ class CRUD {
     //***********************************************************************
     // (U): Update Row(s)
     //***********************************************************************
+    
+    /**
+     * Updates column of a table name identified by the primary key
+     * 
+     * @param type $table	Table name
+     * @param type $fieldname	Column of a table to be updated
+     * @param type $value	Value of Column to be updated with
+     * @param type $pk		Primary key of the record to be updated
+     * @param type $id		Value of primary key
+     */
     public function dbUpdate($table, $fieldname, $value, $pk, $id){
-	$this->conn();	
-	
-	if (Debug::getDebug()){
-	    echo "Tablename: ".$table."<br>";
-	    echo "Fieldname: ".$pk."<br>";
-	    echo "ID: ".$id."<br>";
-	}
+	//$this->conn();
 	
 	$result = $this->chkRowExist($table, $pk, $id);
 	if (!$result){
 	    throw new Exception("Row $id Doesn't exist");
 	}
 	$sql = "UPDATE $table SET $fieldname = '$value' WHERE $pk = :id";
+	
+	if (Debug::getDebug()){	    	    
+	    fb($sql, "SQL Query", FirePHP::INFO);
+	}
+	
 	$stmt = $this->_dbConn->prepare($sql);
 	$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 	$stmt->execute();
@@ -270,13 +256,12 @@ class CRUD {
 	if ($stmt->rowCount() > 0) {
 	    //return $this->_success = true;
 	    if (Debug::getDebug()){
-		echo "Row $id successfully updated! ";
+		FB::info("Row $id successfully updated!");		
 	    }	    
-	}
+	} 
 	
 	/*if ($stmt->rowCount() > 0) {
-	    return $this->_success = true;
-	    
+	    return $this->_success = true;	    
 	} else {
 	    return $this->_success = false;
 	}*/
@@ -294,7 +279,7 @@ class CRUD {
      * @param string $id 
      */
     public function dbDeleteSingleRow($table, $fieldname, $id) {
-	$this->conn();
+	//$this->conn();
 	$result = $this->chkRowExist($table, $fieldname, $id);
 	if (!$result){
 	    throw new Exception("Row Doesn't exist");
@@ -311,7 +296,7 @@ class CRUD {
     }
 
     public function dbDeleteMultipleRow($table, $fieldname, $array) {
-	$this->conn();
+	//$this->conn();
 	foreach ($array as $id) {
 	    $result = $this->chkRowExist($table, $fieldname, $id);
 	    if (!$result){
@@ -333,10 +318,6 @@ class CRUD {
 		    }
 		}
 	    }
-		//echo "Row " . $id . " Deleted!<br>";
-	    //} else {
-		//echo "Row " . $id . " doesn't exist!!! <br>";
-	    //}
 	}
     }
     
@@ -352,7 +333,7 @@ class CRUD {
      * @return boolean 
      */
     private function chkRowExist($table, $fieldname=null, $id=null) {
-	$this->conn();
+	//$this->conn();
 	$sql = "SELECT * FROM $table WHERE $fieldname =:id";
 	$stmt = $this->_dbConn->prepare($sql);
 	$stmt->bindParam(':id', $id);

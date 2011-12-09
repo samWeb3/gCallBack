@@ -1,7 +1,7 @@
 <?php
 
-require_once 'gfCRUD.class.php';
-require_once 'gfPagination.php';
+require_once '../class/gfCRUD.class.php';
+require_once 'gfPagination_bak.php';
 
 class AdminCallBack {
     private $_crud;
@@ -72,9 +72,8 @@ class AdminCallBack {
 	    <div id="middle">
 		<div id="search">
 			<label for="filter">Filter Record: </label> <input type="text" name="filter" value="" id="filter" />
-			<span id="displayRecord"><form action="'.$_SERVER['PHP_SELF'].'" method="get" class="pull-right"><input class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp"><!--input class="btn info" type="submit" value="Display Records" placeholder="Search"--></form></span>
 		</div>
-		<table class="zebra-striped tablesorter" id="CallBackTable">
+		<table class="zebra-striped tablesorter" id="resultTable">
 		    <thead>
 		    <tr>
 			<th>Date: </th>
@@ -91,9 +90,9 @@ class AdminCallBack {
 			$status = "";
 			if ($r[cb_status] == 0){
 			    //need to pass a pager number to ensure when callback is called from page it doesn't go back to first page
-			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&param1=valu1&param2=value2'><button class='btn danger'>Callback</button></a>";
+			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&param1=valu1&param2=value2'>Callback</a>";
 			} else {
-			    $status = "<button class='btn success disabled'>Answered</button>";
+			    $status = "Answered";
 			}
 			$callBackTableSet .= "<tr><td>".$date."</td>
 				<td>".$r[name]."</td>
@@ -103,13 +102,13 @@ class AdminCallBack {
 				<td>".$status."</td>
 			    </tr>";		    
 		    }
-		    
-		    $callBackTableSet .= "</tbody></table>";
 
-		    //Display the full navigation in one go		  
-		    $callBackTableSet .= "<div class='cPaginator'>".$pager->renderFullNav()."</div>";	    
+		    //Display the full navigation in one go
+		    $callBackTableSet .= "</tbody><tfoot><tr><td colspan='6'>".$pager->renderFullNav()."<tr><td></tfoot></table>";
 		    
 		    return $callBackTableSet;
+		    
+		//echo "</table>";
     }
     
     /**

@@ -1,5 +1,7 @@
 <?php
     require_once 'class/gfCRUD.class.php';
+    require_once 'FirePHP/firePHP.php';
+    Debug::setDebug(true);
     
     $cb = new CRUD();
     $cb->username = 'root';
@@ -36,7 +38,9 @@
      * Update Row {return value]
      * 
      */
-    /*$result = $cb->dbUpdate('gccallback', 'name', 'shanti', 'cId', 16);
+    //$result = $cb->dbUpdate('gccallback', 'name', 'shanti', 'cId', 16);   
+    $result = $cb->dbUpdate('callbackuserenquiry', 'cb_status', 1, 'enq_id', 127);
+    
     if ($result){
 	echo "row successfully updated";
     } else {
