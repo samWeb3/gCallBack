@@ -47,15 +47,21 @@ class AdminCallBack {
 		FROM callbackuserenquiry, callbackuser
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id		
 		ORDER BY callbackuserenquiry.callBackDate DESC";	    
+	    if (Debug::getDebug()){
+		    fb($sql, "SQL No Status: ", FirePHP::INFO);		    
+	    }
 	} else if ($cbStatus == '0' || $cbStatus == '1') {	    
 	    $sql = "SELECT callbackuser.user_id, enq_id, name, email, telephone, enquiry, callBackDate, cb_status
 		FROM callbackuserenquiry, callbackuser
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id
 		AND cb_status = '$cbStatus'
 		ORDER BY callbackuserenquiry.callBackDate DESC";
+	    if (Debug::getDebug()){
+		    fb($sql, "SQL Status Set: ", FirePHP::INFO);		    
+	    }
 	}	
 	
-	$pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "param1=valu1&param2=value2");
+	$pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "&cbStatus=$cbStatus&param1=valu1&param2=value2");
 	
 	/*
 	 * The paginate() function returns a mysql result set
@@ -91,7 +97,7 @@ class AdminCallBack {
 			$status = "";
 			if ($r[cb_status] == 0){
 			    //need to pass a pager number to ensure when callback is called from page it doesn't go back to first page
-			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&param1=valu1&param2=value2'><button class='btn danger'>Callback</button></a>";
+			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2'><button class='btn danger'>Callback</button></a>";
 			} else {
 			    $status = "<button class='btn success disabled'>Answered</button>";
 			}

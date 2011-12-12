@@ -11,7 +11,7 @@ try {
     //Check if Callback link has been clicked
     if ((isset($_GET['enq_id']))) {
 	$adminCallBack->updateCallBackStatus($_GET['enq_id']);
-    }
+    }    
     if ((isset($_GET['row_pp']))){
 	if (empty($_GET['row_pp'])){
 	    $errorMessage = "Please enter the number of records to be displayed";
@@ -30,7 +30,18 @@ try {
     $AnsCB = $adminCallBack->countAnsCB();
     $UnAnsCB = $adminCallBack->countUnAnsCB();
     
-    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10);
+    if((isset($_GET['cbStatus']))){
+	if (isset($_GET['cbStatus']) == 0){
+	    echo "Only CallBacks";
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '0');
+	} else if (isset($_GET['cbStatus']) == 1){
+	    echo "Only Answered";
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '1');
+	}
+	
+    } else {
+	$callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10);
+    }    
 } catch (Exception $ex) {
     echo $ex->getMessage();
 }
@@ -56,12 +67,13 @@ try {
 
 		<li>
 		    <h3>Answered Callbacks</h3>    	
-		    <p class="dashboard"><span class="data"><?php echo $AnsCB ?></span></p>
+		    <p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF']."?&cbStatus='1'"?>"><?php echo $AnsCB ?></a></span></p>
 		</li>
 
 		<li>
 		    <h3>Unanswered Callbacks</h3>    	
-		    <p class="dashboard"><span class="data"><?php echo $UnAnsCB ?></span></p>
+		    <p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF']."?&cbStatus='0'"?>"><?php echo $UnAnsCB ?></a></span></p>
+		    <?php //$_SERVER['PHP_SELF']."?&UnAnsCB='UnAnsCB'"?>
 		</li>
 
 		<li>
