@@ -58,3 +58,13 @@
     .pContainer .last a, .pContainer .last a:hover {
 	border: none !important;
     }
+/*Extend some bootstrap css*/
+.btn:active{
+    outline: none !important;
+}
+.btn:focus{
+    outline: none !important;
+}
+.btn.disabled{
+    outline: none !important;
+}

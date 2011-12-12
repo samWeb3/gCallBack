@@ -63,7 +63,7 @@ Debug::setDebug(true);
 	    $val->checkTextLength('user_name', 3, 30);			   
 	    $val->removeTags('user_name');
 	    $val->isEmail('user_email');	    
-	    $val->matches('user_tel', '/[0-9][3,11]/');
+	    $val->matches('user_tel', '/[0-9]{3,11}/');
 	    $val->checkTextLength('user_enquiry', 5, 500);
 	    $val->useEntities('user_enquiry');
 	    
@@ -92,9 +92,9 @@ Debug::setDebug(true);
 		    echo $e->getMessage();
 		}		
 	    } else {
-		echo '<span class="warning">All values not set. Therefore, form couldn\'t be submitted: <br />';
-		print_r($filtered);
-		echo '</span><br />';
+		if (Debug::getDebug()){
+		    fb($filtered, "All Values not set", FirePHP::INFO);		    
+		}		
 	    }
 	    
 	} catch (Exception $e){

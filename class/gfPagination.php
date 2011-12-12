@@ -120,7 +120,7 @@ class PS_Pagination {
 		if ($this->_page == 1) {
 			return "<span class='page_link disabled'><a href='#'>$tag</a></span>";			
 		} else {
-		    return '<span class="page_link"><a href="' . $this->_php_self . '?page=1&' . $this->_append . '">' . $tag . '</a></span>';		    
+		    return '<span class="page_link"><a href="' . $this->_php_self . '?page=1&row_pp='.$this->_rows_per_page.'&' . $this->_append . '">' . $tag . '</a></span>';		    
 		}
 	}
 	
@@ -138,7 +138,7 @@ class PS_Pagination {
 		if ($this->_page == $this->_max_pages) {
 			return "<span class='page_link disabled last'><a href='#'>$tag</a></span>";			
 		} else {
-			return '<span class="page_link last"><a href="' . $this->_php_self . '?page=' . $this->_max_pages . '&' . $this->_append . '">' . $tag . '</a></span>';			
+			return '<span class="page_link last"><a href="' . $this->_php_self . '?page=' . $this->_max_pages . '&row_pp='.$this->_rows_per_page.'&' . $this->_append . '">' . $tag . '</a></span>';			
 		}
 	}
 	
@@ -154,7 +154,7 @@ class PS_Pagination {
 			return FALSE;
 		
 		if ($this->_page < $this->_max_pages) {
-		    return '<span class="page_link"><a href="' . $this->_php_self . '?page=' . ($this->_page + 1) . '&' . $this->_append . '">' .$tag. '</a></span>';		    
+		    return '<span class="page_link"><a href="' . $this->_php_self . '?page=' . ($this->_page + 1) . '&row_pp='.$this->_rows_per_page.'&' . $this->_append . '">' .$tag. '</a></span>';		    
 		} else {
 		    return "<span class='page_link disabled'><a href='#'>$tag</a></span>";
 		    
@@ -173,7 +173,7 @@ class PS_Pagination {
 			return FALSE;
 		
 		if ($this->_page > 1) {
-		    return '<span class="page_link"><a href="' . $this->_php_self . '?page=' . ($this->_page - 1) . '&' . $this->_append . '">' .$tag. '</a></span>';		    
+		    return '<span class="page_link"><a href="' . $this->_php_self . '?page=' . ($this->_page - 1) . '&row_pp='.$this->_rows_per_page.'&' . $this->_append . '">' .$tag. '</a></span>';		    
 		} else {
 		    return "<span class='page_link disabled'><a href='#'>$tag</a></span>";		     
 		}
