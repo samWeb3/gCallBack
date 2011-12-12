@@ -1,7 +1,8 @@
 <?php
 
 /*
- * To change this template, choose Tools | Templates 
+ * Debug Class
+ * 
  */
 class Debug {
     private static $_debug = false;

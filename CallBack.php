@@ -80,12 +80,13 @@ Debug::setDebug(true);
 	    
 	    //if nothing is mission or no errors is thrown
 	    if (!$missing && !$errors){
-		try {	    
-		   
+		try {
 		    $cbf = new CallBackForm($fname, $email, $tel, $enquiry);		    
 		    
-		    $submitted = "CallBack: Congratulation! Your Form has been submitted!";	
-		    Fb::info($submitted);		    
+		    $submitted = "CallBack: Congratulation! Your Form has been submitted!";
+		    if (Debug::getDebug()){
+			Fb::info($submitted);
+		    }
 		    unset($_POST['user_name'], $_POST['user_email'], $_POST['user_tel'], $_POST['user_enquiry']);
 		    
 		} catch (Exception $e) {
@@ -95,14 +96,11 @@ Debug::setDebug(true);
 		if (Debug::getDebug()){
 		    fb($filtered, "All Values not set", FirePHP::INFO);		    
 		}		
-	    }
-	    
+	    }	    
 	} catch (Exception $e){
 	    echo $e;
-	}
-	
+	}	
     }
-
     ?>
 
     <body>
@@ -174,15 +172,5 @@ Debug::setDebug(true);
 		</li>
 	    </ul>
 	</form>
-	
-	<!--div id="callback">
-	    <div id="cbHeader">
-		  <div class="leftFloat">CallBack</div>
-	    </div>
-	    <div id="cbMiddle">
-		
-	    </div>    	    
-	</div-->
-	
     </body>
 </html>

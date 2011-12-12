@@ -42,7 +42,7 @@ class AdminCallBack {
      * @param int $numLink  Number of links
      */
     public function viewPaginateCallBacks($rowNum, $numLink, $cbStatus=""){	
-	if ($cbStatus == ""){	    
+	if ($cbStatus == "" || $cbStatus == '2'){	    
 	    $sql = "SELECT callbackuser.user_id, enq_id, name, email, telephone, enquiry, callBackDate, cb_status
 		FROM callbackuserenquiry, callbackuser
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id		
@@ -78,7 +78,7 @@ class AdminCallBack {
 	    <div id="middle">
 		<div id="search">
 			<label for="filter">Filter Record: </label> <input type="text" name="filter" value="" id="filter" />
-			<span id="displayRecord"><form action="'.$_SERVER['PHP_SELF'].'" method="get" class="pull-right"><input class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp"><!--input class="btn info" type="submit" value="Display Records" placeholder="Search"--></form></span>
+			<span id="displayRecord"><form action="'.$_SERVER['PHP_SELF'].'" method="get" class="pull-right"><input type="hidden" name="cbStatus" value="'.$cbStatus.'"><input class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp"></form></span>
 		</div>
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
@@ -124,10 +124,7 @@ class AdminCallBack {
      * @param string $enqId Enquiry Id of the callback table
      */
     public function updateCallBackStatus($enqId){	
-	$this->_crud->dbUpdate('callbackuserenquiry', 'cb_status', 1, 'enq_id', $enqId);
-	//Need to update the count result
-	//$this->countAnsCB();
-	//$this->countUnAnsCB();
+	$this->_crud->dbUpdate('callbackuserenquiry', 'cb_status', 1, 'enq_id', $enqId);	
     }
     
     /**
@@ -135,10 +132,8 @@ class AdminCallBack {
      * 
      * @return int Number of answered Call Back 
      */
-    public function countAnsCB(/*$pageNo="1"*/){
-	$rs = $this->_crud->dbSelect('callbackuserenquiry', 'cb_status', '1');
-	$num = count($rs);
-	//echo "Answered Call Back:  <a href='".$_SERVER['PHP_SELF']."?ans_CB=ans_CB&page=$pageNo'>$num</a><br />";
+    public function countAnsCB(){
+	$rs = $this->_crud->dbSelect('callbackuserenquiry', 'cb_status', '1');	
 	return count($rs);	
     }
     
@@ -148,11 +143,8 @@ class AdminCallBack {
      * @return int Number of Unanswered Call Back
      */
     public function countUnAnsCB(){
-	$rs = $this->_crud->dbSelect('callbackuserenquiry', 'cb_status', '0');
-	$num = count($rs);
-	//echo "UnAnswered Call Back:  <a href='".$_SERVER['PHP_SELF']."?unAns_CB=unAns_CB'>$num</a><br />";
-	return count($rs);
-	
+	$rs = $this->_crud->dbSelect('callbackuserenquiry', 'cb_status', '0');		
+	return count($rs);	
     }
     
     /**

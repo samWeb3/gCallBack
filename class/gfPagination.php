@@ -223,8 +223,6 @@ class PS_Pagination {
 		return '<span class="pContainer">'.$this->renderFirst() . $this->renderPrev() . $this->renderNav() . $this->renderNext() . $this->renderLast().'</span>';
 	}
 	
-
-	
 	/**
 	 * Displays the page number
 	 * 

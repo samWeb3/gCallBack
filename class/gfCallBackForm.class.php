@@ -72,8 +72,7 @@ class CallBackForm {
 		    fb($user_id, "User ID");
 		    fb($this->_tel, "New Telephone");
 		    fb($tel, "Old Telephone");
-		    $this->_crud->dbUpdate('callbackuser', 'telephone', $this->_tel, 'user_id', $user_id);
-		    
+		    $this->_crud->dbUpdate('callbackuser', 'telephone', $this->_tel, 'user_id', $user_id);		    
 		}		
 	    } else {
 		if (Debug::getDebug()){
@@ -131,22 +130,11 @@ class CallBackForm {
 	    FB::info("CallBackForm: Email to be sent to : $ow_email using gfEmailPostmark class with follwoing information: "); 
 	    $message = "Name: ".$this->_name."<br /> Email: ".$this->_email."<br /> Telephone: ".$this->_tel."<br /> Enquiry: ".$this->_enquiry."<br />";	    
 	    FB::info($message);
-	}
-	
+	}	
 	  /*$message = "Did you receive my message";
 	  $email = new gfEmailPostmark();
 	  $email->to($ow_email)->subject($subject)->messagePlain($message)->send(); */
     }
-    
-    /**
-     * Set debug mode
-     *
-     * @access public
-     * @param bool $debug Set to TRUE to enable debug messages
-     * @return void
-     */
-    /*public static function setDebug($debug) {
-	self::$_debug = $debug;
-    }*/
+
 }
 ?>

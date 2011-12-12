@@ -46,15 +46,6 @@ class CRUD {
     public function getDbConn(){
 	return $this->_dbConn;
     }
-    
-    //To Test and Delete if not working
-    public function __get($name){
-	switch (strtolower($name)) {
-	    case 'dbConn';		
-		return $this->_dbConn;
-		break;
-	}
-    }
 
     /**
      * Check for the undeclared variable in the code
@@ -259,12 +250,6 @@ class CRUD {
 		FB::info("Row $id successfully updated!");		
 	    }	    
 	} 
-	
-	/*if ($stmt->rowCount() > 0) {
-	    return $this->_success = true;	    
-	} else {
-	    return $this->_success = false;
-	}*/
     }
     
     //***********************************************************************
