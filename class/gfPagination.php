@@ -231,6 +231,10 @@ class PS_Pagination {
 	public function getPage(){
 	    return $this->_page;
 	}	
+	
+	public function getRowsPerPage(){
+	    return $this->_rows_per_page;
+	}
 
 }
 ?>

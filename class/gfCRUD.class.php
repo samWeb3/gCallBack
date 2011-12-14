@@ -150,7 +150,7 @@ class CRUD {
      * @param string $id
      * @return array on success or throw PDOExcepton on failure 
      */
-    public function dbSelect($table, $fieldname=null, $id=null) {
+    public function dbSelect($table, $fieldname=null, $id=null, $fromDate=null, $toDate=null) {
 	//$this->conn();	
 	if ($fieldname && $id != null) {
 	    $sql = "SELECT * FROM $table WHERE $fieldname =:id";
@@ -164,6 +164,69 @@ class CRUD {
 
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    public function dbSelectFromTo($table, $fieldname=null, $id=null, $dateFieldName = null, $fromDate=null, $toDate=null) {
+	fb($fieldname, "FieldName", FirePHP::INFO);
+	fb($id, "ID", FirePHP::INFO);
+	fb($dateFieldName, "Date Field Name", FirePHP::INFO);
+	fb($fromDate, "From Date", FirePHP::INFO);
+	fb($toDate, "To Date", FirePHP::INFO);
+	
+	$sql = "SELECT * FROM $table";	
+	
+	if (Debug::getDebug()){
+	   fb($sql, "SQL Query 1 ", FirePHP::INFO);	   
+	}
+	
+	//if parameters is not null
+	if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate == null && $toDate == null){
+	    Fb::warn("Only Field name and id set:");
+	    $sql .= " WHERE $fieldname = :id";
+	    if (Debug::getDebug()){
+	       fb($sql, "SQL Query 2", FirePHP::INFO);
+	    }
+	    $stmt = $this->_dbConn->prepare($sql);
+	    $stmt->bindParam(':id', $id);
+	     
+	} else if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate != null && $toDate != null){   	
+	   Fb::warn("All Parameter Set:");
+	   $sql .= " WHERE $fieldname = :id AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
+	   if (Debug::getDebug()){
+	    fb($sql, "SQL Query3", FirePHP::INFO);
+	   }
+	   $stmt = $this->_dbConn->prepare($sql);
+	   $stmt->bindParam(':id', $id);
+	   $stmt->bindParam(':fromDate', $fromDate);
+	   $stmt->bindParam(':toDate', $toDate);	
+	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate != null && $toDate != null){
+	    Fb::warn("Fields name and id not set");
+	    $sql .= " WHERE $dateFieldName > :fromDate AND $dateFieldName < :toDate";
+	    if (Debug::getDebug()){
+		fb($sql, "SQL Query4", FirePHP::INFO);
+	    }
+	    $stmt = $this->_dbConn->prepare($sql);	   
+	    $stmt->bindParam(':fromDate', $fromDate);
+	    $stmt->bindParam(':toDate', $toDate);
+	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate == null && $toDate == null){
+	    Fb::warn("Only Datefield set");
+	      $stmt = $this->_dbConn->prepare($sql);
+	}
+	
+	/*if (!($dateFieldName && $fromDate && $toDate && $fieldnames && $id)){
+	    $stmt = $this->_dbConn->prepare($sql);
+	}*/
+
+	//if following parameters doesn't exist
+	
+	//$stmt = $this->_dbConn->prepare($sql);
+	//$stmt->bindParam(':id', $id);
+	//$stmt->bindParam(':fromDate', $fromDate);
+	//$stmt->bindParam(':toDate', $toDate);	
+	$stmt->execute();
+
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }    
+
     
     /**
      *

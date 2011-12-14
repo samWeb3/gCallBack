@@ -1,27 +1,19 @@
 <?php
 //Include the PS_Pagination class
-require_once 'class/gfAdminCallBack.class.php';
+require_once 'class/gfAdminCallBack_PREV.class.php';
 require_once 'FirePHP/firePHP.php';
 //Set the Debugging mode to True
 Debug::setDebug(true);
 
 try {
+    $adminCallBack = new AdminCallBack();
+
     //Get the From and To Date Range
-    if (isset($_GET['dateRange'])){	
+    if (isset($_GET['dateRange'])){
+	$dateRange = $_GET['dateRange'];
 	$fromDate = $_GET['fromDate'];
 	$toDate = $_GET['toDate'];
-	$dateRange = $_GET['dateRange'];
-	
-	if ($fromDate != "" && $toDate != ""){
-	    $infoMessage = "Displaying Callback Records From <strong>$fromDate</strong> to <strong>$toDate</strong>";
-	} else {
-	    $infoMessage = "Displaying All Callback Records";
-	}		
-    } else {
-	$infoMessage = "Displaying All Callback Records";
     }
-    
-    $adminCallBack = new AdminCallBack($fromDate, $toDate, $dateRange);
 
     //Check if Callback link has been clicked
     if ((isset($_GET['enq_id']))) {
@@ -44,21 +36,21 @@ try {
 	$inputNum = 10;	
     }
 
-    $TotalCB = $adminCallBack->countTotCB();
-    $AnsCB = $adminCallBack->countAnsCB();
-    $UnAnsCB = $adminCallBack->countUnAnsCB();
+    $TotalCB = $adminCallBack->countTotCB($fromDate, $toDate);
+    $AnsCB = $adminCallBack->countAnsCB($fromDate, $toDate);
+    $UnAnsCB = $adminCallBack->countUnAnsCB($fromDate, $toDate);
     
     if((isset($_GET['cbStatus']))){
 	$cbStatus = $_GET['cbStatus'];	
 	if ($cbStatus == 0){//Display UnAnswered CallBacks	   
-	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '0');
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '0', $fromDate, $toDate, $dateRange);
 	} else if ($cbStatus == 1){//Display Answered CallBacks	   
-	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '1');
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '1', $fromDate, $toDate, $dateRange);
 	} else if ($cbStatus == 2){ // Total CallBacks
-	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '2');
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '2', $fromDate, $toDate, $dateRange);
 	}
     } else { //Display Total Callbacks
-	$callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '2');
+	$callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '2', $fromDate, $toDate, $dateRange);
     }    
 } catch (Exception $ex) {
     echo $ex->getMessage();
@@ -75,31 +67,26 @@ try {
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/callback.css" rel="stylesheet">
 	<link href="css/easypaginate.css" rel="stylesheet">
+	
+	
+	</script>
     </head>
     <body>
-	
+	<div id="dateRange">
+	    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
+		<!--Used by JavaScript-->
+		<input type="text" id="from" name="from"/>
+		<input type="text" id="to" name="to"/>
+		
+		<!--Used by PHP-->
+		<input type="hidden" id="fromDate" name="fromDate" />
+		<input type="hidden" id="toDate" name="toDate" />
+		
+		<input type="submit" id="date" name="dateRange" value="Display" />
+	    </form>
+	</div>
 	
 	<div id="container">
-	    
-	    <div id="dateRange">
-		<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get" class="pull-right">
-		    <!--Used by JavaScript-->
-		    <input class="medium" type="text" id="from" name="from" placeholder="Date From" />
-		    <input class="medium" type="text" id="to" name="to" placeholder="Date To" />
-
-		    <!--Used by PHP-->
-		    <input type="hidden" id="fromDate" name="fromDate"/>
-		    <input type="hidden" id="toDate" name="toDate"/>
-
-		    <input type="submit" id="date" name="dateRange" value="Display" class="btn default"/>
-		</form>
-	    </div>
-	    
-	    <?php
-		if (isset($infoMessage)){		
-		    echo "<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>$infoMessage</div>";
-		}				
-	    ?>
 
 	    <ul id="items">
 		<li>
@@ -115,7 +102,8 @@ try {
 
 		<li>
 		    <h3>Unanswered Callbacks</h3>    	
-		    <p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF']."?cbStatus=0&fromDate=$fromDate&toDate=$toDate&dateRange=$dateRange"?>" class="dashboardLink" id="unAnsCB"><?php echo $UnAnsCB ?></a></span></p>		  
+		    <p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF']."?cbStatus=0&fromDate=$fromDate&toDate=$toDate&dateRange=$dateRange"?>" class="dashboardLink" id="unAnsCB"><?php echo $UnAnsCB ?></a></span></p>
+		    <?php //$_SERVER['PHP_SELF']."?&UnAnsCB='UnAnsCB'"?>
 		</li>
 
 		<li>
@@ -132,21 +120,16 @@ try {
 	    <?php
 		if (isset($errorMessage)){		
 		    echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
-		} 	
-		
+		} 		
 		echo $callBackTableSet;
 	    ?>
 	</div>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script><!--For Date Range Picker-->
 	<script src="js/jquery.tablesorter.min.js"></script>	
 	<script type="text/javascript" src="js/easypaginate.js"></script>	
 	<script type="text/javascript" src="js/recordFilter.js"></script>
 	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>	
-	<!--for Date Range Picker-->
-	<script src="js/dr/jquery.ui.widget.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/dr/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
 
 	<script type="text/javascript">
 	    /**************************************************
@@ -187,34 +170,37 @@ try {
 		    $('#totCB').addClass('activeLink');
 		    break;
 	    }
-	    
-	    /**************************************************
-	     * Date Range Picker 
-	     **************************************************/	    
-	    $(function() {
-		var dates = $( "#from, #to" ).datepicker({
-		    defaultDate: "+1w",
-		    changeMonth: true,
-		    numberOfMonths: 1,
-		    onSelect: function( selectedDate ) {
-			var option = this.id == "from" ? "minDate" : "maxDate",
-			instance = $( this ).data( "datepicker" ),
-			date = $.datepicker.parseDate(
-			instance.settings.dateFormat ||
-			    $.datepicker._defaults.dateFormat,
-			selectedDate, instance.settings );
-			dates.not( this ).datepicker( "option", option, date );
-		    }
-		});
-	    });
-
-	    $(document).ready(function(){
-		$('#date').click(function() {
-		    console.log("From " + $('#from').val() + " To: " + $('#to').val());
-		    $('#fromDate').val($('#from').val());
-		    $('#toDate').val($('#to').val());
-		});
-	    });
 	</script>
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/dr/jquery.ui.widget.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/dr/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+	$(function() {
+		var dates = $( "#from, #to" ).datepicker({
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 1,
+			onSelect: function( selectedDate ) {
+				var option = this.id == "from" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+			}
+		});
+	});
+		
+    $(document).ready(function(){
+	$('#date').click(function() {
+	    console.log("From " + $('#from').val() + " To: " + $('#to').val());
+	    $('#fromDate').val($('#from').val());
+	    $('#toDate').val($('#to').val());
+	});
+    });
+    </script>
     </body>
 </html>

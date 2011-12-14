@@ -24,6 +24,8 @@ ul#items{
     width:auto;
     height:205px;
     overflow:hidden;
+    clear: both;
+    margin-left: 10px;
 }
 ul#items li{
     list-style:none;
@@ -91,4 +93,7 @@ a.dashboardLink:hover{
 }
 .activeLink{
     color: #444 !important;
+}
+.clear{
+    clear: both;
 }

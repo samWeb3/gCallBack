@@ -5,20 +5,9 @@ require_once 'gfPagination.php';
 
 class AdminCallBack {
     private $_crud;
-    private $_dateRange;
-    private $_fromDate;
-    private $_toDate;
-    private $_unixFromDate;
-    private $_unixToDate;
-        
-    public function __construct($fromDate = "", $toDate = "", $dateRange="") {
-	if ($fromDate != "" && $toDate !="" && $dateRange != ""){	
-	    $this->_fromDate = $fromDate;
-	    $this->_toDate = $toDate;
-	    $this->_unixFromDate = strtotime($fromDate);
-	    $this->_unixToDate = strtotime($toDate);
-	    $this->_dateRange = $dateRange;
-	} 
+    
+    public function __construct() {
+	
 	$this->dbConnSetup();
     }
 
@@ -53,13 +42,15 @@ class AdminCallBack {
      * @param int $rowNum   Number of rows per page
      * @param int $numLink  Number of links
      */
-    public function viewPaginateCallBacks($rowNum, $numLink, $cbStatus=""){	
+    public function viewPaginateCallBacks($rowNum, $numLink, $cbStatus="", $fromDate="", $toDate="", $dateRange=""){	
 	if ($cbStatus == "" || $cbStatus == '2'){	    
 	    $sql = "SELECT callbackuser.user_id, enq_id, name, email, telephone, enquiry, callBackDate, cb_status
 		FROM callbackuserenquiry, callbackuser		
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id";
-		if ($this->_unixFromDate != "" && $this->_unixToDate != ""){		    
-		    $sql .= " AND callBackDate > $this->_unixFromDate AND callBackDate < $this->_unixToDate"; 		
+		if ($fromDate != "" && $toDate != ""){
+		    $fromDateUTF = strtotime($fromDate);
+		    $toDateUTF = strtotime($toDate);		    
+		    $sql .= " AND callBackDate > $fromDateUTF AND callBackDate < $toDateUTF"; 		
 		}
 		$sql .= " ORDER BY callbackuserenquiry.callBackDate DESC";	    
 	    if (Debug::getDebug()){
@@ -69,8 +60,10 @@ class AdminCallBack {
 	    $sql = "SELECT callbackuser.user_id, enq_id, name, email, telephone, enquiry, callBackDate, cb_status
 		FROM callbackuserenquiry, callbackuser
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id";
-		if ($this->_unixFromDate != "" && $this->_unixToDate != ""){		    
-		    $sql .= " AND callBackDate > $this->_unixFromDate AND callBackDate < $this->_unixToDate"; 		
+		if ($fromDate != "" && $toDate != ""){
+		    $fromDateUTF = strtotime($fromDate);
+		    $toDateUTF = strtotime($toDate);		    
+		    $sql .= " AND callBackDate > $fromDateUTF AND callBackDate < $toDateUTF"; 		
 		}		
 		$sql .= " AND cb_status = '$cbStatus' ORDER BY callbackuserenquiry.callBackDate DESC";
 	    if (Debug::getDebug()){
@@ -78,7 +71,7 @@ class AdminCallBack {
 	    }
 	}	
 	
-	$pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "&cbStatus=$cbStatus&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange");
+	$pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "&cbStatus=$cbStatus&param1=valu1&param2=value2&fromDate=$fromDate&toDate=$toDate&dateRange=$dateRange");
 	
 	/*
 	 * The paginate() function returns a mysql result set
@@ -97,10 +90,10 @@ class AdminCallBack {
 			<label for="filter">Filter Record: </label> <input type="text" name="filter" value="" id="filter" />
 			<span id="displayRecord">
 			    <form action="'.$_SERVER['PHP_SELF'].'" method="get" class="pull-right">
-				<input type="hidden" name="cbStatus" value="'.$cbStatus.'">				
-				<input type="hidden" name="fromDate" value="'.$this->_fromDate.'">
-				<input type="hidden" name="toDate" value="'.$this->_toDate.'">
-				<input type="hidden" name="dateRange" value="'.$this->_dateRange.'">				
+				<input type="hidden" name="cbStatus" value="'.$cbStatus.'">
+				<input type="hidden" name="fromDate" value="'.$fromDate.'">
+				<input type="hidden" name="toDate" value="'.$toDate.'">
+				<input type="hidden" name="dateRange" value="'.$dateRange.'">
 				<input class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp">
 			    </form>
 			</span>
@@ -122,7 +115,7 @@ class AdminCallBack {
 			$status = "";
 			if ($r[cb_status] == 0){
 			    //need to pass a pager number to ensure when callback is called from page it doesn't go back to first page
-			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange'><button class='btn danger'>Callback</button></a>";
+			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$fromDate&toDate=$toDate&dateRange=$dateRange'><button class='btn danger'>Callback</button></a>";
 			} else {
 			    $status = "<button class='btn success disabled'>Answered</button>";
 			}
@@ -157,14 +150,16 @@ class AdminCallBack {
      * 
      * @return int Number of answered Call Back 
      */
-    public function countAnsCB(){
-	Fb::info("Answered:");
-	/*if ($this->_unixFromDate != null && $this->_unixToDate != null){
+    public function countAnsCB($fromDate=null, $toDate=null){
+	if ($fromDate != null && $toDate != null){
+	    
+	    $fromDateUTF = strtotime($fromDate);
+	    $toDateUTF = strtotime($toDate);	
 	    
 	    $sql = "SELECT * FROM callbackuserenquiry WHERE cb_status = '1' AND callBackDate > :fromDate AND callBackDate < :toDate";
 	    $stmt = $stmt= $this->_crud->getDbConn()->prepare($sql);
-	    $stmt->bindParam(':fromDate', $this->_unixFromDate);
-	    $stmt->bindParam(':toDate', $this->_unixToDate);
+	    $stmt->bindParam(':fromDate', $fromDateUTF);
+	    $stmt->bindParam(':toDate', $toDateUTF);
 	    $stmt->execute();
 
 	    $rs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -173,9 +168,8 @@ class AdminCallBack {
 	} else {
 	    $rs = $this->_crud->dbSelect('callbackuserenquiry', 'cb_status', '1');	
 	    return count($rs);			
-	}*/
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', 'cb_status', '1', 'callBackDate', $this->_unixFromDate, $this->_unixToDate);		
-	return count($rs);	
+	}
+	
     }
     
     /**
@@ -183,17 +177,16 @@ class AdminCallBack {
      * 
      * @return int Number of Unanswered Call Back
      */
-    public function countUnAnsCB(){
-	Fb::info("Un Answered:");
-	/*if ($this->_unixFromDate != null && $this->_unixToDate != null){
+    public function countUnAnsCB($fromDate=null, $toDate=null){
+	if ($fromDate != null && $toDate != null){
 	    
 	    $fromDateUTF = strtotime($fromDate);
 	    $toDateUTF = strtotime($toDate);	
 	    
 	    $sql = "SELECT * FROM callbackuserenquiry WHERE cb_status = '0' AND callBackDate > :fromDate AND callBackDate < :toDate";
 	    $stmt = $stmt= $this->_crud->getDbConn()->prepare($sql);
-	     $stmt->bindParam(':fromDate', $this->_unixFromDate);
-	    $stmt->bindParam(':toDate', $this->_unixToDate);
+	    $stmt->bindParam(':fromDate', $fromDateUTF);
+	    $stmt->bindParam(':toDate', $toDateUTF);
 	    $stmt->execute();
 
 	    $rs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -201,9 +194,7 @@ class AdminCallBack {
 	} else {
 	    $rs = $this->_crud->dbSelect('callbackuserenquiry', 'cb_status', '0');		
 	    return count($rs);	
-	}*/
-	 $rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', 'cb_status', '0', 'callBackDate', $this->_unixFromDate, $this->_unixToDate);		
-	 return count($rs);	
+	}
     }
     
     /**
@@ -211,25 +202,24 @@ class AdminCallBack {
      * 
      * @return int Number all Call Back
      */
-    public function countTotCB(){
-	Fb::info("Total Call Back");
-	/*if ($this->_unixFromDate != null && $this->_unixToDate != null){	   	
+    public function countTotCB($fromDate=null, $toDate=null){
+	if ($fromDate != null && $toDate != null){
+	    
+	    $fromDateUTF = strtotime($fromDate);
+	    $toDateUTF = strtotime($toDate);	
 	    
 	    $sql = "SELECT * FROM callbackuserenquiry WHERE callBackDate > :fromDate AND callBackDate < :toDate";
 	    $stmt = $stmt= $this->_crud->getDbConn()->prepare($sql);
-	    $stmt->bindParam(':fromDate', $this->_unixFromDate);
-	    $stmt->bindParam(':toDate', $this->_unixToDate);
+	    $stmt->bindParam(':fromDate', $fromDateUTF);
+	    $stmt->bindParam(':toDate', $toDateUTF);
 	    $stmt->execute();
 
 	    $rs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	    return count($rs);
-	} else {*/
-	    //$rs = $this->_crud->dbSelect('callbackuserenquiry');
-	    //return count($rs);	
-	//}	
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry',null, null, 'callBackDate', $this->_unixFromDate, $this->_unixToDate);
-	//$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry');
-	return count($rs);	
+	} else {
+	    $rs = $this->_crud->dbSelect('callbackuserenquiry');
+	    return count($rs);	
+	}	
     }
 }
 
