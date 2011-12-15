@@ -12,8 +12,11 @@ try {
 	$toDate = $_GET['toDate'];
 	$dateRange = $_GET['dateRange'];
 	
+	$ukFromDate = date("d M Y", strtotime($fromDate));
+	$ukToDate = date("d M Y", strtotime($toDate));
+	
 	if ($fromDate != "" && $toDate != ""){
-	    $infoMessage = "Displaying Callback Records From <strong>$fromDate</strong> to <strong>$toDate</strong>";
+	    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
 	} else {
 	    $infoMessage = "Displaying All Callback Records";
 	}		
@@ -133,8 +136,12 @@ try {
 		if (isset($errorMessage)){		
 		    echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
 		} 	
+		if ($callBackTableSet) {
+		    echo $callBackTableSet;
+		} else { // no query returned then
+		    echo "<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>";
+		}
 		
-		echo $callBackTableSet;
 	    ?>
 	</div>
 
@@ -196,6 +203,7 @@ try {
 		    defaultDate: "+1w",
 		    changeMonth: true,
 		    numberOfMonths: 1,
+		    //dateFormat: 'dd/mm/yy',
 		    onSelect: function( selectedDate ) {
 			var option = this.id == "from" ? "minDate" : "maxDate",
 			instance = $( this ).data( "datepicker" ),
@@ -206,11 +214,10 @@ try {
 			dates.not( this ).datepicker( "option", option, date );
 		    }
 		});
-	    });
-
+	    }); 
+	
 	    $(document).ready(function(){
-		$('#date').click(function() {
-		    console.log("From " + $('#from').val() + " To: " + $('#to').val());
+		$('#date').click(function() {		    
 		    $('#fromDate').val($('#from').val());
 		    $('#toDate').val($('#to').val());
 		});

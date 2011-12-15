@@ -86,7 +86,10 @@ class AdminCallBack {
 	*/
 	$reqResultSet = $pager->paginate();
 		
-	if(!$reqResultSet) die(mysql_error());
+	//if(!$reqResultSet) die(mysql_error());
+	if (!$reqResultSet){
+	    return false;
+	} else {
 	
 	$this->countAnsCB();
 	$this->countUnAnsCB();
@@ -141,6 +144,7 @@ class AdminCallBack {
 		    $callBackTableSet .= "<div class='cPaginator'>".$pager->renderFullNav()."</div>";	    
 		    
 		    return $callBackTableSet;
+	}
     }
     
     /**

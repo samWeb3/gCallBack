@@ -35,8 +35,7 @@
 	});
 		
     $(document).ready(function(){
-	$('#date').click(function() {
-	    console.log("From " + $('#from').val() + " To: " + $('#to').val());
+	$('#date').click(function() {	    
 	    $('#fromDate').val($('#from').val());
 	    $('#toDate').val($('#to').val());
 	});
