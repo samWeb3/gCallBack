@@ -3,7 +3,7 @@ class gfInstances
 {
 	public function getInstanceId()
 	{
-		return 151;
+		return 152;
 	}
 }
 ?>

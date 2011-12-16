@@ -42,7 +42,9 @@ class CRUD {
 		throw new Exception("$name is invalid");
 	}
     }
-    
+    /**
+     * Returns database connection 
+     */
     public function getDbConn(){
 	return $this->_dbConn;
     }
@@ -165,14 +167,26 @@ class CRUD {
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function dbSelectFromTo($table, $fieldname=null, $id=null, $dateFieldName = null, $fromDate=null, $toDate=null) {
+    /**
+     * Returns the callback data relevent to the filtering of the data accroding to the provided parameters	
+     * 
+     * @param string $table	    Tablename from where the records to be selected
+     * @param int    $instanceId    Instance Id of a partner website
+     * @param string $fieldname	    Fieldname to be filtered
+     * @param int    $id	    Id of a fieldname to be filtered from	
+     * @param string $dateFieldName 
+     * @param string $fromDate	    Date From
+     * @param string $toDate	    Date Until
+     * @return string		    Records 
+     */
+    public function dbSelectFromTo($table, $instanceId, $fieldname=null, $id=null, $dateFieldName = null, $fromDate=null, $toDate=null) {
 	fb($fieldname, "FieldName", FirePHP::INFO);
 	fb($id, "ID", FirePHP::INFO);
 	fb($dateFieldName, "Date Field Name", FirePHP::INFO);
 	fb($fromDate, "From Date", FirePHP::INFO);
 	fb($toDate, "To Date", FirePHP::INFO);
 	
-	$sql = "SELECT * FROM $table";	
+	$sql = "SELECT * FROM $table WHERE instanceId = $instanceId";	
 	
 	if (Debug::getDebug()){
 	   fb($sql, "SQL Query 1 ", FirePHP::INFO);	   
@@ -181,7 +195,7 @@ class CRUD {
 	//if parameters is not null
 	if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate == null && $toDate == null){
 	    Fb::warn("Only Field name and id set:");
-	    $sql .= " WHERE $fieldname = :id";
+	    $sql .= " AND $fieldname = :id";
 	    if (Debug::getDebug()){
 	       fb($sql, "SQL Query 2", FirePHP::INFO);
 	    }
@@ -190,7 +204,7 @@ class CRUD {
 	     
 	} else if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate != null && $toDate != null){   	
 	   Fb::warn("All Parameter Set:");
-	   $sql .= " WHERE $fieldname = :id AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
+	   $sql .= " AND $fieldname = :id AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
 	   if (Debug::getDebug()){
 	    fb($sql, "SQL Query3", FirePHP::INFO);
 	   }
@@ -200,7 +214,7 @@ class CRUD {
 	   $stmt->bindParam(':toDate', $toDate);	
 	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate != null && $toDate != null){
 	    Fb::warn("Fields name and id not set");
-	    $sql .= " WHERE $dateFieldName > :fromDate AND $dateFieldName < :toDate";
+	    $sql .= " AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
 	    if (Debug::getDebug()){
 		fb($sql, "SQL Query4", FirePHP::INFO);
 	    }
@@ -211,17 +225,7 @@ class CRUD {
 	    Fb::warn("Only Datefield set");
 	      $stmt = $this->_dbConn->prepare($sql);
 	}
-	
-	/*if (!($dateFieldName && $fromDate && $toDate && $fieldnames && $id)){
-	    $stmt = $this->_dbConn->prepare($sql);
-	}*/
-
-	//if following parameters doesn't exist
-	
-	//$stmt = $this->_dbConn->prepare($sql);
-	//$stmt->bindParam(':id', $id);
-	//$stmt->bindParam(':fromDate', $fromDate);
-	//$stmt->bindParam(':toDate', $toDate);	
+		
 	$stmt->execute();
 
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);

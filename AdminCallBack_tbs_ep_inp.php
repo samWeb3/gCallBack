@@ -24,7 +24,10 @@ try {
 	$infoMessage = "Displaying All Callback Records";
     }
     
-    $adminCallBack = new AdminCallBack($fromDate, $toDate, $dateRange);
+    $instanceId = 152;//instance of partner
+    $numLink = 10;//number of link
+    
+    $adminCallBack = new AdminCallBack($instanceId, $fromDate, $toDate, $dateRange);
 
     //Check if Callback link has been clicked
     if ((isset($_GET['enq_id']))) {
@@ -49,22 +52,22 @@ try {
 
     $TotalCB = $adminCallBack->countTotCB();
     $AnsCB = $adminCallBack->countAnsCB();
-    $UnAnsCB = $adminCallBack->countUnAnsCB();
+    $UnAnsCB = $adminCallBack->countUnAnsCB();     
     
     if((isset($_GET['cbStatus']))){
 	$cbStatus = $_GET['cbStatus'];	
 	if ($cbStatus == 0){//Display UnAnswered CallBacks	   
-	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '0');
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, $numLink, '0');
 	} else if ($cbStatus == 1){//Display Answered CallBacks	   
-	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '1');
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, $numLink, '1');
 	} else if ($cbStatus == 2){ // Total CallBacks
-	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '2');
+	    $callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, $numLink, '2');
 	}
     } else { //Display Total Callbacks
-	$callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, 10, '2');
+	$callBackTableSet = $adminCallBack->viewPaginateCallBacks($inputNum, $numLink, '2');
     }    
 } catch (Exception $ex) {
-    echo $ex->getMessage();
+   $errorMessage = $ex->getMessage();
 }
 ?>   
 <!DOCTYPE html>
