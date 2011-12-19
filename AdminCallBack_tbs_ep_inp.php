@@ -24,7 +24,7 @@ try {
 	$infoMessage = "Displaying All Callback Records";
     }
     
-    $instanceId = 152;//instance of partner
+    $instanceId = 151;//instance of partner
     $numLink = 10;//number of link
     
     $adminCallBack = new AdminCallBack($instanceId, $fromDate, $toDate, $dateRange);
@@ -143,8 +143,7 @@ try {
 		    echo $callBackTableSet;
 		} else { // no query returned then
 		    echo "<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>";
-		}
-		
+		}		
 	    ?>
 	</div>
 
