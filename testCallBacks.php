@@ -21,12 +21,12 @@
     //Insert into table
     //$cb->dbInsert('gccallback', $values);
     
-    /*$res = $cb->dbSelect('gccallback');    
+    $res = $cb->dbSelect('gccallback');    
     foreach ($res as $array){
 	foreach ($array as $k => $v){
 	    echo "key <strong>" . $k . "</strong> has value of: <strong>" . $v . "</strong><br>";
 	}	
-    } */   
+    }   
     
     
     /*$delete = array(1, 9, 10, 11, 12, 13, 14, 15);    
@@ -39,7 +39,7 @@
      * 
      */
     //$result = $cb->dbUpdate('gccallback', 'name', 'shanti', 'cId', 16);   
-    $result = $cb->dbUpdate('callbackuserenquiry', 'cb_status', 1, 'enq_id', 127);
+    /*$result = $cb->dbUpdate('callbackuserenquiry', 'cb_status', 1, 'enq_id', 127);
     
     if ($result){
 	echo "row successfully updated";

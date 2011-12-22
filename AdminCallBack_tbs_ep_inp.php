@@ -12,8 +12,13 @@ try {
 	$toDate = $_GET['toDate'];
 	$dateRange = $_GET['dateRange'];
 	
-	$ukFromDate = date("d M Y", strtotime($fromDate));
-	$ukToDate = date("d M Y", strtotime($toDate));
+	$ukFromDate = date("d M Y h:i:s A", strtotime($fromDate));
+	
+	/*
+	 * We are adding 86399sec (1day - 1sec) so unixToDate returns 11:59 PM(End of Day)
+	 * instead of 12:00 AM(Begining of day)
+	 */
+	$ukToDate = date("d M Y h:i:s A", strtotime($toDate)+(86399));
 	
 	if ($fromDate != "" && $toDate != ""){
 	    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
@@ -106,7 +111,7 @@ try {
 		    echo "<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>$infoMessage</div>";
 		}				
 	    ?>
-
+	    
 	    <ul id="items">
 		<li>
 		    <h3>Total Callbacks</h3>    	
@@ -158,6 +163,18 @@ try {
 	<script src="js/dr/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
 
 	<script type="text/javascript">
+	     /**************************************************
+	     * Display Help Text on Focus In and Foucs Out on 
+	     * Display Record Input box
+	     **************************************************/	   
+	    $('#disRecHelpText').hide();
+	    $('#disRecord').focusin(function() {			
+		$('#disRecHelpText').show();		
+	    });
+	    $('#disRecord').focusout(function() {		
+		$('#disRecHelpText').hide();
+	    });
+	    
 	    /**************************************************
 	     * Sort Table
 	     **************************************************/
@@ -202,7 +219,7 @@ try {
 	     **************************************************/	    
 	    $(function() {
 		var dates = $( "#from, #to" ).datepicker({
-		    defaultDate: "+1w",
+		    defaultDate: "+1w",		   
 		    changeMonth: true,
 		    numberOfMonths: 1,
 		    //dateFormat: 'dd/mm/yy',

@@ -93,7 +93,7 @@ class CRUD {
      * @param array $values  values retrieved from the array
      */
     public function dbInsert($table, $values) {
-	//$this->conn();	
+	$this->conn();	
 
 	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
@@ -153,7 +153,7 @@ class CRUD {
      * @return array on success or throw PDOExcepton on failure 
      */
     public function dbSelect($table, $fieldname=null, $id=null, $fromDate=null, $toDate=null) {
-	//$this->conn();	
+	$this->conn();	
 	if ($fieldname && $id != null) {
 	    $sql = "SELECT * FROM $table WHERE $fieldname =:id";
 	} else {

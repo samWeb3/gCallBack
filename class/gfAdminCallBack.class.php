@@ -24,10 +24,16 @@ class AdminCallBack {
 	    throw new Exception("Partner ID Not provided");
 	}	
 	if ($fromDate != "" && $toDate !="" && $dateRange != ""){	    
-	    $this->_fromDate = $fromDate;
-	    $this->_toDate = $toDate;
+	    $this->_fromDate = $fromDate;	    
+	    $this->_toDate = $toDate;	    
 	    $this->_unixFromDate = strtotime($fromDate);
-	    $this->_unixToDate = strtotime($toDate);
+	    
+	    /*
+	     * We are adding 86399sec (1day - 1sec) so unixToDate returns 11:59 PM(End of Day)
+	     * instead of 12:00 AM(Begining of day)
+	     */
+	    $this->_unixToDate = strtotime($toDate) + (86399);	
+	   
 	    $this->_dateRange = $dateRange;
 	}
 	$this->_instanceId = $instanceId;
@@ -116,8 +122,9 @@ class AdminCallBack {
 				<input type="hidden" name="cbStatus" value="'.$cbStatus.'">				
 				<input type="hidden" name="fromDate" value="'.$this->_fromDate.'">
 				<input type="hidden" name="toDate" value="'.$this->_toDate.'">
-				<input type="hidden" name="dateRange" value="'.$this->_dateRange.'">				
-				<input class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp">
+				<input type="hidden" name="dateRange" value="'.$this->_dateRange.'">	
+				<label id="disRecHelpText" class="help-inline">Enter valid number and press &#60;ENTER&#62; !&nbsp;</label>
+				<input id="disRecord" class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp">				
 			    </form>
 			</span>
 		</div>
