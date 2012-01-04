@@ -241,9 +241,11 @@ class CRUD {
      * @return array
      *
      */
-    public function rawSelect($sql) {
+     public function rawSelect($sql) {
 	$this->conn();
-	return $this->_dbConn->query($sql);
+	//return $this->_dbConn->query($sql);
+	$stmt = $this->_dbConn->query($sql);
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function dbJoinTable($tablenames, $fieldnames, $id){	

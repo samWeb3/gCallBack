@@ -1,0 +1,66 @@
+<html>
+    <head><title></title>	
+	<link href="layout.css" rel="stylesheet" type="text/css">	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.symbol.js"></script>
+    </head>
+    <body>
+	<h1>Call Back Statistics</h1>
+	<div id="placeholder" style="width:818px; height:300px"></div>
+
+	<script>	    
+	    var dayRange = new Array(6, 7, 8, 9, 10, 11, 12);
+	    var callBackRec = new Array(66, 44, 12, 15, 60, 30, 22);
+	    var answeredRec = new Array(44, 30, 10, 10, 55, 30, 21);
+	    
+	    /**
+	     * Construct the multidimentional array based on the day and record passed!
+	     * 
+	     * @param int day	no of days retrieved from date range
+	     * @param int rec   no of record for each day
+	     */
+	    function multiDimenArray(day, rec){
+		var nOfR = day.length;
+	   
+		//this unit array holds day and record for e.g [6. 7]
+		var unit = new Array();
+
+		//data multidimentional array holds number of unit array for e.g., [[6, 7], [7, 44]]
+		var data = new Array();
+
+		for (i=0; i<nOfR; i++){ 
+		    //add day and callback record into unit array
+		    unit = new Array(day[i], rec[i]);
+		    //add unit array into data mulit-dimen array
+		    data.push(unit);
+		}	       
+		return data;
+	    }
+	   
+	    //Following Script is for generating statistics
+	    var callbackData = multiDimenArray(dayRange, callBackRec);
+	    var answeredData = multiDimenArray(dayRange, answeredRec);	       
+	    	    
+	    var data = [ 
+		{ 
+		    color: "red", 
+		    label: "CallBack", 		    
+		    data: callbackData
+		}, 
+		{ 
+		    color: "green", 
+		    label: "Answered", 		     
+		    data: answeredData
+		} 
+	    ]; 
+	    var options = {
+		series: {
+		    lines: { show: true },
+		    points: { show: true }
+		}
+	    };		
+	    $.plot($("#placeholder"), data, options);
+	</script>
+    </body>
+</html>
