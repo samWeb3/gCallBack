@@ -8,7 +8,7 @@ Debug::setDebug(true);
 try {
     //Get the From and To Date Range
     if (isset($_GET['dateRange'])){	
-	$fromDate = $_GET['fromDate'];
+	$fromDate = $_GET['fromDate'];	
 	$toDate = $_GET['toDate'];
 	$dateRange = $_GET['dateRange'];
 	
@@ -24,7 +24,8 @@ try {
 	    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
 	} else {
 	    $infoMessage = "Displaying All Callback Records";
-	}		
+	}	
+	
     } else {
 	$infoMessage = "Displaying All Callback Records";
     }

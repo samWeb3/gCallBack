@@ -130,7 +130,7 @@ class AdminCallBack {
 		</div>
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
-		    <tr>
+		    <tr>			
 			<th>Date: </th>
 			<th>Name: </th>
 			<th>Email: </th>
@@ -141,7 +141,8 @@ class AdminCallBack {
 		    </thead><tbody>';	
 	
 		    foreach ($reqResultSet as $r){
-			$date = date('d.M.Y', $r[callBackDate]);
+			//$date = date('d.M.Y', $r[callBackDate]);
+			$date = date('M.d.Y', $r[callBackDate])."<br /><span class='small unHighlight'>".date('h:i:s A', $r[callBackDate])."</span>";
 			$status = "";
 			if ($r[cb_status] == 0){
 			    //need to pass a pager number to ensure when callback is called from page it doesn't go back to first page

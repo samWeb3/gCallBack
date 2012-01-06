@@ -62,11 +62,6 @@ require_once 'FirePHP/firePHP.php';
 	<?php
 	if (isset($_POST['dateRange'])) {
 	    
-	    $cb = new CRUD();
-	    $cb->username = 'root';
-	    $cb->password = 'root123';
-	    $cb->dsn = "mysql:dbname=griff;host=localhost";
-
 	    $fromDate = strtotime($_POST['fromDate']);	    
 
 	    //we add one day (86400sec) to a toDate to get PM
@@ -78,54 +73,103 @@ require_once 'FirePHP/firePHP.php';
 	    //get the number of days
 	    $noOfDays = $range / 86400;	   
 
-	    //Doing this as we want php value inside javascript array dayRange and callBackRec
+	    getRecords($toDate, $fromDate, $noOfDays);
+	     
+	} else {
+	    //Get the current date
+	    $toDate = time();
+	    //calculate the range for 30 days
+	    $range = 86400 * 30;
+	    //Deduct $range from $toDate
+	    $fromDate = $toDate - $range;
+	    $noOfDays = $range / 86400;	 	           
+	    
+	    getRecords($toDate, $fromDate, $noOfDays);	    
+	}
+	
+	/**
+	 * Get Total & Answered callback records between Dates
+	 * Add the records into the javascript array constructed earlier
+	 * 
+	 * @param type $toDate	    End Date
+	 * @param type $fromDate    Start Date
+	 * @param type $noOfDays    Days between Start and End Date
+	 */	
+	function getRecords($toDate, $fromDate, $noOfDays){	    
+	    //database connections
+	    $cb = new CRUD();
+	    $cb->username = 'root';
+	    $cb->password = 'root123';
+	    $cb->dsn = "mysql:dbname=griff;host=localhost";
+	    
+	    echo "To Date:  " . date('d.M.Y h:i:s A', $toDate) . "<br />";
+	    //echo "Month timestamp (86400 * 30): ".$range." <br />";
+	    echo "From Date:  " . date('d.M.Y h:i:s A', $fromDate) . "<br />";
+	    echo "No of Days: " . $noOfDays . "<br />";
+	    
+	    $fromDateEnd = $fromDate + 86399;
+	    echo "From Date End: ".date('d.M.Y h:i:s A', $fromDateEnd) . "<br />";
+	    
+	    //Doing this inorder to add php value inside javascript array dayRange, callBackRec, $countAnsRec
 	    echo "<script type='text/javascript' language='JavaScript'>";
 
-	    //Iterate through the no of Days and print Date + no of records
+	    //Iterate through each Days to get records
 	    for ($i = 0; $i < $noOfDays; $i++) {
-
-		//Starts with first day
-		//$date = date("d M Y h:i:s A", $fromDate);		
-		//$day = date("d", $fromDate);
+		echo "dayRange.push($fromDate * 1000);";//need to multiply unix timestamp by 1000 to get javascript timestamp
 		
 		//add 86400sec to get the end of the day
 		$fromDateEnd = $fromDate + 86400;
-		$resCB = $cb->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
-			$fromDate and callBackDate < $fromDateEnd");
+		
+		    /*****************************************************
+		     * FOR TOTAL CALLBACKS 
+		     *****************************************************/
 
-		$countRec;
-		
-		//get a record for a day
-		foreach ($resCB as $num) {
-		    foreach ($num as $k => $v) {
-			$countRec = $v;
-		    }
-		}
-		
-		$resAnsCB = $cb->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
-			$fromDate and callBackDate < $fromDateEnd and cb_status = 1");
-		
-		$countAnsRec;
-		
-		//get a answered record for a day
-		foreach ($resAnsCB as $num){
-		    foreach ($num as $k => $v){
-			$countAnsRec = $v;
-		    }
-		}
+		    //Get the record for a specified day
+		    $resCB = $cb->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
+			    $fromDate and callBackDate < $fromDateEnd");
+		    
+		    //Strip the record number from resultset Array
+		    $countCBRec = countRecord($resCB);		
+
+		    /*****************************************************
+		     * FOR ANSWERED CALLBACKS 
+		     *****************************************************/
+
+		    $resAnsCB = $cb->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
+			    $fromDate and callBackDate < $fromDateEnd and cb_status = 1");
+
+		    $countAnsRec = countRecord($resAnsCB);
 
 		//Add one more day (86400sec) to the first day 
-		$fromDate = $fromDate + 86400;		
-		//printing the php var in a javascript arrary we declared earlier
-		echo "dayRange.push($fromDate * 1000);";//need to multiply unix timestamp by 1000 to get javascript timestamp
-		echo "callBackRec.push($countRec);";
-		echo "ansCBRec.push($countAnsRec);";
+		$fromDate = $fromDate + 86400;	
+		
+		/****************************************************************
+		 * printing the php var in a javascript array we declared earlier
+		 ****************************************************************/	
+		echo "callBackRec.push($countCBRec);";
+		echo "ansCBRec.push($countAnsRec);";		    
 	    }
-	    echo "</script>";	   
+	    
+	    echo "</script>";
+	}
+	
+	/**
+	 * Strip number from Array [Result set from sql query]
+	 * 
+	 * @param type $countRecArr Pass a counted result in Array 
+	 * @return type 
+	 */
+	function countRecord($countRecArr) {	    
+	    foreach ($countRecArr as $num) {
+		foreach ($num as $k => $v) {
+		    $countRecNum = $v;
+		}
+	    }
+	    return $countRecNum;
 	}
 	?>
 
-	<form action="Date_Range_stats.php" method="post">
+	<form action="Date_Range_stats_2.php" method="post">
 	    <input type="text" id="from" name="from"/>
 	    <input type="text" id="to" name="to"/>
 	    <input type="hidden" id="fromDate" name="fromDate" />
@@ -135,11 +179,13 @@ require_once 'FirePHP/firePHP.php';
 
 	<div id="placeholder" style="width:818px;height:300px"></div>
 
+	<p><input id="enableTooltip" type="checkbox" checked>Enable tooltip</p>
+	
 	<script>	
 	    
-	    console.log("Day Range: " + dayRange);
+	    /*console.log("Day Range: " + dayRange);
 	    console.log("Call Back Record: " + callBackRec);
-	    console.log("Answered Call Back Records: " + ansCBRec);
+	    console.log("Answered Call Back Records: " + ansCBRec);*/
 	
 	    if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at begining
 		
@@ -173,11 +219,11 @@ require_once 'FirePHP/firePHP.php';
 		    for (i=0; i<nOfR; i++){
 			unit = new Array(day[i], rec[i]);
 			data.push(unit);
-			console.log("Data: " + data);
+			//console.log("Data: " + data);
 		    }	       
 		    return data;
 		}	   
-		console.log("Day Range: " + dayRange);
+		//console.log("Day Range: " + dayRange);
 	   
 		//Following Script is for generating callback statistics
 		var callbackData = multiDimenArray(dayRange, callBackRec);		
@@ -186,17 +232,16 @@ require_once 'FirePHP/firePHP.php';
 		var answeredData = multiDimenArray(dayRange, ansCBRec);	
 	    	    
 		//console.log("Returned CallBack Data: ", callbackData);	
-		console.log("Returned CallBack Data: ", answeredData);	
+		//console.log("Returned CallBack Data: ", answeredData);	
 					    	    
-		var data = [ 
+		var datasets = [ 
 		    { 
 			color: "#CB413B", 
-			label: "CallBack", 		    
+			label: "CallBacks", 		    
 			data: callbackData,
 			fill: true, 
 			fillColor: "rgba(255, 0, 0, 0.1)"			
-		    }//To be Used when data for answered call retrieved: 
-		    , 
+		    },
 		    { 
 			color: "green", 
 			label: "Answered", 		     
@@ -218,8 +263,8 @@ require_once 'FirePHP/firePHP.php';
 			
 		    },
 		    grid: {
-			    borderWidth: 2, 
-			    borderColor: "#999999", 
+			    //borderWidth: 0, 
+			    //borderColor: "#999999", 
 			    hoverable: true, 
 			    clickable: true
 			}, 		    
@@ -229,7 +274,50 @@ require_once 'FirePHP/firePHP.php';
 		    }
 		};
 	
-		$.plot($("#placeholder"), data, options);
+		var plot = $.plot($("#placeholder"), datasets, options);
+
+
+		/*****************************************************************
+		* Following script for showing the tooltips on mouse hover
+		******************************************************************/
+		
+		function showTooltip(x, y, contents) {
+		    $('<div id="tooltip">' + contents + '</div>').css( {
+			position: 'absolute',
+			display: 'none',
+			top: y + -15,
+			left: x + 15,			
+			border: '1px solid #000',//#fdd
+			padding: '6px',
+			'background-color': '#fff',//fee			
+			opacity: 0.80			
+		    }).appendTo("body").fadeIn(200);
+		}
+
+		var previousPoint = null;
+		$("#placeholder").bind("plothover", function (event, pos, item) {
+		    $("#x").text(pos.x);
+		    $("#y").text(pos.y);
+
+		    if ($("#enableTooltip:checked").length > 0) {
+			if (item) {
+			    if (previousPoint != item.dataIndex) {
+				previousPoint = item.dataIndex;
+
+				$("#tooltip").remove();
+				var x = item.datapoint[0],//.toFixed(2),
+				    y = item.datapoint[1];//.toFixed(2);
+
+				showTooltip(item.pageX, item.pageY,					    
+					    y + " " + item.series.label);
+			    }
+			}
+			else {
+			    $("#tooltip").remove();
+			    previousPoint = null;            
+			}
+		    }
+		});
 	    }
 	</script>
     </body>

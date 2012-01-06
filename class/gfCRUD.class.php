@@ -242,7 +242,7 @@ class CRUD {
      *
      */
      public function rawSelect($sql) {
-	$this->conn();
+	//$this->conn();
 	//return $this->_dbConn->query($sql);
 	$stmt = $this->_dbConn->query($sql);
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);

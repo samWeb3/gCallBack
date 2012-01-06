@@ -58,6 +58,31 @@
     .pContainer .last a, .pContainer .last a:hover {
 	border: none !important;
     }
+
+/*Callback AdminCallBack Style*/
+#dateRange {
+    border: 0px solid red;
+}
+#viewStatPnl {
+    width: 812px;
+    height: 350px;   
+    padding-top: 10px;
+}
+#statPlaceholder {
+    margin: 0px auto;  
+    width: 770px;
+    height: 300px;
+}
+    
+/*CallBack statPlaceholder style*/
+#statPlaceholder table{
+    width: 0px !important;
+}
+#statPlaceholder table td, #statPlaceholder table th{
+    padding: 5px 5px 4px;
+    background: #f1f1f1;
+}
+
 /*Extend some bootstrap css*/
 .btn:active{
     outline: none !important;
@@ -67,4 +92,17 @@
 }
 .btn.disabled{
     outline: none !important;
+}
+.small {
+    font-size: 11px !important;
+}
+.unHighlight{
+    color: #BFBFBF;
+}
+.group:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
 }
