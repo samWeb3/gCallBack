@@ -44,30 +44,24 @@ $cbStats = new CallBackStats();
 		 * instead of 12:00 AM(Begining of day)
 		 */
 		$ukToDate = date("d M Y h:i:s A", strtotime($toDate) + (86399));		
-		
 
 		if ($fromDate != "" && $toDate != "") {
 		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
-		    
-		    echo "Graph Stats [If If]";
-		    
+		    	    
 		    $fromDate = $_GET['fromDate'];
 		    $toDate = $_GET['toDate'];
 		    
-		    $cbStats->customStats($fromDate, $toDate);
-		    
+		    $cbStats->customStats($fromDate, $toDate);		    
 		    
 		} else {
 		    $infoMessage = "Displaying All Callback Records";
 		    
-		    echo "Graph Stats [If ELSE]";
 		    $cbStats->monthStats();		    
 		}
 		
 	    } else {
 		$infoMessage = "Displaying All Callback Records";
-		
-		echo "Graph Stats [Else]";
+				
 		$cbStats->monthStats();	
 	    }
 
@@ -127,16 +121,6 @@ $cbStats = new CallBackStats();
 		    <button id="viewDashboardBtn" class="btn default pull-left">View Dashboard</button>
 		</div>
 
-		<!--div id="switchDisplay">
-<?php
-//if (isset($_GET['switchBoard']) == 'dashboardPnl'){				
-?>
-			<button id="viewDashboardBtn" class="btn default pull-left">View Dashboard</button>		    
-		<?php //} if (isset($_GET['switchBoard']) == 'statsPnl'){ ?>		    
-			<button id="viewStatBtn" class="btn default pull-left">View Statistics</button>
-		<?php // } ?>
-		</div-->
-
 		<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get" class="pull-right">
 		    <!--Used by JavaScript-->
 		    <input class="medium" type="text" id="from" name="from" placeholder="Date From" />
@@ -157,39 +141,7 @@ if (isset($infoMessage)) {
     echo "<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>$infoMessage</div>";
 }
 ?>
-
-
-<?php
-/*$cbStats = new CallBackStats();
-if (isset($_GET['dateRange'])) {
-    echo "crash here? ";
-    $sFromDate = strtotime($_GET['fromDate']);
-
-    //we add one day (86400sec) to a toDate to get PM
-    $sToDate = strtotime($_GET['toDate']) + 86399;
-
-    //to calculate how many days we need range
-    $range = $sToDate - $sFromDate;
-
-    //get the number of days
-    $noOfDays = round($range / 86400);
-
-    $cbStats->getRecords($sToDate, $sFromDate, $noOfDays);
-    //getRecords($toDate, $fromDate, $noOfDays);
-} else {
-    //Get the today end day 
-    $sToDate = strtotime('today') + 86400;
-    //calculate the range for 30 days
-    $range = 86400 * 30;
-    //Deduct $range from $toDate
-    $sFromDate = $sToDate - $range;
-    $noOfDays = round($range / 86400);
-
-    $cbStats->getRecords($sToDate, $sFromDate, $noOfDays);
-}*/
-?>
-
-	    <div id="viewStatPnl">
+	    <div id="viewStatPn">
 		<div id="statPlaceholder"></div>
 	    </div>	    
 
@@ -240,6 +192,7 @@ if ($callBackTableSet) {
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script><!--For Date Range Picker-->
 	<script src="js/jquery.tablesorter.min.js"></script>	
+	<script type="text/javascript" src="js/jquery.cookies.2.2.0.js"></script>
 	<script type="text/javascript" src="js/easypaginate.js"></script>	
 	<script type="text/javascript" src="js/recordFilter.js"></script>
 	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>	
@@ -338,6 +291,55 @@ if ($callBackTableSet) {
 		    $('#toDate').val($('#to').val());
 		});
 	    });
+	    
+	    /*****************************************************
+	     * SWITCH BETWEEN GRAPHICAL STATS AND DASHBOARD
+	     *****************************************************/
+	    
+	    //http://code.google.com/p/cookies/wiki/Documentation#Options_object
+	    var ns = jaaulde.utils.cookies;
+	    
+	    //console.log("Dashboard Value: " + ns.get('dashboard'));
+	    
+	    //If cookie is set to stat
+	    if (ns.get('dashboard') == 'stat'){ 
+		//Display Dashboard Btn
+		$('#viewDashboardBtn').show();
+		$('#viewStatBtn').hide();		
+		
+		//Show Stats Pnl
+		$('#statPlaceholder').show();
+		$('#viewDashboardPnl').hide();
+		
+	    //If the dashboard value is either set to dashboard || or is null || or is empty then
+	    } else if ((ns.get('dashboard') == 'dashboard') || (ns.get('dashboard') == null) || (ns.get('dashboard') == '')){ 
+		//Display the stat button
+		$('#viewDashboardBtn').hide();
+		$('#viewStatBtn').show();
+		
+		//Display the dashboard Pnl
+		$('#statPlaceholder').hide();
+		$('#viewDashboardPnl').show();
+	    }
+
+	    //When View Statistic button clicked
+	    $('#viewStatBtn').click(function(){		
+		$(this).hide();//hide current button [#viewStat]
+		$('#viewDashboardBtn').show();//show View Dashboard button	
+		ns.set('dashboard', 'stat');
+		//console.log(ns.get('dashboard'));		
+		$('#statPlaceholder').show();
+		$('#viewDashboardPnl').hide();		
+	    });
+
+	    $('#viewDashboardBtn').click(function(){		
+		$(this).hide();//hide current button [#viewStat]
+		$('#viewStatBtn').show();//show View Dashboard button
+		ns.set('dashboard', 'dashboard');
+		//console.log(ns.get('dashboard'));
+		$('#statPlaceholder').hide();
+		$('#viewDashboardPnl').show();
+	    });    	
 	</script>
     </body>
 </html>

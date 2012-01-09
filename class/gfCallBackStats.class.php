@@ -97,6 +97,44 @@ class CallBackStats {
 	}
 	return $countRecNum;
     }
+    
+    /**
+     * Computes Prev one month date from the current day
+     */
+    public function monthStats(){
+	//Get the today end day 
+	$unixToDate = strtotime('today') + 86400;
+	//calculate the range for 30 days
+	$range = 86400 * 30;
+	//Deduct $range from $toDate
+	$unixFromDate = $unixToDate - $range;
+	$noOfDays = round($range / 86400);
+
+	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);
+    }
+    
+    /**
+     * Computes a Date Range received from Date Picker
+     * 
+     * @param type $fromDate	Stats to display from the start date
+     * @param type $toDate      Stats to display until the end date
+     */
+    public function customStats($fromDate, $toDate){
+	
+	$unixFromDate = strtotime($fromDate);
+
+	//we add one day (86400sec) to a toDate to get PM
+	$unixToDate = strtotime($toDate) + 86399;
+
+	//to calculate how many days we need range
+	$range = $unixToDate - $unixFromDate;
+
+	//get the number of days
+	$noOfDays = round($range / 86400);
+
+	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);
+	
+    }
 }
 
 ?>

@@ -1,9 +1,8 @@
 //Hide the tooltip div
-$('#tooltip').hide();
+$('#tooltipContainer').hide();
 
 $('#viewStatPnl').hide();
 $('#viewDashboardBtn').hide();
-
 
 //When View Statistic button clicked
 $('#viewStatBtn').click(function(){

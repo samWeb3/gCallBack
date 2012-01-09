@@ -15,9 +15,6 @@ Debug::setDebug(true);
 	<link href="css/dr/demos.css" rel="stylesheet" />	
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/callback.css" rel="stylesheet" />
-	
-	
-	
 
 	<script>
 	    //need this until php sets the value
@@ -69,7 +66,7 @@ Debug::setDebug(true);
 
 	<div id="statPlaceholder" style="width:818px;height:300px"></div>
 
-	<p id="tooltip"><input id="enableTooltip" type="checkbox" checked>Enable tooltip</p>
+	<p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>Enable tooltip</p>
 	
 	
 	
@@ -112,9 +109,7 @@ Debug::setDebug(true);
 		});
 	    });
 	
-	</script>
-	
-	
+	</script>	
 	
 	<script language="javascript" type="text/javascript" src="js/callbackStats.js"></script>
     </body>

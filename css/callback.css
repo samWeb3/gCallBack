@@ -63,25 +63,34 @@
 #dateRange {
     border: 0px solid red;
 }
-#viewStatPnl {
-    width: 812px;
-    height: 350px;   
-    padding-top: 10px;
-}
-#statPlaceholder {
-    margin: 0px auto;  
-    width: 770px;
-    height: 300px;
-}
     
 /*CallBack statPlaceholder style*/
+#statPlaceholder {
+    margin: 10px auto;  
+    width: 760px;
+    height: 300px;
+    margin-right: 25px;    
+    margin-bottom: 20px;
+}
+.yAxis .tickLabel {   
+    padding-right: 10px;    
+}
 #statPlaceholder table{
     width: 0px !important;
 }
 #statPlaceholder table td, #statPlaceholder table th{
     padding: 5px 5px 4px;
     background: #f1f1f1;
+   
 }
+#statPlaceholder .legend .visible td:not(.legendLabel){
+    
+}
+
+.legend table {   
+ 
+}
+
 
 /*Extend some bootstrap css*/
 .btn:active{
@@ -105,4 +114,12 @@
     display: block;
     height: 0;
     visibility: hidden;
+}
+
+/*Hacks For Chrome and Safari*/
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .legend table { 	
+	right: 102px !important;
+    };	
 }
