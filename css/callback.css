@@ -10,18 +10,6 @@
 	float: none;	
 	font-weight: bolder;
     }
-    #displayRecord input{
-	/*-moz-transition: none 0s ease 0s;
-	background-color: rgba(255, 255, 255, 0.3);
-	border: 1px solid #111111;
-	border-radius: 4px 4px 4px 4px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.25);
-	color: rgba(255, 255, 255, 0.75);
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-	line-height: 1;
-	padding: 4px 9px;*/
-    }    
-
 /* Custom Paginator Style */
 .cPaginator{
     height: 36px;
@@ -65,6 +53,9 @@
 }
     
 /*CallBack statPlaceholder style*/
+#tooltipContainer{
+    display: none;
+}
 #statPlaceholder {
     margin: 10px auto;  
     width: 760px;
@@ -82,13 +73,6 @@
     padding: 5px 5px 4px;
     background: #f1f1f1;
    
-}
-#statPlaceholder .legend .visible td:not(.legendLabel){
-    
-}
-
-.legend table {   
- 
 }
 
 

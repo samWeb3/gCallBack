@@ -102,6 +102,7 @@ class CallBackStats {
      * Computes Prev one month date from the current day
      */
     public function monthStats(){
+	$this->resetRecords();
 	//Get the today end day 
 	$unixToDate = strtotime('today') + 86400;
 	//calculate the range for 30 days
@@ -120,7 +121,7 @@ class CallBackStats {
      * @param type $toDate      Stats to display until the end date
      */
     public function customStats($fromDate, $toDate){
-	
+	$this->resetRecords();
 	$unixFromDate = strtotime($fromDate);
 
 	//we add one day (86400sec) to a toDate to get PM
@@ -132,9 +133,22 @@ class CallBackStats {
 	//get the number of days
 	$noOfDays = round($range / 86400);
 
-	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);
-	
+	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);	
     }
+    
+    /**
+     * Need to reset the callBackRec and ansCBRec js array before
+     * fetching the correct reocord set
+     * 
+     * Else record set will be populated by old set of data
+     */
+    private function resetRecords(){
+	echo "<script type='text/javascript' language='JavaScript'>";
+	echo "callBackRec = [];";
+	echo "ansCBRec = [];";
+	echo "</script>";
+    }
+
 }
 
 ?>

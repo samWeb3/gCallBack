@@ -54,8 +54,7 @@ $cbStats = new CallBackStats();
 		    $cbStats->customStats($fromDate, $toDate);		    
 		    
 		} else {
-		    $infoMessage = "Displaying All Callback Records";
-		    
+		    $infoMessage = "Displaying All Callback Records";		    
 		    $cbStats->monthStats();		    
 		}
 		
@@ -73,6 +72,18 @@ $cbStats = new CallBackStats();
 	    //Check if Callback link has been clicked
 	    if ((isset($_GET['enq_id']))) {
 		$adminCallBack->updateCallBackStatus($_GET['enq_id']);
+		if ($fromDate != "" && $toDate != "") {
+		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		    	    
+		    $fromDate = $_GET['fromDate'];
+		    $toDate = $_GET['toDate'];
+		    
+		    $cbStats->customStats($fromDate, $toDate);		    
+		    
+		} else {
+		    $infoMessage = "Displaying All Callback Records";		    
+		    $cbStats->monthStats();		    
+		}
 	    }
 	    if ((isset($_GET['row_pp']))) {
 		if (empty($_GET['row_pp'])) {
@@ -193,8 +204,7 @@ if ($callBackTableSet) {
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script><!--For Date Range Picker-->
 	<script src="js/jquery.tablesorter.min.js"></script>	
 	<script type="text/javascript" src="js/jquery.cookies.2.2.0.js"></script>
-	<script type="text/javascript" src="js/easypaginate.js"></script>	
-	<script type="text/javascript" src="js/recordFilter.js"></script>
+	<script type="text/javascript" src="js/easypaginate.js"></script>		
 	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>	
 	<!--for Date Range Picker-->
 	<script src="js/dr/jquery.ui.widget.js" type="text/javascript" charset="utf-8"></script>
