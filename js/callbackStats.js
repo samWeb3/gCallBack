@@ -108,10 +108,14 @@ if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at 
 		    var x = item.datapoint[0],//date timestamp [for eg ]1324400068000]
 		    y = item.datapoint[1];//.toFixed(2);
 		    
-		    var date = new Date(x);
+		    var date = new Date(x);		    		    		    
+		    
+		    function ddmmyy(){
+			return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();		
+		    }
 		   
 		    showTooltip(item.pageX, item.pageY,					    
-			y + " " + item.series.label + " on " + date);
+			y + " " + item.series.label + " on " + ddmmyy());
 		}
 	    }
 	    else {
