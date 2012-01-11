@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Datepicker - Select a Date Range</title>
+	<link href="css/dr/jquery.ui.all.css" rel="stylesheet" />
+	<link href="css/dr/demos.css" rel="stylesheet" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/dr/jquery.ui.widget.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/dr/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+	$(function() {
+		var dates = $( "#from, #to" ).datepicker({
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 1,
+			onSelect: function( selectedDate ) {
+				var option = this.id == "from" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+			}
+		});
+	});
+		
+    $(document).ready(function(){
+	$('#date').click(function() {
+	    console.log("From " + $('#from').val() + " To: " + $('#to').val());
+	    $('#fromDate').val($('#from').val());
+	    $('#toDate').val($('#to').val());
+	});
+    });
+	
+	</script>
+</head>
+<body>
+
+    
+<div class="demo">
+
+<label for="from">From</label>
+<input type="text" id="from" name="from"/>
+<label for="to">to</label>
+
+<input type="text" id="to" name="to"/>
+
+</div><!-- End demo -->
+
+
+<div class="demo-description">
+<p>Select the date range to search for.</p>
+</div><!-- End demo-description -->
+<input type="input" id="fromDate" />
+<input type="input" id="toDate" />
+<input type="submit" id="date" name="dateRange" value="Display" />
+
+</body>
+</html>

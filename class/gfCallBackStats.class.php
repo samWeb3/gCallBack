@@ -6,8 +6,18 @@ require_once 'gfPagination.php';
 class CallBackStats {
 
     private $_crud;
+    private $_instanceId;
+    
 
-    public function __construct() {	
+    /**
+     *
+     * @param int $instanceId	Instance Id of a partner website
+     */
+    public function __construct($instanceId) {	
+	if (empty($instanceId)){
+	    throw new Exception("Partner ID Not provided");
+	}
+	$this->_instanceId = $instanceId;
 	$this->dbConnSetup();
     }
 
@@ -55,7 +65,7 @@ class CallBackStats {
 
 		//Get the record for a specified day
 		$resCB = $this->_crud->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
-				$fromDate and callBackDate < $fromDateEnd");
+				$fromDate and callBackDate < $fromDateEnd AND callbackuserenquiry.instanceId = $this->_instanceId");
 
 		//Strip the record number from resultset Array
 		$countCBRec = $this->countRecord($resCB);
@@ -65,7 +75,7 @@ class CallBackStats {
 		 ******************************************************/
 
 		$resAnsCB = $this->_crud->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
-				$fromDate and callBackDate < $fromDateEnd and cb_status = 1");
+				$fromDate and callBackDate < $fromDateEnd and cb_status = 1 AND callbackuserenquiry.instanceId = $this->_instanceId");
 
 		$countAnsRec = $this->countRecord($resAnsCB);
 

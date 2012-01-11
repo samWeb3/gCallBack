@@ -34,7 +34,8 @@
       /* IE6-7 */
     }
     .pContainer a:hover{
-	background-color: #C7EEFE;    
+	background-color: #C7EEFE;  
+	text-decoration: none;
     }
     .pContainer .disabled a, .pContainer .disabled a:hover {
 	background-color: transparent;
@@ -64,7 +65,7 @@
     margin-bottom: 20px;
 }
 .yAxis .tickLabel {   
-    padding-right: 10px;    
+    padding-right: 5px;    
 }
 #statPlaceholder table{
     width: 0px !important;

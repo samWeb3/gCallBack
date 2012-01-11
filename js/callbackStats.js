@@ -125,3 +125,52 @@ if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at 
 	}
     });
 }
+
+/*****************************************************
+ * SWITCH BETWEEN GRAPHICAL STATS AND DASHBOARD
+ *****************************************************/
+
+//http://code.google.com/p/cookies/wiki/Documentation#Options_object
+var ns = jaaulde.utils.cookies;
+
+//console.log("Dashboard Value: " + ns.get('dashboard'));
+
+//If cookie is set to stat
+if (ns.get('dashboard') == 'stat'){ 
+    //Display Dashboard Btn
+    $('#viewDashboardBtn').show();
+    $('#viewStatBtn').hide();		
+
+    //Show Stats Pnl
+    $('#statPlaceholder').show();
+    $('#viewDashboardPnl').hide();
+
+//If the dashboard value is either set to dashboard || or is null || or is empty then
+} else if ((ns.get('dashboard') == 'dashboard') || (ns.get('dashboard') == null) || (ns.get('dashboard') == '')){ 
+    //Display the stat button
+    $('#viewDashboardBtn').hide();
+    $('#viewStatBtn').show();
+
+    //Display the dashboard Pnl
+    $('#statPlaceholder').hide();
+    $('#viewDashboardPnl').show();
+}
+
+//When View Statistic button clicked
+$('#viewStatBtn').click(function(){		
+    $(this).hide();//hide current button [#viewStat]
+    $('#viewDashboardBtn').show();//show View Dashboard button	
+    ns.set('dashboard', 'stat');
+    //console.log(ns.get('dashboard'));		
+    $('#statPlaceholder').show();
+    $('#viewDashboardPnl').hide();		
+});
+
+$('#viewDashboardBtn').click(function(){		
+    $(this).hide();//hide current button [#viewStat]
+    $('#viewStatBtn').show();//show View Dashboard button
+    ns.set('dashboard', 'dashboard');
+    //console.log(ns.get('dashboard'));
+    $('#statPlaceholder').hide();
+    $('#viewDashboardPnl').show();
+}); 

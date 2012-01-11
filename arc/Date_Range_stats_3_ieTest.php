@@ -1,10 +1,12 @@
 <?php
-    //Include the PS_Pagination class
-    require_once 'class/gfAdminCallBack.class.php';
-    require_once 'class/gfCallBackStats.class.php';
-    require_once 'FirePHP/firePHP.php';
-    //Set the Debugging mode to True
-    Debug::setDebug(true);
+//Include the PS_Pagination class
+require_once 'class/gfAdminCallBack.class.php';
+require_once 'class/gfCallBackStats.class.php';
+require_once 'FirePHP/firePHP.php';
+//Set the Debugging mode to True
+Debug::setDebug(true);
+
+$cbStats = new CallBackStats();
 ?>  
 <!DOCTYPE html>
 <html>
@@ -27,11 +29,6 @@
     </head>
     <body>
 	<?php
-	$instanceId = 151; //instance of partner
-	$numLink = 10; //number of link
-	
-	$cbStats = new CallBackStats($instanceId);
-	
 	try {
 	    //Get the From and To Date Range
 	    if (isset($_GET['dateRange'])) {
@@ -49,10 +46,16 @@
 		$ukToDate = date("d M Y h:i:s A", strtotime($toDate) + (86399));		
 
 		if ($fromDate != "" && $toDate != "") {
-		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";  		    
-		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']);		    		    
+		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		    	    
+		    $fromDate = $_GET['fromDate'];
+		    $toDate = $_GET['toDate'];
+		    
+		    $cbStats->customStats($fromDate, $toDate);		    
+		    
 		} else {
-		    $infoMessage = "Displaying All Callback Records";		    
+		    $infoMessage = "Displaying All Callback Records";
+		    
 		    $cbStats->monthStats();		    
 		}
 		
@@ -62,18 +65,14 @@
 		$cbStats->monthStats();	
 	    }
 
+	    $instanceId = 151; //instance of partner
+	    $numLink = 10; //number of link
+
 	    $adminCallBack = new AdminCallBack($instanceId, $fromDate, $toDate, $dateRange);
 
 	    //Check if Callback link has been clicked
 	    if ((isset($_GET['enq_id']))) {
 		$adminCallBack->updateCallBackStatus($_GET['enq_id']);
-		if ($fromDate != "" && $toDate != "") {
-		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";		    
-		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']); 
-		} else {
-		    $infoMessage = "Displaying All Callback Records";		    
-		    $cbStats->monthStats();		    
-		}
 	    }
 	    if ((isset($_GET['row_pp']))) {
 		if (empty($_GET['row_pp'])) {
@@ -111,8 +110,9 @@
 	} catch (Exception $ex) {
 	    $errorMessage = $ex->getMessage();
 	}
-	?>
-	
+	?> 
+
+
 	<div id="container">
 
 	    <div id="dateRange" class="group">
@@ -136,14 +136,19 @@
 		</form>
 	    </div>
 
+	    
+
+
+
 <?php
 if (isset($infoMessage)) {
     echo "<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>$infoMessage</div>";
 }
 ?>
-	    <div id="viewStatPn">
-		<div id="statPlaceholder"></div>
-	    </div>	    
+
+	   
+	    
+	    <div id="statPlaceholder"></div>    	    
 
 	    <p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>Enable tooltip</p>
 
@@ -193,11 +198,9 @@ if ($callBackTableSet) {
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script><!--For Date Range Picker-->
 	<script src="js/jquery.tablesorter.min.js"></script>	
 	<script type="text/javascript" src="js/jquery.cookies.2.2.0.js"></script>
-	<script type="text/javascript" src="js/easypaginate.js"></script>		
+	<script type="text/javascript" src="js/easypaginate.js"></script>	
+	<script type="text/javascript" src="js/recordFilter.js"></script>
 	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>	
-	
-	<script type="text/javascript" src="js/recordFilter.js"></script>	
-	
 	<!--for Date Range Picker-->
 	<script src="js/dr/jquery.ui.widget.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/dr/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
@@ -292,7 +295,56 @@ if ($callBackTableSet) {
 		    $('#fromDate').val($('#from').val());
 		    $('#toDate').val($('#to').val());
 		});
-	    });	
+	    });
+	    
+	    /*****************************************************
+	     * SWITCH BETWEEN GRAPHICAL STATS AND DASHBOARD
+	     *****************************************************/
+	    
+	    //http://code.google.com/p/cookies/wiki/Documentation#Options_object
+	    var ns = jaaulde.utils.cookies;
+	    
+	    //console.log("Dashboard Value: " + ns.get('dashboard'));
+	    
+	    //If cookie is set to stat
+	    if (ns.get('dashboard') == 'stat'){ 
+		//Display Dashboard Btn
+		$('#viewDashboardBtn').show();
+		$('#viewStatBtn').hide();		
+		
+		//Show Stats Pnl
+		$('#statPlaceholder').show();
+		$('#viewDashboardPnl').hide();
+		
+	    //If the dashboard value is either set to dashboard || or is null || or is empty then
+	    } else if ((ns.get('dashboard') == 'dashboard') || (ns.get('dashboard') == null) || (ns.get('dashboard') == '')){ 
+		//Display the stat button
+		$('#viewDashboardBtn').hide();
+		$('#viewStatBtn').show();
+		
+		//Display the dashboard Pnl
+		$('#statPlaceholder').hide();
+		$('#viewDashboardPnl').show();
+	    }
+
+	    //When View Statistic button clicked
+	    $('#viewStatBtn').click(function(){		
+		$(this).hide();//hide current button [#viewStat]
+		$('#viewDashboardBtn').show();//show View Dashboard button	
+		ns.set('dashboard', 'stat');
+		//console.log(ns.get('dashboard'));		
+		$('#statPlaceholder').show();
+		$('#viewDashboardPnl').hide();		
+	    });
+
+	    $('#viewDashboardBtn').click(function(){		
+		$(this).hide();//hide current button [#viewStat]
+		$('#viewStatBtn').show();//show View Dashboard button
+		ns.set('dashboard', 'dashboard');
+		//console.log(ns.get('dashboard'));
+		$('#statPlaceholder').hide();
+		$('#viewDashboardPnl').show();
+	    });    	
 	</script>
     </body>
 </html>

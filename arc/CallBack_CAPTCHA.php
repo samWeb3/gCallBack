@@ -1,9 +1,85 @@
 <?php
 require_once 'class/gfCallBackForm.class.php';
-require_once 'FirePHP/firePHP.php';
+?>
 
-//Set the Debugging mode to True
-Debug::setDebug(true);
+<?php
+    $missing = null;
+    $errors = null;
+
+    if (filter_has_var(INPUT_POST, request_callback)){	//better than isset as it returns true even in case of an empty string 	
+	try {
+	    require_once 'class/gfValidator.php';
+
+	    $required = array('user_fname', 'user_email', 'user_tel', 'user_enquiry');
+
+	    //retrieve the input and check whether any fields are missing	    
+	    $val = new Validator($required);
+
+	    //Validate each field and generate errror
+	    $val->checkTextLength('user_fname', 3, 30);			   
+	    $val->removeTags('user_fname');
+	    $val->isEmail('user_email');	    
+	    $val->matches('user_tel', '/[0-9][3,11]/');
+	    $val->checkTextLength('user_enquiry', 5, 500);
+	    $val->useEntities('user_enquiry');
+
+	    //check the validation test has been set for each required field
+	    $filtered = $val->validateInput();
+
+	    $fname = $filtered['user_fname'];
+	    $email = $filtered['user_email'];
+	    $tel = $filtered['user_tel'];
+	    $enquiry = $filtered['user_enquiry'];
+
+	    $missing = $val->getMissing();
+	    $errors = $val->getErrors();	    
+
+	} catch (Exception $e){
+	    echo $e;
+	}
+    }
+?>
+
+<?php
+    require_once('class/recaptchalib.php');
+    // Get a key from https://www.google.com/recaptcha/admin/create
+    $publickey = "6LfZ5MoSAAAAAE2F-qJQSfJyu2hxKhjE2MWoSfzv";
+    $privatekey = "6LfZ5MoSAAAAAMKc_l2F7qAowkQKBYIesqZz3GGX ";
+
+    # the response from reCAPTCHA
+    $resp = null;
+    # the error code from reCAPTCHA, if any
+    $error = null;
+
+    # was there a reCAPTCHA response?
+    if ($_POST["recaptcha_response_field"]) {
+	    $resp = recaptcha_check_answer ($privatekey,
+					    $_SERVER["REMOTE_ADDR"],
+					    $_POST["recaptcha_challenge_field"],
+					    $_POST["recaptcha_response_field"]);
+
+	    if ($resp->is_valid) {
+		echo "Correct Capche is entered";
+		
+		    //if nothing is mission or no errors is thrown
+		if (!$missing && !$errors){
+		    try {
+			$cbf = new CallBackForm($fname, $email, $tel, $enquiry);
+		    } catch (Exception $e) {
+			echo $e->getMessage();
+		    }		
+		} else {
+		    echo '<span class="warning">All values not set. Therefore, form couldn\'t be submitted: <br />';
+		    print_r($filtered);
+		    echo '</span><br />';
+		}
+		   
+	    } else {
+		    # set the error code so that we can display it
+		    $error = $resp->error;
+	    }
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -39,86 +115,37 @@ Debug::setDebug(true);
 		color: #f00;
 		font-weight: bold;
 	    }
+
 	</style>
+
     </head>
 
     <?php
     
-    $missing = null;
-    $errors = null;
-    $success = null;
     
-    if (filter_has_var(INPUT_POST, request_callback)){	//better than isset as it returns true even in case of an empty string 	
-	try {
-	    require_once 'class/gfValidator.php';
-	    
-	    $required = array('user_name', 'user_email', 'user_tel', 'user_enquiry');
-	    
-	    //retrieve the input and check whether any fields are missing	    
-	    $val = new Validator($required);
-	    
-	    //Validate each field and generate errror
-	    $val->checkTextLength('user_name', 3, 30);			   
-	    $val->removeTags('user_name');
-	    $val->isEmail('user_email');	    
-	    $val->matches('user_tel', '/[0-9]{3,11}/');
-	    $val->checkTextLength('user_enquiry', 5, 500);
-	    $val->useEntities('user_enquiry');
-	    
-	    //check the validation test has been set for each required field
-	    $filtered = $val->validateInput();
-	    
-	    $fname = $filtered['user_name'];
-	    $email = $filtered['user_email'];
-	    $tel = $filtered['user_tel'];
-	    $enquiry = $filtered['user_enquiry'];
-	    
-	    $missing = $val->getMissing();
-	    $errors = $val->getErrors();
-	    
-	    //if nothing is mission or no errors is thrown
-	    if (!$missing && !$errors){
-		try {
-		    $cbf = new CallBackForm($fname, $email, $tel, $enquiry);		    
-		    
-		    $submitted = "CallBack: Congratulation! Your Form has been submitted!";
-		    if (Debug::getDebug()){
-			Fb::info($submitted);
-		    }
-		    unset($_POST['user_name'], $_POST['user_email'], $_POST['user_tel'], $_POST['user_enquiry']);
-		    
-		} catch (Exception $e) {
-		    echo $e->getMessage();
-		}		
-	    } else {
-		if (Debug::getDebug()){
-		    fb($filtered, "All Values not set", FirePHP::INFO);		    
-		}		
-	    }	    
-	} catch (Exception $e){
-	    echo $e;
-	}	
-    }
+
     ?>
 
     <body>
 	<h1>CallBack Form</h1>
-	<form action="CallBack.php" method="POST">
+	<form action="CallBack_CAPTCHA.php" method="POST">
+	    
+
 	    <ul>
 		<li>
 		    <?php 
-			if (isset($errors['user_name'])) { 
-			    echo '<span class="warning">' . $errors['user_name'] . '</span><br />'; 				
+			if (isset($errors['user_fname'])) { 
+			    echo '<span class="warning">' . $errors['user_fname'] . '</span><br />'; 				
 			} 
 		    ?>
 		    <span class="leftWidth">First Name:</span>
-			<input type="text" maxlength="32" size="20" name="user_name"
+			<input type="text" maxlength="32" size="20" name="user_fname"
 			   <?php
 				//Sticky Form: The Essential Guide to Dreamweaver CS4 with CSS, Ajax, and PHP
 				if (isset($missing)) { //if any field a are missing retain the info
 				    //ENT_COMPAT: converts double quote to $quote; but lives single quote alone
-				    echo 'value ="'.htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8').'"';
-				}				
+				    echo 'value ="'.htmlentities($_POST['user_fname'], ENT_COMPAT, 'UTF-8').'"';
+				}
 			    ?>
 			/>
 		</li>		
@@ -165,10 +192,25 @@ Debug::setDebug(true);
 		    ?></textarea>
 		</li>
 		<li><span class="leftWidth">&nbsp; </span>
+		    
+		    
+		    
+		    <?php echo recaptcha_get_html($publickey, $error); ?>
 		    <input class="buttonBackground" type="submit" value="Request Callback" name="request_callback" />
 		    <input class="buttonBackground" type="reset" value="Reset" id="reset" name="reset">
 		</li>
 	    </ul>
+	    
 	</form>
+	
+	<!--div id="callback">
+	    <div id="cbHeader">
+		  <div class="leftFloat">CallBack</div>
+	    </div>
+	    <div id="cbMiddle">
+		
+	    </div>    	    
+	</div-->
+	
     </body>
 </html>
