@@ -6,8 +6,7 @@ require_once 'gfPagination.php';
 class CallBackStats {
 
     private $_crud;
-    private $_instanceId;
-    
+    private $_instanceId;    
 
     /**
      *
@@ -61,22 +60,15 @@ class CallBackStats {
 
 		/*****************************************************
 		 * FOR TOTAL CALLBACKS 
-		 *****************************************************/
-
-		//Get the record for a specified day
-		$resCB = $this->_crud->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
-				$fromDate and callBackDate < $fromDateEnd AND callbackuserenquiry.instanceId = $this->_instanceId");
-
+		 *****************************************************/	       
+	        $resCB = $this->statResultSet($fromDate, $fromDateEnd);
 		//Strip the record number from resultset Array
 		$countCBRec = $this->countRecord($resCB);
 
 		/******************************************************
 		 * FOR ANSWERED CALLBACKS 
 		 ******************************************************/
-
-		$resAnsCB = $this->_crud->rawSelect("select count(*) from callbackuserenquiry where callBackDate > 
-				$fromDate and callBackDate < $fromDateEnd and cb_status = 1 AND callbackuserenquiry.instanceId = $this->_instanceId");
-
+		$resAnsCB = $this->statResultSet($fromDate, $fromDateEnd, '1');
 		$countAnsRec = $this->countRecord($resAnsCB);
 
 		//Add one more day (86400sec) to the first day 
@@ -97,7 +89,7 @@ class CallBackStats {
      * Strip number from Array [Result set from sql query]
      * 
      * @param type $countRecArr Pass a counted result in Array 
-     * @return type 
+     * @return type		Integer
      */
     private function countRecord($countRecArr) {
 	foreach ($countRecArr as $num) {
@@ -158,7 +150,30 @@ class CallBackStats {
 	echo "ansCBRec = [];";
 	echo "</script>";
     }
-
+    
+    /**
+     * Returns the resultSet required for generating stats
+     * 
+     * @param type $fromDate	    Stats to display from the start date 00:00:00
+     * @param type $fromDateEnd	    Stats to display from the start date 23:59:59    
+     * @param type $cbStatus	    '1' if Answered
+     * @return type		    Array [resultSet]
+     */
+    private function statResultSet($fromDate, $fromDateEnd, $cbStatus=""){
+	$sql =  "select count(*) from callbackuserenquiry where callBackDate > 
+				:fromDate and callBackDate < :fromDateEnd AND callbackuserenquiry.instanceId = :insId";
+	if ($cbStatus == '1'){
+	    $sql .= " AND cb_status = $cbStatus";
+	} 			
+		
+	$stmt = $this->_crud->getDbConn()->prepare($sql);
+	$stmt->bindParam(':insId', $this->_instanceId, PDO::PARAM_STR);
+	$stmt->bindParam(':fromDate', $fromDate, PDO::PARAM_STR);
+	$stmt->bindParam(':fromDateEnd', $fromDateEnd, PDO::PARAM_STR);
+	$stmt->execute();
+	
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>

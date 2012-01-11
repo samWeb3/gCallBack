@@ -68,9 +68,7 @@ class PS_Pagination {
 		if ($this->_total_rows == 0) {
 		    if (Debug::getDebug()){			
 			Fb::warn("Query returned zero rows.");
-		    }
-		    /*if ($this->_debug)
-			echo "Query returned zero rows.";*/
+		    }		    
 		    return FALSE;
 		}
 		

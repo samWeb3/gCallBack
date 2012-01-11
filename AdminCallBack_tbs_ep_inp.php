@@ -57,8 +57,7 @@
 		}
 		
 	    } else {
-		$infoMessage = "Displaying All Callback Records";
-				
+		$infoMessage = "Displaying All Callback Records";				
 		$cbStats->monthStats();	
 	    }
 
