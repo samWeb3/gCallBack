@@ -116,7 +116,7 @@
 
 	    <div id="dateRange" class="group">
 		<div id="switchDisplay">
-		    <button id="viewStatBtn" class="btn default pull-left">View Statistics</button>
+		    <button id="viewStatBtn" class="btn default pull-left">View Statistics</button>		    
 		    <button id="viewDashboardBtn" class="btn default pull-left">View Dashboard</button>
 		</div>
 
@@ -128,8 +128,6 @@
 		    <!--Used by PHP-->
 		    <input type="hidden" id="fromDate" name="fromDate"/>
 		    <input type="hidden" id="toDate" name="toDate"/>
-
-		    <!--input type="hidden" id="switchBoard" name="switchBoard" value="dashboardPnl"/-->
 
 		    <input type="submit" id="date" name="dateRange" value="Display" class="btn default"/>
 		</form>
@@ -292,6 +290,10 @@ if ($callBackTableSet) {
 		    $('#toDate').val($('#to').val());
 		});
 	    });	
+	    
+	    $('.callback').click(function(){
+		alert("button responding!!");
+	    });
 	</script>
     </body>
 </html>

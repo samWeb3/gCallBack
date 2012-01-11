@@ -146,7 +146,8 @@ class AdminCallBack {
 			$status = "";
 			if ($r[cb_status] == 0){
 			    //need to pass a pager number to ensure when callback is called from page it doesn't go back to first page
-			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange'><button class='btn danger'>Callback</button></a>";
+			    //$status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange'><button class='btn danger'>Callback</button></a>";//Doesn't work <IE8			    			    
+			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange' class='btn danger'>Callback</a>";			    			   
 			} else {
 			    $status = "<button class='btn success disabled'>Answered</button>";
 			}
