@@ -20,32 +20,33 @@ class CRUD {
 	switch ($name) {
 	    case 'username':
 		$this->username = $value;
-		if (Debug::getDebug()){
-		    fb($value, "Username", FirePHP::INFO);		    
+		if (Debug::getDebug()) {
+		    fb($value, "Username", FirePHP::INFO);
 		}
 		break;
 
 	    case 'password':
 		$this->password = $value;
-		if (Debug::getDebug()){
-		    fb($value, "Password", FirePHP::INFO);		    
+		if (Debug::getDebug()) {
+		    fb($value, "Password", FirePHP::INFO);
 		}
 		break;
 
 	    case 'dsn':
 		$this->dsn = $value;
-		if (Debug::getDebug()){
-		    fb($value, "DSN Set", FirePHP::INFO);		    
-		}		
+		if (Debug::getDebug()) {
+		    fb($value, "DSN Set", FirePHP::INFO);
+		}
 		break;
 	    default:
 		throw new Exception("$name is invalid");
 	}
     }
+
     /**
      * Returns database connection 
      */
-    public function getDbConn(){
+    public function getDbConn() {
 	return $this->_dbConn;
     }
 
@@ -76,12 +77,11 @@ class CRUD {
 	if (!$this->_dbConn instanceof PDO) {
 	    $this->_dbConn = new PDO($this->dsn, $this->username, $this->password);
 	    $this->_dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	}	
-	if (Debug::getDebug()){
-	    FB::info("CRUD class: Connection successful!");	    
+	}
+	if (Debug::getDebug()) {
+	    FB::info("CRUD class: Connection successful!");
 	}
     }
-    
 
     //***********************************************************************
     // (C): Create Row(s)
@@ -93,57 +93,57 @@ class CRUD {
      * @param array $values  values retrieved from the array
      */
     public function dbInsert($table, $values) {
-	$this->conn();	
+	$this->conn();
 
 	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
-	if (Debug::getDebug()){
-	    fb($fieldnames, "Fieldnames", FirePHP::INFO);	    
-	}	
+	if (Debug::getDebug()) {
+	    fb($fieldnames, "Fieldnames", FirePHP::INFO);
+	}
 
 	$sql = "INSERT INTO $table";
 
 	//set the field name
 	$fields = '(' . implode(', ', $fieldnames) . ')';
-	if (Debug::getDebug()){
-	    fb($fields, "Fields", FirePHP::INFO);	    
+	if (Debug::getDebug()) {
+	    fb($fields, "Fields", FirePHP::INFO);
 	}
 	//set the placeholder values
 	$bound = '(:' . implode(', :', $fieldnames) . ')';
-	if (Debug::getDebug()){
-	    fb($bound, "Bounds", FirePHP::INFO);	    
+	if (Debug::getDebug()) {
+	    fb($bound, "Bounds", FirePHP::INFO);
 	}
 
 	//put the query together
 	$sql .= $fields . ' VALUES ' . $bound;
-	if (Debug::getDebug()){
-	    fb($sql, "SQL Query", FirePHP::INFO);	    
-	}	
+	if (Debug::getDebug()) {
+	    fb($sql, "SQL Query", FirePHP::INFO);
+	}
 	//Prepare statement
 	$stmt = $this->_dbConn->prepare($sql);
 
 	/* Iterate through multi-dimentional array and execute statement */
 	foreach ($values as $vals) {
 	    foreach ($vals as $v) {
-		if (Debug::getDebug()){
+		if (Debug::getDebug()) {
 		    fb($v, "Values", FirePHP::INFO);
-		}		
+		}
 	    }
-	    
+
 	    $result = $stmt->execute($vals);
 	}
-	
+
 	if ($result) {
 	    return $this->_success = true;
 	} else {
 	    return $this->_success = false;
 	}
     }
-    
+
     //***********************************************************************
     // (R): Read Row(s)
     //***********************************************************************
-    
+
     /**
      * Select values from table
      * 
@@ -153,7 +153,7 @@ class CRUD {
      * @return array on success or throw PDOExcepton on failure 
      */
     public function dbSelect($table, $fieldname=null, $id=null, $fromDate=null, $toDate=null) {
-	$this->conn();	
+	$this->conn();
 	if ($fieldname && $id != null) {
 	    $sql = "SELECT * FROM $table WHERE $fieldname =:id";
 	} else {
@@ -166,7 +166,7 @@ class CRUD {
 
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     /**
      * Returns the callback data relevent to the filtering of the data accroding to the provided parameters	
      * 
@@ -180,58 +180,56 @@ class CRUD {
      * @return string		    Records 
      */
     public function dbSelectFromTo($table, $instanceId, $fieldname=null, $id=null, $dateFieldName = null, $fromDate=null, $toDate=null) {
-	fb($fieldname, "FieldName", FirePHP::INFO);
-	fb($id, "ID", FirePHP::INFO);
-	fb($dateFieldName, "Date Field Name", FirePHP::INFO);
-	fb($fromDate, "From Date", FirePHP::INFO);
-	fb($toDate, "To Date", FirePHP::INFO);
-	
-	$sql = "SELECT * FROM $table WHERE instanceId = $instanceId";	
-	
-	if (Debug::getDebug()){
-	   fb($sql, "SQL Query 1 ", FirePHP::INFO);	   
+
+	$sql = "SELECT * FROM $table WHERE instanceId = $instanceId";
+
+	if (Debug::getDebug()) {
+	    fb($fieldname, "FieldName", FirePHP::INFO);
+	    fb($id, "ID", FirePHP::INFO);
+	    fb($dateFieldName, "Date Field Name", FirePHP::INFO);
+	    fb($fromDate, "From Date", FirePHP::INFO);
+	    fb($toDate, "To Date", FirePHP::INFO);
+	    fb($sql, "SQL Query 1 ", FirePHP::INFO);
 	}
-	
+
 	//if parameters is not null
-	if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate == null && $toDate == null){
-	    Fb::warn("Only Field name and id set:");
+	if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate == null && $toDate == null) {
 	    $sql .= " AND $fieldname = :id";
-	    if (Debug::getDebug()){
-	       fb($sql, "SQL Query 2", FirePHP::INFO);
+	    if (Debug::getDebug()) {
+		Fb::warn("Only Field name and id set:");
+		fb($sql, "SQL Query 2", FirePHP::INFO);
 	    }
 	    $stmt = $this->_dbConn->prepare($sql);
 	    $stmt->bindParam(':id', $id);
-	     
-	} else if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate != null && $toDate != null){   	
-	   Fb::warn("All Parameter Set:");
-	   $sql .= " AND $fieldname = :id AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
-	   if (Debug::getDebug()){
-	    fb($sql, "SQL Query3", FirePHP::INFO);
-	   }
-	   $stmt = $this->_dbConn->prepare($sql);
-	   $stmt->bindParam(':id', $id);
-	   $stmt->bindParam(':fromDate', $fromDate);
-	   $stmt->bindParam(':toDate', $toDate);	
-	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate != null && $toDate != null){
-	    Fb::warn("Fields name and id not set");
-	    $sql .= " AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
-	    if (Debug::getDebug()){
-		fb($sql, "SQL Query4", FirePHP::INFO);
+	} else if ($fieldname != null && $id != null && $dateFieldName != null && $fromDate != null && $toDate != null) {
+	    $sql .= " AND $fieldname = :id AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
+	    if (Debug::getDebug()) {
+		Fb::warn("All Parameter Set:");
+		fb($sql, "SQL Query3", FirePHP::INFO);
 	    }
-	    $stmt = $this->_dbConn->prepare($sql);	   
+	    $stmt = $this->_dbConn->prepare($sql);
+	    $stmt->bindParam(':id', $id);
 	    $stmt->bindParam(':fromDate', $fromDate);
 	    $stmt->bindParam(':toDate', $toDate);
-	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate == null && $toDate == null){
-	    Fb::warn("Only Datefield set");
-	      $stmt = $this->_dbConn->prepare($sql);
+	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate != null && $toDate != null) {
+	    $sql .= " AND $dateFieldName > :fromDate AND $dateFieldName < :toDate";
+	    if (Debug::getDebug()) {
+		Fb::warn("Fields name and id not set");
+		fb($sql, "SQL Query4", FirePHP::INFO);
+	    }
+	    $stmt = $this->_dbConn->prepare($sql);
+	    $stmt->bindParam(':fromDate', $fromDate);
+	    $stmt->bindParam(':toDate', $toDate);
+	} else if ($fieldname == null && $id == null && $dateFieldName != null && $fromDate == null && $toDate == null) {
+	    $stmt = $this->_dbConn->prepare($sql);
+	    if (Debug::getDebug()) {
+		Fb::warn("Only Datefield set");
+	    }
 	}
-		
 	$stmt->execute();
-
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }    
+    }
 
-    
     /**
      *
      * @execute a raw query
@@ -241,52 +239,48 @@ class CRUD {
      * @return array
      *
      */
-     public function rawSelect($sql) {
-	//$this->conn();
-	//return $this->_dbConn->query($sql);
+    public function rawSelect($sql) {
 	$stmt = $this->_dbConn->query($sql);
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function dbJoinTable($tablenames, $fieldnames, $id){	
-	
-	print_r($tablenames);	
+
+    public function dbJoinTable($tablenames, $fieldnames, $id) {
+
+	print_r($tablenames);
 	print_r($fieldnames);
-	
-	
+
 	$fields = implode(', ', $fieldnames);
-	if (Debug::getDebug()){
-	   echo "<br />Fields: " . $fields."<br />"; 
-	}	
-	
+	if (Debug::getDebug()) {
+	    echo "<br />Fields: " . $fields . "<br />";
+	}
+
 	$tables = implode(', ', $tablenames);
-	if (Debug::getDebug()){
-	    echo "<br />Tables: " .$tables."<br />";
+	if (Debug::getDebug()) {
+	    echo "<br />Tables: " . $tables . "<br />";
 	}
-	
-	//$tablePlusId = implode('.'.user_id.', ', $tablenames).".id".$id;
-	
-	foreach ($tablenames as $tn){
-	    if (Debug::getDebug()){
-		echo $tn.".".$id."<br>";
-	    }	    
-	}	
-	
-	if (Debug::getDebug()){    
-	    echo "<br /> Table plus Id: ". $tablePlusId."<br>";
+
+
+	foreach ($tablenames as $tn) {
+	    if (Debug::getDebug()) {
+		echo $tn . "." . $id . "<br>";
+	    }
 	}
-	
-	$sql = "SELECT ".$fields." FROM ".$tables. " WHERE ";
-	
-	if (Debug::getDebug()){
-	    echo "SQL So far: ".$sql;
+
+	if (Debug::getDebug()) {
+	    echo "<br /> Table plus Id: " . $tablePlusId . "<br>";
+	}
+
+	$sql = "SELECT " . $fields . " FROM " . $tables . " WHERE ";
+
+	if (Debug::getDebug()) {
+	    echo "SQL So far: " . $sql;
 	}
     }
-    
+
     //***********************************************************************
     // (U): Update Row(s)
     //***********************************************************************
-    
+
     /**
      * Updates column of a table name identified by the primary key
      * 
@@ -296,31 +290,31 @@ class CRUD {
      * @param type $pk		Primary key of the record to be updated
      * @param type $id		Value of primary key
      */
-    public function dbUpdate($table, $fieldname, $value, $pk, $id){
+    public function dbUpdate($table, $fieldname, $value, $pk, $id) {
 	//$this->conn();
-	
+
 	$result = $this->chkRowExist($table, $pk, $id);
-	if (!$result){
+	if (!$result) {
 	    throw new Exception("Row $id Doesn't exist");
 	}
 	$sql = "UPDATE $table SET $fieldname = '$value' WHERE $pk = :id";
-	
-	if (Debug::getDebug()){	    	    
+
+	if (Debug::getDebug()) {
 	    fb($sql, "SQL Query", FirePHP::INFO);
 	}
-	
+
 	$stmt = $this->_dbConn->prepare($sql);
 	$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 	$stmt->execute();
-	
+
 	if ($stmt->rowCount() > 0) {
 	    //return $this->_success = true;
-	    if (Debug::getDebug()){
-		FB::info("Row $id successfully updated!");		
-	    }	    
-	} 
+	    if (Debug::getDebug()) {
+		FB::info("Row $id successfully updated!");
+	    }
+	}
     }
-    
+
     //***********************************************************************
     // (D): Delete Row
     //***********************************************************************
@@ -335,7 +329,7 @@ class CRUD {
     public function dbDeleteSingleRow($table, $fieldname, $id) {
 	//$this->conn();
 	$result = $this->chkRowExist($table, $fieldname, $id);
-	if (!$result){
+	if (!$result) {
 	    throw new Exception("Row Doesn't exist");
 	}
 	$sql = "DELETE FROM $table WHERE $fieldname =:id";
@@ -343,38 +337,34 @@ class CRUD {
 	$stmt->bindParam(':id', $id); //use parameterized sql stmt to prevent sql injection
 	$stmt->execute();
 	if ($stmt->rowCount() > 0) {
-	    if (Debug::getDebug()){
-		echo "Row $id Deleted ";
+	    if (Debug::getDebug()) {
+		FB::info("Row $id Deleted");
 	    }
 	}
     }
 
     public function dbDeleteMultipleRow($table, $fieldname, $array) {
-	//$this->conn();
 	foreach ($array as $id) {
 	    $result = $this->chkRowExist($table, $fieldname, $id);
-	    if (!$result){
-		//throw new Exception("Row $id Doesn't exist");
-		echo ("Row $id Doesn't Exist <br>");
+	    if (!$result) {
+		FB::info("Row $id Doesn't Exist <br>");
 	    } else {
-	    //if ($result) {
-		if (Debug::getDebug()){
-		    echo "Row " . $id . " Exists!!! <br>";
+		if (Debug::getDebug()) {
+		    FB::info("Row " . $id . " Exists!!! <br>");
 		}
 		$sql = "DELETE FROM $table WHERE $fieldname = :id";
 		$stmt = $this->_dbConn->prepare($sql);
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 		if ($stmt->rowCount() > 0) {
-		    if (Debug::getDebug()){
-			//return $this->_success = true;
+		    if (Debug::getDebug()) {
 			echo "Row $id Deleted <br>";
 		    }
 		}
 	    }
 	}
     }
-    
+
     //***********************************************************************
     // WORKER CLASS
     //***********************************************************************
@@ -387,7 +377,6 @@ class CRUD {
      * @return boolean 
      */
     private function chkRowExist($table, $fieldname=null, $id=null) {
-	//$this->conn();
 	$sql = "SELECT * FROM $table WHERE $fieldname =:id";
 	$stmt = $this->_dbConn->prepare($sql);
 	$stmt->bindParam(':id', $id);
@@ -399,6 +388,7 @@ class CRUD {
 	    return $this->_success = false;
 	}
     }
+
 }
 
 ?>

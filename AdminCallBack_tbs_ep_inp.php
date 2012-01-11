@@ -14,6 +14,7 @@
 	<link href="css/dr/jquery.ui.all.css" rel="stylesheet" />
 	<link href="css/dr/demos.css" rel="stylesheet" />
 	<link href="css/callback.css" rel="stylesheet" />
+	<link href="css/hacks.css" rel="stylesheet" />
 
 	<link href="css/bootstrap.css" rel="stylesheet" />	
 	<link href="css/easypaginate.css" rel="stylesheet" />
@@ -113,7 +114,6 @@
 	?>
 	
 	<div id="container">
-
 	    <div id="dateRange" class="group">
 		<div id="switchDisplay">
 		    <button id="viewStatBtn" class="btn default pull-left">View Statistics</button>		    

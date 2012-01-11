@@ -115,9 +115,12 @@ class AdminCallBack {
 	
 	$callBackTableSet =  '
 	    <div id="middle">
-		<div id="search">
-			<label for="filter">Filter Record: </label> <input type="text" name="filter" value="" id="filter" />
-			<span id="displayRecord">
+		<div id="search" class="group">
+		    <div class="pull-left">
+			<label for="filter">Filter Record: </label> 
+			<input type="text" name="filter" value="" id="filter">			
+		    </div>
+			<span id="displayRecord" class="pull-right">
 			    <form action="'.$_SERVER['PHP_SELF'].'" method="get" class="pull-right">
 				<input type="hidden" name="cbStatus" value="'.$cbStatus.'">				
 				<input type="hidden" name="fromDate" value="'.$this->_fromDate.'">
@@ -128,6 +131,7 @@ class AdminCallBack {
 			    </form>
 			</span>
 		</div>
+	    
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
 		    <tr>			

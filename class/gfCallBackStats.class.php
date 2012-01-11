@@ -20,13 +20,7 @@ class CallBackStats {
 	$this->dbConnSetup();
     }
 
-    private function dbConnSetup() {
-	$this->_crud = new CRUD();
-	$this->_crud->username = 'root';
-	$this->_crud->password = 'root123';
-	$this->_crud->dsn = "mysql:dbname=griff;host=localhost";
-	$this->_crud->conn();
-    }
+   
 
     /**
      * Get Total & Answered callback records between Dates
@@ -37,12 +31,6 @@ class CallBackStats {
      * @param type $noOfDays    Days between Start and End Date
      */
     function getRecords($toDate, $fromDate, $noOfDays) {
-	
-	if (Debug::getDebug()){
-	    fb(date('d.M.Y h:i:s A', $toDate), "To Date: ", FirePHP::INFO);		    
-	    fb(date('d.M.Y h:i:s A', $fromDate), "From Date: ", FirePHP::INFO);		    
-	    fb($noOfDays, "No of Days: ", FirePHP::INFO);		    
-	}
 
 	//Doing this inorder to add php value inside javascript array dayRange, callBackRec, $countAnsRec
 	echo "<script type='text/javascript' language='JavaScript'>";
@@ -83,22 +71,7 @@ class CallBackStats {
 	}
 
 	echo "</script>";
-    }
-
-    /**
-     * Strip number from Array [Result set from sql query]
-     * 
-     * @param type $countRecArr Pass a counted result in Array 
-     * @return type		Integer
-     */
-    private function countRecord($countRecArr) {
-	foreach ($countRecArr as $num) {
-	    foreach ($num as $k => $v) {
-		$countRecNum = $v;
-	    }
-	}
-	return $countRecNum;
-    }
+    }   
     
     /**
      * Computes Prev one month date from the current day
@@ -136,6 +109,32 @@ class CallBackStats {
 	$noOfDays = round($range / 86400);
 
 	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);	
+    }
+    
+    /**
+     * Set up Database connection
+     */
+     private function dbConnSetup() {
+	$this->_crud = new CRUD();
+	$this->_crud->username = 'root';
+	$this->_crud->password = 'root123';
+	$this->_crud->dsn = "mysql:dbname=griff;host=localhost";
+	$this->_crud->conn();
+    }
+    
+     /**
+     * Strip number from Array [Result set from sql query]
+     * 
+     * @param type $countRecArr Pass a counted result in Array 
+     * @return type		Integer
+     */
+    private function countRecord($countRecArr) {
+	foreach ($countRecArr as $num) {
+	    foreach ($num as $k => $v) {
+		$countRecNum = $v;
+	    }
+	}
+	return $countRecNum;
     }
     
     /**
