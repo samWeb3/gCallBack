@@ -20,8 +20,6 @@ class CallBackStats {
 	$this->dbConnSetup();
     }
 
-   
-
     /**
      * Get Total & Answered callback records between Dates
      * Add the records into the javascript array constructed earlier
@@ -48,16 +46,14 @@ class CallBackStats {
 
 		/*****************************************************
 		 * FOR TOTAL CALLBACKS 
-		 *****************************************************/	       
-	        $resCB = $this->statResultSet($fromDate, $fromDateEnd);
+		 *****************************************************/
 		//Strip the record number from resultset Array
-		$countCBRec = $this->countRecord($resCB);
+		$countCBRec = $this->countRecord($this->statResultSet($fromDate, $fromDateEnd));
 
 		/******************************************************
 		 * FOR ANSWERED CALLBACKS 
-		 ******************************************************/
-		$resAnsCB = $this->statResultSet($fromDate, $fromDateEnd, '1');
-		$countAnsRec = $this->countRecord($resAnsCB);
+		 ******************************************************/		
+		$countAnsRec = $this->countRecord($this->statResultSet($fromDate, $fromDateEnd, '1'));
 
 		//Add one more day (86400sec) to the first day 
 		$fromDate = $fromDate + 86400;

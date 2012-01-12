@@ -111,8 +111,7 @@
 	} catch (Exception $ex) {
 	    $errorMessage = $ex->getMessage();
 	}
-	?>
-	
+	?>	
 	<div id="container">
 	    <div id="dateRange" class="group">
 		<div id="switchDisplay">
@@ -132,6 +131,8 @@
 		    <input type="submit" id="date" name="dateRange" value="Display" class="btn default"/>
 		</form>
 	    </div>
+	    
+	     
 
 <?php
 if (isset($infoMessage)) {
@@ -164,16 +165,17 @@ if (isset($infoMessage)) {
 		</ul>
 	    </div>
 
-<?php
-if (isset($errorMessage)) {
-    echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
-}
-if ($callBackTableSet) {
-    echo $callBackTableSet;
-} else { // no query returned then
-    echo "<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>";
-}
-?>
+	    <?php
+	    if (isset($errorMessage)) {
+		echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
+	    }
+	    if ($callBackTableSet) {
+		echo $callBackTableSet;
+	    } else { // no query returned then
+		echo "<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>";
+	    }
+	    ?>
+	    
 	</div>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>

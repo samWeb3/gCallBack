@@ -4,19 +4,30 @@
  * http://www.phpro.org/classes/PDO-CRUD.html
  */
 require_once 'gfDebug.php';
+require_once 'dbConn.inc.php';
 
 class CRUD {
 
     private $_dbConn;
     private $_success;
+    private $_username;
+    private $_password;
+    private $_dsn;
 
+    function __construct() {
+	$this->_username = _USERNAME;
+	$this->_password = _PASSWORD;
+	$this->_dsn = _DSN;
+	$this->conn();
+    }
+    
     /**
      * http://www.hiteshagrawal.com/php/php5-tutorial-__set-magic-method
      * 
      * @param type $name    holds the name of undefined attributes
      * @param type $value   holds the value assigned to the undefined attributes
      */
-    public function __set($name, $value) {
+    /*public function __set($name, $value) {
 	switch ($name) {
 	    case 'username':
 		$this->username = $value;
@@ -24,14 +35,12 @@ class CRUD {
 		    fb($value, "Username", FirePHP::INFO);
 		}
 		break;
-
 	    case 'password':
 		$this->password = $value;
 		if (Debug::getDebug()) {
 		    fb($value, "Password", FirePHP::INFO);
 		}
 		break;
-
 	    case 'dsn':
 		$this->dsn = $value;
 		if (Debug::getDebug()) {
@@ -41,7 +50,7 @@ class CRUD {
 	    default:
 		throw new Exception("$name is invalid");
 	}
-    }
+    }*/
 
     /**
      * Returns database connection 
@@ -55,7 +64,7 @@ class CRUD {
      * 
      * @param type $name 
      */
-    public function __isset($name) {
+    /*public function __isset($name) {
 	switch ($name) {
 	    case 'username':
 		$this->username = null;
@@ -65,21 +74,21 @@ class CRUD {
 		$this->password = null;
 		break;
 	}
-    }
+    }*/
 
     /**
      * @Connect to the database and set the error mode to Exception 
      * @Throws PDOException on Failure
      */
     public function conn() {
-	isset($this->username);
-	isset($this->password);
+	//isset($this->username);
+	//isset($this->password);
 	if (!$this->_dbConn instanceof PDO) {
-	    $this->_dbConn = new PDO($this->dsn, $this->username, $this->password);
+	    $this->_dbConn = new PDO($this->_dsn, $this->_username, $this->_password);
 	    $this->_dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	if (Debug::getDebug()) {
-	    FB::info("CRUD class: Connection successful!");
+	    FB::info("CRUD class1: Connection successful!");
 	}
     }
 
@@ -93,7 +102,7 @@ class CRUD {
      * @param array $values  values retrieved from the array
      */
     public function dbInsert($table, $values) {
-	$this->conn();
+	//$this->conn();
 
 	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
@@ -129,10 +138,8 @@ class CRUD {
 		    fb($v, "Values", FirePHP::INFO);
 		}
 	    }
-
 	    $result = $stmt->execute($vals);
 	}
-
 	if ($result) {
 	    return $this->_success = true;
 	} else {
@@ -153,7 +160,7 @@ class CRUD {
      * @return array on success or throw PDOExcepton on failure 
      */
     public function dbSelect($table, $fieldname=null, $id=null, $fromDate=null, $toDate=null) {
-	$this->conn();
+	//$this->conn();
 	if ($fieldname && $id != null) {
 	    $sql = "SELECT * FROM $table WHERE $fieldname =:id";
 	} else {
@@ -244,39 +251,6 @@ class CRUD {
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function dbJoinTable($tablenames, $fieldnames, $id) {
-
-	print_r($tablenames);
-	print_r($fieldnames);
-
-	$fields = implode(', ', $fieldnames);
-	if (Debug::getDebug()) {
-	    echo "<br />Fields: " . $fields . "<br />";
-	}
-
-	$tables = implode(', ', $tablenames);
-	if (Debug::getDebug()) {
-	    echo "<br />Tables: " . $tables . "<br />";
-	}
-
-
-	foreach ($tablenames as $tn) {
-	    if (Debug::getDebug()) {
-		echo $tn . "." . $id . "<br>";
-	    }
-	}
-
-	if (Debug::getDebug()) {
-	    echo "<br /> Table plus Id: " . $tablePlusId . "<br>";
-	}
-
-	$sql = "SELECT " . $fields . " FROM " . $tables . " WHERE ";
-
-	if (Debug::getDebug()) {
-	    echo "SQL So far: " . $sql;
-	}
-    }
-
     //***********************************************************************
     // (U): Update Row(s)
     //***********************************************************************
@@ -339,28 +313,6 @@ class CRUD {
 	if ($stmt->rowCount() > 0) {
 	    if (Debug::getDebug()) {
 		FB::info("Row $id Deleted");
-	    }
-	}
-    }
-
-    public function dbDeleteMultipleRow($table, $fieldname, $array) {
-	foreach ($array as $id) {
-	    $result = $this->chkRowExist($table, $fieldname, $id);
-	    if (!$result) {
-		FB::info("Row $id Doesn't Exist <br>");
-	    } else {
-		if (Debug::getDebug()) {
-		    FB::info("Row " . $id . " Exists!!! <br>");
-		}
-		$sql = "DELETE FROM $table WHERE $fieldname = :id";
-		$stmt = $this->_dbConn->prepare($sql);
-		$stmt->bindParam(':id', $id);
-		$stmt->execute();
-		if ($stmt->rowCount() > 0) {
-		    if (Debug::getDebug()) {
-			echo "Row $id Deleted <br>";
-		    }
-		}
 	    }
 	}
     }

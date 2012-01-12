@@ -37,17 +37,9 @@ class AdminCallBack {
 	    $this->_dateRange = $dateRange;
 	}
 	$this->_instanceId = $instanceId;
-	$this->dbConnSetup();
+	$this->_crud = new CRUD();
     }
 
-    private function dbConnSetup() {
-	$this->_crud = new CRUD();
-	$this->_crud->username = 'root';
-	$this->_crud->password = 'root123';
-	$this->_crud->dsn = "mysql:dbname=griff;host=localhost";
-	$this->_crud->conn();
-    }
-    
     /**
      * Display all CallBack Records without pagination them
      * 
@@ -153,7 +145,7 @@ class AdminCallBack {
 			    //$status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange'><button class='btn danger'>Callback</button></a>";//Doesn't work <IE8			    			    
 			    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange' class='btn danger'>Callback</a>";			    			   
 			} else {
-			    $status = "<button class='btn success disabled'>Answered</button>";
+			    $status = "<a href='#' class='btn success disabled'>Answered</button>";
 			}
 			$callBackTableSet .= "<tr><td>".$date."</td>
 				<td>".$r[name]."</td>
