@@ -1,0 +1,53 @@
+/*IE6 Hacks*/
+.pContainer, .pContainer a{    
+    *border-right-color: #ccc;
+}
+/*IE7 hacks*/
+*+html .pContainer{
+    border: 1px solid #ccc;
+}
+*+html #search{
+   margin-bottom: 18px;
+}
+*+html #dateRange{
+    margin-bottom: 28px;
+}
+*+html .pContainer a {
+   border-right: 1px solid #ccc;
+}
+*+html .info{   
+    margin-top: -11px;    
+}
+*+html form{
+    margin-bottom: 0px;
+}
+*+html .alert-message{
+    border: none;
+}
+*+html span.data{
+   top: 20px;
+   right: 20px;
+}
+/*IE8 Hacks*/
+@media \0screen{
+    .pContainer{
+	border: 1px solid #ccc;
+    }
+    .pContainer a{
+	border-right: 1px solid #ccc;	
+    }    
+} 
+/*IE6 Hacks - Group*/
+html.group{/*fix the problem when floating div right within the main container for IE6*/
+	height: 1%;
+}
+/*IE 7 Hacks - Group*/
+*:first-child+html .group{/*fix the problem when floating div right within the main container for IE7*/
+	min-height:1px;
+}
+/*Hacks For Chrome and Safari*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .legend table { 	
+	right: 102px !important;
+    };	
+}
