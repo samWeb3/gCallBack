@@ -4,7 +4,7 @@
  * http://www.phpro.org/classes/PDO-CRUD.html
  */
 require_once 'gfDebug.php';
-require_once 'dbConn.inc.php';
+require_once 'config/dbConn.inc.php';
 
 class CRUD {
 
@@ -20,37 +20,6 @@ class CRUD {
 	$this->_dsn = _DSN;
 	$this->conn();
     }
-    
-    /**
-     * http://www.hiteshagrawal.com/php/php5-tutorial-__set-magic-method
-     * 
-     * @param type $name    holds the name of undefined attributes
-     * @param type $value   holds the value assigned to the undefined attributes
-     */
-    /*public function __set($name, $value) {
-	switch ($name) {
-	    case 'username':
-		$this->username = $value;
-		if (Debug::getDebug()) {
-		    fb($value, "Username", FirePHP::INFO);
-		}
-		break;
-	    case 'password':
-		$this->password = $value;
-		if (Debug::getDebug()) {
-		    fb($value, "Password", FirePHP::INFO);
-		}
-		break;
-	    case 'dsn':
-		$this->dsn = $value;
-		if (Debug::getDebug()) {
-		    fb($value, "DSN Set", FirePHP::INFO);
-		}
-		break;
-	    default:
-		throw new Exception("$name is invalid");
-	}
-    }*/
 
     /**
      * Returns database connection 
@@ -60,35 +29,16 @@ class CRUD {
     }
 
     /**
-     * Check for the undeclared variable in the code
-     * 
-     * @param type $name 
-     */
-    /*public function __isset($name) {
-	switch ($name) {
-	    case 'username':
-		$this->username = null;
-		break;
-
-	    case 'password':
-		$this->password = null;
-		break;
-	}
-    }*/
-
-    /**
      * @Connect to the database and set the error mode to Exception 
      * @Throws PDOException on Failure
      */
-    public function conn() {
-	//isset($this->username);
-	//isset($this->password);
+    public function conn() {	
 	if (!$this->_dbConn instanceof PDO) {
 	    $this->_dbConn = new PDO($this->_dsn, $this->_username, $this->_password);
 	    $this->_dbConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	if (Debug::getDebug()) {
-	    FB::info("CRUD class1: Connection successful!");
+	    FB::info("CRUD class: Connection successful!");
 	}
     }
 
