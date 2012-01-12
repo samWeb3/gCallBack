@@ -22,19 +22,11 @@ class CallBackForm {
 	$this->_tel = $tel;
 	$this->_enquiry = $enquiry;
 
-	$this->dbConnSetup();
+	$this->_crud = new CRUD();
 	$this->setInstId();
 	$this->addCallBackRequest();
 	$this->sendEmail();
-    }
-
-    private function dbConnSetup() {
-	$this->_crud = new CRUD();
-	$this->_crud->username = 'root';
-	$this->_crud->password = 'root123';
-	$this->_crud->dsn = "mysql:dbname=griff;host=localhost";
-	$this->_crud->conn();
-    }
+    }    
 
     public function addCallBackRequest() {
 	$unixtime = time();

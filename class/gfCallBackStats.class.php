@@ -17,7 +17,7 @@ class CallBackStats {
 	    throw new Exception("Partner ID Not provided");
 	}
 	$this->_instanceId = $instanceId;
-	$this->dbConnSetup();
+	$this->_crud = new CRUD();
     }
 
     /**
@@ -105,18 +105,7 @@ class CallBackStats {
 	$noOfDays = round($range / 86400);
 
 	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);	
-    }
-    
-    /**
-     * Set up Database connection
-     */
-     private function dbConnSetup() {
-	$this->_crud = new CRUD();
-	$this->_crud->username = 'root';
-	$this->_crud->password = 'root123';
-	$this->_crud->dsn = "mysql:dbname=griff;host=localhost";
-	$this->_crud->conn();
-    }
+    }  
     
      /**
      * Strip number from Array [Result set from sql query]
