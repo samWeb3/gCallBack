@@ -161,16 +161,6 @@ if (isset($infoMessage)) {
 			<h3>Unanswered Callbacks</h3>    	
 			<p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=0&fromDate=$fromDate&toDate=$toDate&dateRange=$dateRange" ?>" class="dashboardLink" id="unAnsCB"><?php echo $UnAnsCB ?></a></span></p>		  
 		    </li>
-
-		    <li>
-			<h3>Total Callbacks</h3>    	
-			<p class="dashboard"><span class="data"><?php echo $TotalCB ?></span></p>
-		    </li>
-
-		    <li>
-			<h3>Unanswered Callbacks</h3>    	
-			<p class="dashboard"><span class="data"><?php echo $UnAnsCB ?></span></p>
-		    </li>
 		</ul>
 	    </div>
 

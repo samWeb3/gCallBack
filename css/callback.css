@@ -7,10 +7,15 @@
 	text-align: left;
 	font-weight: bolder;
 	width: auto !important;
-	padding-right: 7px;
-	/*float: none;	
-	font-weight: bolder;*/
+	padding-right: 7px;	
     }
+/* Dashboard Paginator */
+ol#pagination{     
+    margin-left: 6px;
+}
+ol#pagination li.prev {
+    left: -34px !important;
+}
 /* Custom Paginator Style */
 .cPaginator{
     height: 36px;
