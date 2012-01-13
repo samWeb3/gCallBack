@@ -13,6 +13,7 @@ class CRUD {
     private $_username;
     private $_password;
     private $_dsn;
+	public $m_AdminCallBack;
 
     function __construct() {
 	$this->_username = _USERNAME;
@@ -48,13 +49,13 @@ class CRUD {
 
     /**
      * Insert a value into a table from arrays;
-     * @param string $table   table name into which value are inserted
-     * @param array $values  values retrieved from the array
+     * @param string $table	table name into which value are inserted
+     * @param array $values	values retrieved from the array
      */
     public function dbInsert($table, $values) {
 	//$this->conn();
 
-	//Gets the arary key of first array item "array_values($values[0]" returns values of first array item
+	//Gets the array key of first array item "array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
 	if (Debug::getDebug()) {
 	    fb($fieldnames, "Fieldnames", FirePHP::INFO);
@@ -104,12 +105,12 @@ class CRUD {
     /**
      * Select values from table
      * 
-     * @param string $table
-     * @param string $fieldname
-     * @param string $id
-     * @return array on success or throw PDOExcepton on failure 
+     * @param string $table	    Tablename
+     * @param string $fieldname	    Fieldname of table
+     * @param string $id	    Value of a Fieldname
+     * @return array		    Success or throw PDOExcepton on failure 
      */
-    public function dbSelect($table, $fieldname=null, $id=null, $fromDate=null, $toDate=null) {
+    public function dbSelect($table, $fieldname=null, $id=null) {
 	//$this->conn();
 	if ($fieldname && $id != null) {
 	    $sql = "SELECT * FROM $table WHERE $fieldname =:id";
@@ -290,7 +291,6 @@ class CRUD {
 	    return $this->_success = false;
 	}
     }
-
 }
 
 ?>
