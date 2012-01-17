@@ -12,8 +12,7 @@ class CRUD {
     private $_success;
     private $_username;
     private $_password;
-    private $_dsn;
-	public $m_AdminCallBack;
+    private $_dsn;    
 
     function __construct() {
 	$this->_username = _USERNAME;

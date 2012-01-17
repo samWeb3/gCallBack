@@ -7,12 +7,15 @@ class AdminCallBack {
 
     private $_crud;
     private $_instanceId;
+    private $_cbStatus;    
+    private $_pager;
+        
     private $_dateRange;
     private $_fromDate;
     private $_toDate;
     private $_unixFromDate;
     private $_unixToDate;
-    private $_cbStatus;
+    
 
     /**
      *
@@ -76,12 +79,11 @@ class AdminCallBack {
 	    $sql = $this->callBackQuery($cbStatus);
 	}
 
-	$pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "&cbStatus=$cbStatus&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange");
-
+	$this->_pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "&cbStatus=$cbStatus&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange");
+	
 	//returns resultset or false
-	$reqResultSet = $pager->paginate();
-
-	//if(!$reqResultSet) die(mysql_error());
+	$reqResultSet = $this->_pager->paginate();
+	
 	if (!$reqResultSet) {
 	    return false;
 	} else {
@@ -89,65 +91,13 @@ class AdminCallBack {
 	    //Updates the Answered and Unanswered callbacks
 	    $this->countAnsCB();
 	    $this->countUnAnsCB();
-
-	    $callBackTableSet = '
-	    <div id="middle">
-		<div id="search" class="group">
-		    <div class="pull-left">
-			<label for="filter">Filter Record: </label> 
-			<input type="text" name="filter" value="" id="filter">			
-		    </div>
-			<span id="displayRecord" class="pull-right">
-			    <form action="' . $_SERVER['PHP_SELF'] . '" method="get" class="pull-right">
-				<input type="hidden" name="cbStatus" value="' . $cbStatus . '">				
-				<input type="hidden" name="fromDate" value="' . $this->_fromDate . '">
-				<input type="hidden" name="toDate" value="' . $this->_toDate . '">
-				<input type="hidden" name="dateRange" value="' . $this->_dateRange . '">	
-				<label id="disRecHelpText" class="help-inline">Enter valid number and press &#60;ENTER&#62; !&nbsp;</label>
-				<input id="disRecord" class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp">				
-			    </form>
-			</span>
-		</div>
 	    
-		<table class="zebra-striped tablesorter" id="CallBackTable">
-		    <thead>
-		    <tr>			
-			<th>Date: </th>
-			<th>Name: </th>
-			<th>Email: </th>
-			<th>Phone No: </th>
-			<th>Enquiry</th>
-			<th>Status</th>
-		    </tr>
-		    </thead><tbody>';
-	   
-	    foreach ($reqResultSet as $r) {
-		//$date = date('d.M.Y', $r[callBackDate]);
-		$date = date('M.d.Y', $r[callBackDate]) . "<br /><span class='small unHighlight'>" . date('h:i:s A', $r[callBackDate]) . "</span>";
-		$status = "";
-		if ($r[cb_status] == 0) {
-		    //need to pass a pager number to ensure when callback is called from page it doesn't go back to first page
-		    //$status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$pager->getPage()."&row_pp=".$pager->getRowsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange'><button class='btn danger'>Callback</button></a>";//Doesn't work <IE8			    			    
-		    $status = "<a href='" . $_SERVER['PHP_SELF'] . "?enq_id=" . $r[enq_id] . "&page=" . $pager->getPage() . "&row_pp=" . $pager->getRowsPerPage() . "&cbStatus=" . $cbStatus . "&param1=valu1&param2=value2&fromDate=$this->_fromDate&toDate=$this->_toDate&dateRange=$this->_dateRange' class='btn danger'>Callback</a>";
-		} else {
-		    $status = "<a href='#' class='btn success disabled'>Answered</button>";
-		}
-		$callBackTableSet .= "<tr><td>" . $date . "</td>
-				<td>" . $r[name] . "</td>
-				<td>" . $r[email] . "</td>
-				<td>" . $r[telephone] . "</td>
-				<td>" . $r[enquiry] . "</td>
-				<td>" . $status . "</td>
-			    </tr>";
-	    }
-
-	    $callBackTableSet .= "</tbody></table>";
-
-	    //Display the full navigation in one go		  
-	    $callBackTableSet .= "<div class='cPaginator'>" . $pager->renderFullNav() . "</div>";
-
-	    return $callBackTableSet;
+	    return $reqResultSet;	    
 	}
+    }
+    
+    public function getPaginatorNav(){
+	return $this->_pager->renderFullNav();
     }
 
     /**
@@ -169,7 +119,7 @@ class AdminCallBack {
 	}
 	$sql .= " ORDER BY callbackuserenquiry.callBackDate DESC";
 	if (Debug::getDebug()) {
-	    fb($sql, "SQL No Status: ", FirePHP::INFO);
+	    fb($sql, "SQL: ", FirePHP::INFO);
 	}
 
 	return $sql;
@@ -233,6 +183,14 @@ class AdminCallBack {
     
     public function getDateRange(){
 	return $this->_dateRange;
+    }
+    
+    public function getPageNo(){
+	return $this->_pager->getPage();
+    }
+    
+    public function getRecordsPerPage(){
+	return $this->_pager->getRowsPerPage();
     }
 }
 

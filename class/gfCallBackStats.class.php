@@ -58,9 +58,9 @@ class CallBackStats {
 		//Add one more day (86400sec) to the first day 
 		$fromDate = $fromDate + 86400;
 
-	    /*****************************************************
+	    /****************************************************************
 	     * printing the php var in a javascript array we declared earlier
-	     * *************************************************** */
+	     * **************************************************************/
 	    
 	    echo "callBackRec.push($countCBRec);";
 	    echo "ansCBRec.push($countAnsRec);";
