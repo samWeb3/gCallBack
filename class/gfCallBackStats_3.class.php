@@ -2,20 +2,26 @@
 
 require_once 'gfCRUD.class.php';
 require_once 'gfPagination.php';
+require_once 'gfDatePickerStatistics.class.php';
 
 class CallBackStats {
 
     private $_crud;
-    private $_instanceId;    
+    private $_dpStatistics;
+    private $_instanceId;        
 
     /**
      *
      * @param int $instanceId	Instance Id of a partner website
      */
-    public function __construct($instanceId) {	
+    public function __construct($instanceId, DatePickerStatistics $dpStatistics) {	
 	if (empty($instanceId)){
 	    throw new Exception("Partner ID Not provided");
 	}
+	if (empty($dpStatistics)) {
+	    throw new Exception("Date Object Not provided");
+	}
+	$this->_dpStatistics = $dpStatistics;
 	$this->_instanceId = $instanceId;
 	$this->_crud = new CRUD();
     }
@@ -71,18 +77,11 @@ class CallBackStats {
     /**
      * Computes Prev one month date from the current day
      */
-    public function monthStats(){
+    public function monthStats(){	
 	$this->resetRecords();
-	//Get the today end day 
-	$unixToDate = strtotime('today') + 86400;
-	//calculate the range for 30 days
-	$range = 86400 * 30;
-	//Deduct $range from $toDate
-	$unixFromDate = $unixToDate - $range;
-	$noOfDays = round($range / 86400);
-
-	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);
-    }
+	$this->_dpStatistics->setNoOfDays(31);
+	$this->getRecords($this->getUnixToDate(), $this->getUnixFromDate(), $this->getNoOfDays());
+    }    
     
     /**
      * Computes a Date Range received from Date Picker
@@ -91,20 +90,15 @@ class CallBackStats {
      * @param type $toDate      Stats to display until the end date
      */
     public function customStats($fromDate, $toDate){
-	$this->resetRecords();
-	$unixFromDate = strtotime($fromDate);
-
-	//we add one day (86400sec) to a toDate to get PM
-	$unixToDate = strtotime($toDate) + 86399;
-
-	//to calculate how many days we need range
-	$range = $unixToDate - $unixFromDate;
-
-	//get the number of days
-	$noOfDays = round($range / 86400);
-
-	$this->getRecords($unixToDate, $unixFromDate, $noOfDays);	
-    }  
+	$this->resetRecords();	
+	/*
+	 * If From Date and To Date not set with the custom value received from parameter
+	 * it always return the 30 days or noOFDays set in above monthStats() function 
+	 */
+	$this->setFromDate($fromDate);
+	$this->setToDate($toDate);	
+	$this->getRecords($this->getUnixToDate(), $this->getUnixFromDate(), $this->getNoOfDays());
+    }
     
      /**
      * Strip number from Array [Result set from sql query]
@@ -156,6 +150,33 @@ class CallBackStats {
 	$stmt->execute();
 	
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    /********************************************************
+     * Delegating Methods
+     ********************************************************/
+    private function setFromDate($fromDate){
+	$this->_dpStatistics->setFromDate($fromDate);
+    }
+    
+    private function setToDate($toDate){
+	$this->_dpStatistics->setToDate($toDate);
+    }
+    
+    private function getUnixToDate(){
+	return $this->_dpStatistics->getUnixToDate();
+    }
+    
+    private function getUnixFromDate(){
+	return $this->_dpStatistics->getUnixFromDate();
+    }
+    
+    private function getNoOfDays(){
+	return $this->_dpStatistics->getNoOfDays();
+    }
+    
+    public function getFromDate(){
+	return $this->_dpStatistics->getUnixFromDate();
     }
 }
 

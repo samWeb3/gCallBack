@@ -31,7 +31,30 @@ if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at 
     var callbackData = multiDimenArray(dayRange, callBackRec);		
 	    
     //To be Used when data for answered call retrieved
-    var answeredData = multiDimenArray(dayRange, ansCBRec);	    	  
+    var answeredData = multiDimenArray(dayRange, ansCBRec);	    
+    
+    
+    /*
+     * control the line and point value based on the day range
+     */
+    var noOfDays = dayRange.length;  
+    var rangeValue;
+    if (noOfDays >= 0 && noOfDays <= 31){
+	lineValue = 4;    
+	pointValue = 4;
+    } else if (noOfDays > 31 && noOfDays <= 60) {
+	lineValue = 4;
+	pointValue = 3;
+    } else if (noOfDays > 60 && noOfDays <= 90) {
+	lineValue = 3;
+	pointValue = 2
+    } else if (noOfDays > 90 && noOfDays <= 120){
+	lineValue = 3;
+	pointValue = 1;
+    } else if (noOfDays > 120){
+	lineValue = 2;
+	pointValue = 0;
+    }
 							    	    
     var datasets = [ 
     { 
@@ -52,13 +75,13 @@ if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at 
 	series: {			
 	    lines: { 
 		show: true, 
-		lineWidth: 4, 
+		lineWidth: lineValue, 
 		fill: true, 
 		fillColor: "rgba(5, 141, 199, 0.1)"
 	    },
 	    points: { 
 		show: true,
-		radius: 4, 			    
+		radius: pointValue, 			    
 		fillColor: "#ffffff", 			    
 		borderColor: "#ffffff"
 	    }
@@ -135,8 +158,15 @@ var ns = jaaulde.utils.cookies;
 
 //console.log("Dashboard Value: " + ns.get('dashboard'));
 
+$('#viewDashboardBtn').hide();
+$('#viewStatBtn').hide();		
+
+//Show Stats Pnl
+$('#statPlaceholder').hide();
+$('#viewDashboardPnl').hide();
+
 //If cookie is set to stat
-if (ns.get('dashboard') == 'stat'){ 
+if (ns.get('dashboard') == 'stat'){     
     //Display Dashboard Btn
     $('#viewDashboardBtn').show();
     $('#viewStatBtn').hide();		

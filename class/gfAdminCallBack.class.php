@@ -25,6 +25,7 @@ class AdminCallBack {
 	if (empty($instanceId)) {
 	    throw new Exception("Partner ID Not provided");
 	}
+	
 	if ($fromDate != "" && $toDate != "" && $dateRange != "") {
 	    $this->_fromDate = $fromDate;
 	    $this->_toDate = $toDate;
@@ -38,6 +39,7 @@ class AdminCallBack {
 
 	    $this->_dateRange = $dateRange;
 	}
+	
 	$this->_instanceId = $instanceId;
 	$this->_crud = new CRUD();
     }

@@ -27,15 +27,12 @@ class CallBackForm {
 	$this->sendEmail();
     }
 
-    /**
-     * 
-     */
     public function addCallBackRequest() {
 	$dbRow = $this->getRow('callbackuser', 'email', $this->_email);
 
 	//if email exist
 	if ($dbRow[email] == $this->_email) {
-	    $this->updateExitRecord($dbRow[user_id], $dbRow[telephone], $dbRow[email]);
+	    $this->updateExistingRecord($dbRow[user_id], $dbRow[telephone], $dbRow[email]);
 	} else {
 	    $this->updateNewRecord();
 	}
@@ -46,7 +43,7 @@ class CallBackForm {
      * @param type $dbUserId
      * @param type $dbTel 
      */
-    private function updateExitRecord($dbUserId, $dbTel) { 
+    private function updateExistingRecord($dbUserId, $dbTel) { 
 	if (Debug::getDebug()) {
 	    Fb::info("CallBackForm: Email exist!");
 	}

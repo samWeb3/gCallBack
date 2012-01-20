@@ -3,11 +3,12 @@
 require_once 'gfCRUD.class.php';
 require_once 'gfPagination.php';
 require_once 'class/gfDatePicker.class.php';
+require_once 'gfDatePickerDashboard.class.php';
 
 class AdminCallBack {
 
     private $_crud;
-    private $_date;
+    private $_dPDashboard;
     private $_instanceId;
     private $_cbStatus;    
     private $_pager;   
@@ -19,15 +20,14 @@ class AdminCallBack {
      * @param string $toDate	    Date To
      * @param string $dateRange	    Name of the Date Range Form
      */
-    public function __construct($instanceId, DatePicker $datePicker) {
+    public function __construct($instanceId, DatePickerDashboard $dPDashboard) {
 	if (empty($instanceId)) {
 	    throw new Exception("Partner ID Not provided");
 	}
-	if (empty($datePicker)) {
+	if (empty($dPDashboard)) {
 	    throw new Exception("Date Object Not provided");
 	}
-	$this->_date = $datePicker;
-	
+	$this->_dPDashboard = $dPDashboard;	
 	$this->_instanceId = $instanceId;
 	$this->_crud = new CRUD();
     }
@@ -154,28 +154,28 @@ class AdminCallBack {
     
     /***Getters and Setters***/
     public function getToDate(){
-	return $this->_date->getToDate();
+	return $this->_dPDashboard->getToDate();
     }
     
     public function getUnixToDate(){
-	return $this->_date->getUnixToDate();
+	return $this->_dPDashboard->getUnixToDate();
     }
     
     public function getUnixFromDate(){
-	return $this->_date->getUnixFromDate();
+	return $this->_dPDashboard->getUnixFromDate();
     }
     
     public function getFromDate(){
 	
-	return $this->_date->getFromDate();
+	return $this->_dPDashboard->getFromDate();
     }
     
-    public function getCbStatus(){	
+    public function getCbStatus(){
 	return $this->_cbStatus;
     }
     
     public function getDateRange(){
-	return $this->_date->getDateRange();
+	return $this->_dPDashboard->getDateRange();
     }
     
     public function getPageNo(){

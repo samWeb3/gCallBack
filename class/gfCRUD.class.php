@@ -22,13 +22,6 @@ class CRUD {
     }
 
     /**
-     * Returns database connection 
-     */
-    public function getDbConn() {
-	return $this->_dbConn;
-    }
-
-    /**
      * @Connect to the database and set the error mode to Exception 
      * @Throws PDOException on Failure
      */
@@ -54,7 +47,7 @@ class CRUD {
     public function dbInsert($table, $values) {
 	//$this->conn();
 
-	//Gets the array key of first array item "array_values($values[0]" returns values of first array item
+	//"array_values($values[0]" returns values of first array item
 	$fieldnames = array_keys($values[0]);
 	if (Debug::getDebug()) {
 	    fb($fieldnames, "Fieldnames", FirePHP::INFO);
@@ -81,20 +74,17 @@ class CRUD {
 	//Prepare statement
 	$stmt = $this->_dbConn->prepare($sql);
 
-	/* Iterate through multi-dimentional array and execute statement */
+	/* 
+	 * Iterate through multi-dimentional array and execute statement to insert row
+	 */
 	foreach ($values as $vals) {
 	    foreach ($vals as $v) {
 		if (Debug::getDebug()) {
 		    fb($v, "Values", FirePHP::INFO);
 		}
 	    }
-	    $result = $stmt->execute($vals);
-	}
-	if ($result) {
-	    return $this->_success = true;
-	} else {
-	    return $this->_success = false;
-	}
+	   $stmt->execute($vals);
+	}	
     }
 
     //***********************************************************************
@@ -270,6 +260,7 @@ class CRUD {
     //***********************************************************************
     // WORKER CLASS
     //***********************************************************************
+    
     /**
      * Checks if the row exists.
      * 
@@ -289,6 +280,13 @@ class CRUD {
 	} else {
 	    return $this->_success = false;
 	}
+    }
+    
+    //***********************************************************************
+    // GETTERS
+    //***********************************************************************
+    public function getDbConn() {
+	return $this->_dbConn;
     }
 }
 

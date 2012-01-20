@@ -1,9 +1,12 @@
 <?php
     //Include the PS_Pagination class
-    require_once 'class/gfAdminCallBack_2.class.php';
-    require_once 'class/gfCallBackStats.class.php';
-    require_once 'class/gfDatePicker.class.php';
+    require_once 'class/gfAdminCallBack_3.class.php';
+    require_once 'class/gfCallBackStats_3.class.php';
+    
     require_once 'FirePHP/firePHP.php';
+    
+    require_once 'class/gfDatePickerDashboard.class.php';
+    require_once 'class/gfDatePickerStatistics.class.php';
     //Set the Debugging mode to True
     Debug::setDebug(true);
 ?>  
@@ -32,8 +35,7 @@
 	$instanceId = 151; //instance of partner
 	$numLink = 10; //number of link
 	
-	$cbStats = new CallBackStats($instanceId);
-	
+	$cbStats = new CallBackStats($instanceId, new DatePickerStatistics());	
 	try {
 	    //Get the From and To Date Range
 	    if (isset($_GET['dateRange'])) {
@@ -54,16 +56,32 @@
 		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";  		    
 		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']);		    		    
 		} else {
-		    $infoMessage = "Displaying All Callback Records";		    
+		    $infoMessage = "Displaying All Callback Records 1";		    
 		    $cbStats->monthStats();		    
 		}
 		
 	    } else {
+		/*print_r($_COOKIE);
+		echo "<br >"		;
+		$dashboardValue = $_COOKIE['dashboard'];
+		echo "Dashboard Value: ".$dashboardValue."<br>";
+		
+		$cbStats->monthStats();*/
+		
 		$infoMessage = "Displaying All Callback Records";				
 		$cbStats->monthStats();	
+		
+		if($dashboardValue == 'dashboard'){
+		    echo "dashboard";
+		    $infoMessage = "Displaying All Callback Records 1";	
+		} else if ($dashboardValue == 'stat'){
+		    echo "stat";
+		    $fromDate = $cbStats->getFromDate();
+		    $infoMessage = "Displaying Callback Records From <strong>$fromDate</strong> to <strong>$ukToDate</strong>";  
+		}
 	    }
 
-	    $adminCallBack = new AdminCallBack($instanceId, new DatePicker($fromDate, $toDate, $dateRange));
+	    $adminCallBack = new AdminCallBack($instanceId, new DatePickerDashboard($fromDate, $toDate, $dateRange));
 
 	    //Check if Callback link has been clicked
 	    if ((isset($_GET['enq_id']))) {
@@ -72,7 +90,7 @@
 		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";		    
 		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']); 
 		} else {
-		    $infoMessage = "Displaying All Callback Records";		    
+		    $infoMessage = "Displaying All Callback Records 3";		    
 		    $cbStats->monthStats();		    
 		}
 	    }
@@ -97,9 +115,8 @@
 	    $AnsCB = $adminCallBack->countAnsCB();
 	    $UnAnsCB = $adminCallBack->countUnAnsCB();
 
-	    if ((isset($_GET['cbStatus']))) {
-		$cbStatus = $_GET['cbStatus'];
-		echo "CB Satus: ".$cbStatus."<br />";
+	    if ((isset($_GET['cbStatus']))) {		
+		$cbStatus = $_GET['cbStatus'];		
 		if ($cbStatus == 0) {//Display UnAnswered CallBacks	   
 		    $resultSet = $adminCallBack->viewPaginateCallBacks($inputNum, $numLink, '0');
 		} else if ($cbStatus == 1) {//Display Answered CallBacks	   
@@ -140,7 +157,7 @@
 	    }
 	    ?>
 	    
-	    <div id="viewStatPn">
+	    <div id="viewStatPnl">
 		<div id="statPlaceholder"></div>
 	    </div>	    
 
@@ -151,6 +168,7 @@
 		    <li>
 			<h3>Total Callbacks</h3>    	
 			<p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=2&fromDate=".$adminCallBack->getFromDate()."&toDate=".$adminCallBack->getToDate()."&dateRange=".$adminCallBack->getDateRange().'"'; ?>" class="dashboardLink" id="totCB"><?php echo $TotalCB ?></a></span></p>
+
 		    </li>
 
 		    <li>
@@ -165,15 +183,21 @@
 		</ul>
 	    </div> 
 	    
+	    <?php	    		
+		if (isset($errorMessage)) {
+		    echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
+		}
+	    ?>
+	    
 	    <div id="middle">
 		<div id="search" class="group">
 		    <div class="pull-left">
 			<label for="filter">Filter Record: </label> 
 			<input type="text" name="filter" value="" id="filter">			
 		    </div>
-			<span id="displayRecord" class="pull-right">
+		    <span id="dateFilter" class="pull-right">
 			    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get" class="pull-right">
-				<input type="hidden" name="cbStatus" value="<?php echo $adminCallBack->getCbStatus()?>">				
+				<input type="hidden" name="cbStatus" id="cbStatus" value="<?php echo $adminCallBack->getCbStatus()?>">				
 				<input type="hidden" name="fromDate" value="<?php echo $adminCallBack->getFromDate()?>">
 				<input type="hidden" name="toDate" value="<?php echo $adminCallBack->getToDate()?>">
 				<input type="hidden" name="dateRange" value="<?php echo $adminCallBack->getDateRange()?>">	
@@ -181,8 +205,8 @@
 				<input id="disRecord" class="input-small span2" type="text" size="15" placeholder="Display Record" name="row_pp">				
 			    </form>
 			</span>
-		</div>
-	    
+		</div>	    
+		
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
 		    <tr>			
@@ -195,17 +219,14 @@
 		    </tr>
 		    </thead>
 		    <tbody>
-			<?php
-			if (isset($errorMessage)) {
-			    echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
-			}
-			if ($resultSet) {
-			    
+			<?php	
+			
+			if ($resultSet) {			    
 			    foreach ($resultSet as $r) {		
 				$date = date('M.d.Y', $r[callBackDate])."<br /><span class='small unHighlight'>".date('G:i:s A', $r[callBackDate])."</span>";
 				$status = "";
 				if ($r[cb_status] == 0) {
-				    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$adminCallBack->getPageNo()."&row_pp=".$adminCallBack->getRecordsPerPage()."&cbStatus=".$cbStatus."&param1=valu1&param2=value2&fromDate=".$adminCallBack->getFromDate()."&toDate=".$adminCallBack->getToDate()."&dateRange=".$adminCallBack->getDateRange()."' class='btn danger'>Callback</a>";
+				    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$adminCallBack->getPageNo()."&row_pp=".$adminCallBack->getRecordsPerPage()."&cbStatus=".$adminCallBack->getCbStatus()."&param1=valu1&param2=value2&fromDate=".$adminCallBack->getFromDate()."&toDate=".$adminCallBack->getToDate()."&dateRange=".$adminCallBack->getDateRange()."' class='btn danger'>Callback</a>";
 				} else {
 				    $status = "<a href='#' class='btn success disabled'>Answered</button>";
 				}
@@ -223,6 +244,7 @@
 			?>
 		    </tbody>
 		</table>
+		
 		<div class="cPaginator">
 		    <?php 
 		    echo $adminCallBack->getPaginatorNav();
@@ -237,8 +259,7 @@
 	<script src="js/jquery.tablesorter.min.js"></script>	
 	<script type="text/javascript" src="js/jquery.cookies.2.2.0.js"></script>
 	<script type="text/javascript" src="js/easypaginate.js"></script>		
-	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>	
-	
+	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>		
 	<script type="text/javascript" src="js/recordFilter.js"></script>	
 	
 	<!--for Date Range Picker-->
@@ -252,94 +273,6 @@
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.symbol.js"></script>
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.stack.js"></script>
 	<script language="javascript" type="text/javascript" src="js/callbackStats.js"></script>
-
-	<script type="text/javascript">
-	    /**************************************************
-	     * Display Help Text on Focus In and Foucs Out on 
-	     * Display Record Input box
-	     **************************************************/	   
-	    $('#disRecHelpText').hide();
-	    $('#disRecord').focusin(function() {			
-		$('#disRecHelpText').show();		
-	    });
-	    $('#disRecord').focusout(function() {		
-		$('#disRecHelpText').hide();
-	    });
-	    
-	    /**************************************************
-	     * Sort Table
-	     **************************************************/
-	    $(function() {
-		$("table#CallBackTable").tablesorter({ sortList: [[0,1]] });
-	    });
-	    
-	    /**************************************************
-	     * Paginate Dashboard
-	     **************************************************/
-	    jQuery(function($){
-		$('ul#items').easyPaginate({
-		    step:3
-		});
-	    });
-	    
-	    /**************************************************
-	     * Display BootStrap Alert Message
-	     **************************************************/
-	    $(".alert-message").alert();	    
-	    
-	    /**************************************************
-	     * Highlight Dashboard Link Based on current Status 
-	     **************************************************/
-	    //Get the php variable set above
-	    var cbStatus = <?php if ($cbStatus == "") {
-		echo 2;
-	    } else {
-		echo $cbStatus;
-	    } ?>;	   
-	    
-	    switch (cbStatus){
-		case 0:		    
-		    $('#unAnsCB').addClass('activeLink');
-		    break;
-		case 1:		    
-		    $('#ansCB').addClass('activeLink');		    
-		    break;
-		case 2: 		    
-		    $('#totCB').addClass('activeLink');
-		    break;
-	    }
-	    
-	    /**************************************************
-	     * Date Range Picker 
-	     **************************************************/	    
-	    $(function() {
-		var dates = $( "#from, #to" ).datepicker({
-		    defaultDate: "+1w",		   
-		    changeMonth: true,
-		    numberOfMonths: 1,
-		    //dateFormat: 'dd/mm/yy',
-		    onSelect: function( selectedDate ) {
-			var option = this.id == "from" ? "minDate" : "maxDate",
-			instance = $( this ).data( "datepicker" ),
-			date = $.datepicker.parseDate(
-			instance.settings.dateFormat ||
-			    $.datepicker._defaults.dateFormat,
-			selectedDate, instance.settings );
-			dates.not( this ).datepicker( "option", option, date );
-		    }
-		});
-	    }); 
-	
-	    $(document).ready(function(){
-		$('#date').click(function() {		    
-		    $('#fromDate').val($('#from').val());
-		    $('#toDate').val($('#to').val());
-		});
-	    });	
-	    
-	    $('.callback').click(function(){
-		alert("button responding!!");
-	    });
-	</script>
+	<script language="javascript" type="text/javascript" src="js/adminCallBack.js"></script>
     </body>
 </html>
