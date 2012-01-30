@@ -222,7 +222,7 @@ Debug::setDebug(true);
 		    </tr>
 		    </thead>
 		    <tbody>
-			<?php				
+			<?php					
 			if ($resultSet) {			    
 			    foreach ($resultSet as $r) {		
 				$date = date('M.d.Y', $r[callBackDate])."<br /><span class='small unHighlight'>".date('G:i:s A', $r[callBackDate])."</span>";
