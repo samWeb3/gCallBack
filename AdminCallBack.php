@@ -37,7 +37,6 @@ Debug::setDebug(true);
 
 	$cbStats = new CallBackStats($instanceId, $datePicker);
 	try {
-	    
 
 	    //Get the From and To Date Range
 	    if (isset($_GET['dateRangeSet'])) {
@@ -138,11 +137,11 @@ Debug::setDebug(true);
 		</form>
 	    </div>
 
-	    <?php
-	    if (isset($infoMessage)) {
-		echo "<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>$infoMessage</div>";
-	    }
-	    ?>
+	    <?php if (isset($infoMessage)) { ?>
+		<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>
+		    <?php echo "$infoMessage"; ?>
+		</div>
+	    <?php } ?>
 	    
 	    <div id="viewStatPnl">
 		<div id="statPlaceholder"></div>
@@ -154,27 +153,44 @@ Debug::setDebug(true);
 		<ul id="items">
 		    <li>
 			<h3>Total Callbacks</h3>    	
-			<p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=2&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"'; ?>" class="dashboardLink" id="totCB"><?php echo $TotalCB ?></a></span></p>
-
+			<p class="dashboard">
+			    <span class="data">
+				<a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=2&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"'; ?>" class="dashboardLink" id="totCB">
+				    <?php echo $TotalCB ?>
+				</a>
+			    </span>
+			</p>
 		    </li>
 
 		    <li>
 			<h3>Answered Callbacks</h3>    	
-			<p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=1&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"'; ?>" class="dashboardLink" id="ansCB"><?php echo $AnsCB ?></a></span></p>
+			<p class="dashboard">
+			    <span class="data">
+				<a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=1&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"'; ?>" class="dashboardLink" id="ansCB">
+				<?php echo $AnsCB ?>
+				</a>
+			    </span>
+			</p>
 		    </li>
 
 		    <li>
 			<h3>Unanswered Callbacks</h3>    	
-			<p class="dashboard"><span class="data"><a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=0&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"' ?>" class="dashboardLink" id="unAnsCB"><?php echo $UnAnsCB ?></a></span></p>		  
+			<p class="dashboard">
+			    <span class="data">
+				<a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=0&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"' ?>" class="dashboardLink" id="unAnsCB">
+				    <?php echo $UnAnsCB ?>
+				</a>
+			    </span>
+			</p>		  
 		    </li>
 		</ul>
 	    </div> 
 	    
-	    <?php	    		
-		if (isset($errorMessage)) {
-		    echo "<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>$errorMessage</div>";
-		}
-	    ?>
+	    <?php if (isset($errorMessage)) { ?>
+		<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>
+		    <?php echo "$errorMessage"; ?>
+		</div>
+	    <?php } ?>
 	    
 	    <div id="middle">
 		<div id="search" class="group">
@@ -234,9 +250,7 @@ Debug::setDebug(true);
 		</table>
 		
 		<div class="cPaginator">
-		    <?php 
-		    echo $adminCallBack->getPaginatorNav();
-		    ?>
+		    <?php echo $adminCallBack->getPaginatorNav(); ?>
 		</div>
 	    </div>
 	    
@@ -261,10 +275,6 @@ Debug::setDebug(true);
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.symbol.js"></script>
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.stack.js"></script>
 	<script language="javascript" type="text/javascript" src="js/callbackStats.js"></script>
-	<script language="javascript" type="text/javascript" src="js/adminCallBack.js"></script>
-	<script type="text/javascript">
-	    $('#CallBackTable td').maxWidth('100')
-	    
-	</script>
+	<script language="javascript" type="text/javascript" src="js/adminCallBack.js"></script>	
     </body>
 </html>
