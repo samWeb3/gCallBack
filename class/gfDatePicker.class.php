@@ -90,6 +90,11 @@ class DatePicker {
 	    return strtotime('today') + 86399;//86400;
 	}
     }
+    
+    public function displayDateRangeMsg($from, $to){
+	$message = "Displaying Records From <strong><span class='highlightDate'>".$from."</span></strong> to <strong><span class='highlightDate'>".$to."</span></strong>";
+	return $message;
+    }
 
 }
 

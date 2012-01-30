@@ -56,14 +56,17 @@ Debug::setDebug(true);
 		$dateRangeSet = $_GET['dateRangeSet'];
 
 		if ($fromDate != "" && $toDate != "") {
-		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		    //$infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		    $infoMessage = $datePicker->displayDateRangeMsg($ukFromDate, $ukToDate);
 		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']);
 		} else {		    
-		    $infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		    //$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		    $infoMessage = $datePicker->displayDateRangeMsg($datePicker->getUkFromDate(), $datePicker->getUkToDate());
 		    $cbStats->monthStats();
 		}
 	    } else {		
-		$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		//$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		$infoMessage = $datePicker->displayDateRangeMsg($datePicker->getUkFromDate(), $datePicker->getUkToDate());
 		$cbStats->monthStats();
 	    }
 
@@ -73,10 +76,12 @@ Debug::setDebug(true);
 	    if ((isset($_GET['enq_id']))) {
 		$adminCallBack->updateCallBackStatus($_GET['enq_id']);
 		if ($fromDate != "" && $toDate != "") {
-		    $infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		    //$infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		    $infoMessage = $datePicker->displayDateRangeMsg($ukFromDate, $ukToDate);
 		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']);
 		} else {		    
-		    $infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		    //$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		    $infoMessage = $datePicker->displayDateRangeMsg($datePicker->getUkFromDate(), $datePicker->getUkToDate());
 		    $cbStats->monthStats();
 		}
 	    }

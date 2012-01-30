@@ -105,3 +105,6 @@ ol#pagination li.prev {
     height: 0;
     visibility: hidden;
 }
+.highlightDate{
+    color: khaki;   
+}
