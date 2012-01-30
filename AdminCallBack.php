@@ -213,10 +213,10 @@ Debug::setDebug(true);
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
 		    <tr>			
-			<th>Date: </th>
-			<th>Name: </th>
-			<th>Email: </th>
-			<th>Phone No: </th>
+			<th>Date </th>
+			<th>Name </th>
+			<th>Email </th>
+			<th>Phone No </th>
 			<th>Enquiry</th>
 			<th>Status</th>
 		    </tr>
