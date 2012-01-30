@@ -23,8 +23,8 @@ Debug::setDebug(true);
 	<script>
 	    //need this until php sets the value, Therefore need here
 	    var dayRange = new Array();
-	    var callBackRec = new Array();//To hold all request for Callback
-	    var ansCBRec = new Array();//To hold answered callback records
+	    var totalRec = new Array();//To hold all request for Callback
+	    var ansRec = new Array();//To hold answered callback records
 	</script>
     </head>
     <body>

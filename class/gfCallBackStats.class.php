@@ -67,8 +67,8 @@ class CallBackStats {
 	    /****************************************************************
 	     * printing the php var in a javascript array we declared earlier
 	     * **************************************************************/	    
-	    echo "callBackRec.push($countCBRec);";
-	    echo "ansCBRec.push($countAnsRec);";
+	    echo "totalRec.push($countCBRec);";
+	    echo "ansRec.push($countAnsRec);";
 	}
 
 	echo "</script>";
@@ -123,8 +123,8 @@ class CallBackStats {
      */
     private function resetRecords(){
 	echo "<script type='text/javascript' language='JavaScript'>";
-	echo "callBackRec = [];";
-	echo "ansCBRec = [];";
+	echo "totalRec = [];";
+	echo "ansRec = [];";
 	echo "</script>";
     }
     

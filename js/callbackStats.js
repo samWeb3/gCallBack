@@ -1,4 +1,4 @@
-if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at begining
+if (dayRange != 0 && totalRec != 0 && ansRec != 0){ //to avoid js error at begining
 		
     /**************************************************
      * CODE BELOW FOR GENERATING STATISTICS
@@ -28,10 +28,10 @@ if (dayRange != 0 && callBackRec != 0 && ansCBRec != 0){ //to avoid js error at 
     }	   		
 	   
     //Following Script is for generating callback statistics
-    var callbackData = multiDimenArray(dayRange, callBackRec);		
+    var callbackData = multiDimenArray(dayRange, totalRec);		
 	    
     //To be Used when data for answered call retrieved
-    var answeredData = multiDimenArray(dayRange, ansCBRec);	    
+    var answeredData = multiDimenArray(dayRange, ansRec);	    
     
     
     /*
