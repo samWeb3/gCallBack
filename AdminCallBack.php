@@ -262,5 +262,9 @@ Debug::setDebug(true);
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.stack.js"></script>
 	<script language="javascript" type="text/javascript" src="js/callbackStats.js"></script>
 	<script language="javascript" type="text/javascript" src="js/adminCallBack.js"></script>
+	<script type="text/javascript">
+	    $('#CallBackTable td').maxWidth('100')
+	    
+	</script>
     </body>
 </html>

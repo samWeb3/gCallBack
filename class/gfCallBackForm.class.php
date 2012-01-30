@@ -32,7 +32,7 @@ class CallBackForm {
 
 	//if email exist
 	if ($dbRow[email] == $this->_email) {
-	    $this->updateExistingRecord($dbRow[user_id], $dbRow[telephone], $dbRow[email]);
+	    $this->updateExistingRecord($dbRow[user_id], $dbRow[telephone]);
 	} else {
 	    $this->updateNewRecord();
 	}

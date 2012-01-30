@@ -54,6 +54,12 @@ ol#pagination li.prev {
 #dateRange {
     border: 0px solid red;
 }
+
+#CallBackTable td, #CallBackTable th {
+    max-width: 210px;
+    overflow: hidden;  
+    /*border: 1px dotted blue;*/
+}
     
 /*CallBack statPlaceholder style*/
 #tooltipContainer{
