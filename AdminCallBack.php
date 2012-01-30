@@ -238,19 +238,25 @@ Debug::setDebug(true);
 					      "&dateRangeSet=".$datePicker->getDateRangeSet()."' class='btn danger'>Callback</a>";
 				} else {
 				    $status = "<a href='#' class='btn success disabled'>Answered</button>";
-				}
-			    echo "<tr><td>".$date."</td>
-				    <td>".$r[name]."</td>
-				    <td>".$r[email]."</td>
-				    <td>".$r[telephone]."</td>
-				    <td>".$r[enquiry]."</td>
-				    <td>".$status."</td>
-				  </tr>";
-			    }			    
-			} else {
-			    echo "<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>";
-			}
-			?>
+				}				
+			?>	
+			
+				<tr>
+				    <td><?php echo $date; ?></td>
+				    <td><?php echo $r[name]; ?></td>
+				    <td><?php echo $r[email]; ?></td>
+				    <td><?php echo $r[telephone]; ?></td>
+				    <td><?php echo $r[enquiry]; ?></td>
+				    <td><?php echo $status; ?></td>
+				</tr>			
+			    
+			<?php } } else { ?>
+				<tr>
+				    <td colspan="6">
+					<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>
+				    </td>
+				</tr>			    
+			<?php } ?>
 		    </tbody>
 		</table>
 		
