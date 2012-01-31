@@ -11,13 +11,17 @@ class AdminCallBack {
     private $_instanceId;
     private $_cbStatus;    
     private $_pager;   
-
+    
     /**
-     * 
+     *
+     * @param Crud $crud		reference to crud object
      * @param type $instanceId		Instance Id of Partner
-     * @param DatePicker $datePicker	datePicker
+     * @param DatePicker $datePicker	reference to datePicker object
      */
-    public function __construct($instanceId, DatePicker $datePicker) {
+    public function __construct(Crud $crud, $instanceId, DatePicker $datePicker) {
+	if (empty($crud)) {
+	    throw new Exception("Crud Object not provided");
+	}
 	if (empty($instanceId)) {
 	    throw new Exception("Partner ID Not provided");
 	}
@@ -26,7 +30,7 @@ class AdminCallBack {
 	}
 	$this->_datePicker = $datePicker;	
 	$this->_instanceId = $instanceId;
-	$this->_crud = new CRUD();
+	$this->_crud = $crud;
     }
 
     /**
@@ -62,7 +66,9 @@ class AdminCallBack {
 	} else if ($cbStatus == '0' || $cbStatus == '1') {//Answered or Unanswered CB	    
 	    $sql = $this->callBackQuery($cbStatus);
 	}	
-	$this->_pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, "&cbStatus=$cbStatus&param1=valu1&param2=value2&fromDate=".$this->_datePicker->getFromDate()."&toDate=".$this->_datePicker->getToDate()."&dateRangeSet=".$this->_datePicker->getDateRangeSet().'"');
+	$this->_pager = new PS_Pagination($this->_crud, $sql, $rowNum, $numLink, 
+		"&cbStatus=$cbStatus&param1=valu1&param2=value2&fromDate=".$this->_datePicker->getFromDate().
+		"&toDate=".$this->_datePicker->getToDate()."&dateRangeSet=".$this->_datePicker->getDateRangeSet().'"');
 	
 	//returns resultset or false
 	$reqResultSet = $this->_pager->paginate();
@@ -90,7 +96,8 @@ class AdminCallBack {
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id
 		AND callbackuserenquiry.instanceId = $this->_instanceId";
 	if ($this->_datePicker->getUnixFromDate() != "" && $this->_datePicker->getUnixToDate() != "") {	    
-	    $sql .= " AND callBackDate > ".$this->_datePicker->getUnixFromDate()." AND callBackDate < ". $this->_datePicker->getUnixToDate();
+	    $sql .= " AND callBackDate > ".$this->_datePicker->getUnixFromDate().
+		    " AND callBackDate < ". $this->_datePicker->getUnixToDate();
 	}
 	if ($cbStatus == '0' || $cbStatus == '1') {
 	    $sql .= " AND cb_status = '$cbStatus'";
@@ -122,7 +129,8 @@ class AdminCallBack {
      */
     public function countAnsCB() {
 	Fb::info("Answered:");
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '1', 'callBackDate', $this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
+	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '1', 'callBackDate', 
+		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
     }
 
@@ -133,7 +141,8 @@ class AdminCallBack {
      */
     public function countUnAnsCB() {
 	Fb::info("Un Answered:");
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '0', 'callBackDate', $this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
+	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '0', 'callBackDate', 
+		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
     }
 
@@ -145,7 +154,8 @@ class AdminCallBack {
     public function countTotCB() {
 	Fb::info("Total Call Back");
 
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, null, null, 'callBackDate', $this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
+	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, null, null, 'callBackDate', 
+		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
     }
     
@@ -162,31 +172,7 @@ class AdminCallBack {
     
     public function getRecordsPerPage(){
 	return $this->_pager->getRowsPerPage();
-    }
-    
-    /********************************************************
-     * Delegating Methods
-     ********************************************************/
-    
-    /*public function getDateRange(){
-	return $this->_datePicker->getDateRangeSet();
-    }
-    
-    public function getToDate(){
-	return $this->_datePicker->getToDate();
-    }
-    
-    public function getUnixToDate(){
-	return $this->_datePicker->getUnixToDate();
-    }
-    
-    public function getUnixFromDate(){
-	return $this->_datePicker->getUnixFromDate();
-    }
-    
-    public function getFromDate(){	
-	return $this->_datePicker->getFromDate();
-    }*/
+    }    
 }
 
 ?>

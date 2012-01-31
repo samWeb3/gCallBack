@@ -7,6 +7,8 @@ require_once 'class/gfDatePicker.class.php';
 
 //Set the Debugging mode to True
 Debug::setDebug(true);
+
+$crud = new CRUD();
 ?>  
 <!DOCTYPE html>
 <html>
@@ -70,7 +72,7 @@ Debug::setDebug(true);
 		$cbStats->monthStats();
 	    }
 
-	    $adminCallBack = new AdminCallBack($instanceId, $datePicker);
+	    $adminCallBack = new AdminCallBack($crud, $instanceId, $datePicker);
 
 	    //Check if Callback link has been clicked
 	    if ((isset($_GET['enq_id']))) {
@@ -229,8 +231,7 @@ Debug::setDebug(true);
 		    <tbody>
 			<?php					
 			if ($resultSet) {			    
-			    foreach ($resultSet as $r) {		
-				$date = date('M.d.Y', $r[callBackDate])."<br /><span class='small unHighlight'>".date('G:i:s A', $r[callBackDate])."</span>";
+			    foreach ($resultSet as $r) {						
 				$status = "";
 				if ($r[cb_status] == 0) {
 				    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$adminCallBack->getPageNo()."&row_pp=".$adminCallBack->getRecordsPerPage().
@@ -242,7 +243,11 @@ Debug::setDebug(true);
 			?>	
 			
 				<tr>
-				    <td><?php echo $date; ?></td>
+				    <td>
+					<span class="qDate"><?php echo $datePicker->convertUnixToDate($r[callBackDate]); ?></span>
+					<br /><span class="small unHighlight">
+					<span class="qtime"><?php echo $datePicker->convertUnixToTime($r[callBackDate]); ?></span>
+				    </td>
 				    <td><?php echo $r[name]; ?></td>
 				    <td><?php echo $r[email]; ?></td>
 				    <td><?php echo $r[telephone]; ?></td>

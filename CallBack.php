@@ -1,9 +1,12 @@
 <?php
 require_once 'class/gfCallBackForm.class.php';
+require_once 'class/gfUser.class.php';
 require_once 'FirePHP/firePHP.php';
 
 //Set the Debugging mode to True
 Debug::setDebug(true);
+$crud = new CRUD();
+$instance = new gfInstances();
 ?>
 
 <!DOCTYPE html>
@@ -76,16 +79,14 @@ Debug::setDebug(true);
 	    $missing = $val->getMissing();
 	    $errors = $val->getErrors();
 	    
-	    //if nothing is mission or no errors is thrown
+	    //if nothing is missing or no errors is thrown
 	    if (!$missing && !$errors){
 		try {
-		    $cbf = new CallBackForm($fname, $email, $tel, $enquiry);		    
+		    $user = new User($fname, $email, $tel);
+		    $cbf = new CallBackForm($crud, $instance, $user, $enquiry);
 		    
-		    $submitted = "CallBack: Congratulation! Your Form has been submitted!";
-		    if (Debug::getDebug()){
-			Fb::info($submitted);
-		    }
-		    unset($_POST['user_name'], $_POST['user_email'], $_POST['user_tel'], $_POST['user_enquiry']);
+		    $fieldnameArr = array('user_name',  'user_email', 'user_tel', 'user_enquiry');
+		    $cbf->resetForm($fieldnameArr);		    
 		    
 		} catch (Exception $e) {
 		    echo $e->getMessage();

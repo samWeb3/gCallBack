@@ -54,11 +54,12 @@ ol#pagination li.prev {
 #dateRange {
     border: 0px solid red;
 }
-
+#CallBackTable  td {
+    color: #808080;
+}
 #CallBackTable td, #CallBackTable th {
     max-width: 210px;
-    overflow: hidden;  
-    /*border: 1px dotted blue;*/
+    overflow: hidden;     
 }
     
 /*CallBack statPlaceholder style*/
@@ -107,4 +108,8 @@ ol#pagination li.prev {
 }
 .highlightDate{
     color: khaki;   
+}
+
+.qDate{
+    white-space: nowrap;
 }
