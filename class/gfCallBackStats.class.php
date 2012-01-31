@@ -14,7 +14,7 @@ class CallBackStats {
      *
      * @param int $instanceId	Instance Id of a partner website
      */
-    public function __construct($instanceId, DatePicker $datePicker) {	
+    public function __construct(CRUD $crud, $instanceId, DatePicker $datePicker) {	
 	if (empty($instanceId)){
 	    throw new Exception("Partner ID Not provided");
 	}
@@ -23,7 +23,7 @@ class CallBackStats {
 	}
 	$this->_datePicker = $datePicker;
 	$this->_instanceId = $instanceId;
-	$this->_crud = new CRUD();
+	$this->_crud = $crud;
     }
 
     /**

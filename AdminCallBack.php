@@ -37,7 +37,7 @@ $crud = new CRUD();
 	DatePicker::setNoOfDays(30);
 	$datePicker = new DatePicker($fromDate, $toDate, $dateRangeSet);
 
-	$cbStats = new CallBackStats($instanceId, $datePicker);
+	$cbStats = new CallBackStats($crud, $instanceId, $datePicker);
 	try {
 
 	    //Get the From and To Date Range
@@ -258,7 +258,10 @@ $crud = new CRUD();
 			<?php } } else { ?>
 				<tr>
 				    <td colspan="6">
-					<div class='alert-message error fade in' data-alert='alert'><a class='close' href='#'>&times;</a>Records not available!</div>
+					<div class='alert-message block-message error' data-alert='alert'>
+					    <div class="block-message-header">Oops! Records not available!</div>
+					    <div class="block-message-body">Please enter valid date range and try again...</div>					    
+					</div>
 				    </td>
 				</tr>			    
 			<?php } ?>

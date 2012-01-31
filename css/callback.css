@@ -99,6 +99,27 @@ ol#pagination li.prev {
 .unHighlight{
     color: #BFBFBF;
 }
+#CallBackTable  .alert-message div{
+    margin-top: 0px;
+}
+.block-message-header{
+    color: #666666;
+    border-bottom: 1px solid #DDDDDD;
+    font-weight: bold;
+}
+.block-message-body{
+    color: #666666;
+}
+.block-message-footer{
+    border-top: 1px solid #DDDDDD;
+    color: #777777;
+    display: block;
+    font-size: 11px;
+    line-height: 12px !important;
+    margin-bottom: -8px !important;
+    margin-top: 18px !important;
+    padding-top: 5px;
+}
 .group:after {
     clear: both;
     content: ".";
@@ -109,7 +130,6 @@ ol#pagination li.prev {
 .highlightDate{
     color: khaki;   
 }
-
 .qDate{
     white-space: nowrap;
 }
