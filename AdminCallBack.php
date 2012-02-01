@@ -246,7 +246,7 @@ $crud = new CRUD();
 				    <td>
 					<!--use unixtimestamp to sort date properly, then hide it using css-->
 					<span class="unixDate"><?php echo $r[callBackDate]; ?></span>
-					<span class="qDate"><?php echo $datePicker->convertUnixToMDY($r[callBackDate]); ?></span>
+					<span class="qDate"><?php echo $datePicker->convertUnixToDMY($r[callBackDate]); ?></span>
 					<br /><span class="small unHighlight">
 					<span class="qtime"><?php echo $datePicker->convertUnixToTime($r[callBackDate]); ?></span>
 				    </td>
