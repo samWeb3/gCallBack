@@ -12,6 +12,9 @@
 *+html #dateRange{
     margin-bottom: 28px;
 }
+*+html #dateRangeMsg{    
+    margin-top: 15px !important;
+}
 *+html .pContainer a {
    border-right: 1px solid #ccc;
 }

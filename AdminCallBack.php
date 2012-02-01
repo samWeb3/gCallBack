@@ -141,7 +141,7 @@ $crud = new CRUD();
 	    </div>
 
 	    <?php if (isset($infoMessage)) { ?>
-		<div class='alert-message info fade in clear' data-alert='alert'><a class='close' href='#'>&times;</a>
+		<div class='alert-message info fade in clear' id="dateRangeMsg" data-alert='alert'><a class='close' href='#'>&times;</a>
 		    <?php echo "$infoMessage"; ?>
 		</div>
 	    <?php } ?>
