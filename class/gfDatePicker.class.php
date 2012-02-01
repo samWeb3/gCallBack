@@ -96,8 +96,8 @@ class DatePicker {
 	return $message;
     }
     
-    public function convertUnixToDate($unixTimeStamp){	
-	return date('d M Y', $unixTimeStamp);
+    public function convertUnixToMDY($unixTimeStamp){	
+	return date('M.d.Y', $unixTimeStamp);
     }
     
     public function convertUnixToTime($unixTimeStamp){	

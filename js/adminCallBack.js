@@ -24,7 +24,7 @@ $(document).ready(function(){
     if ($('#CallBackTable tr').is('.visible')){		  
 	//if so use tablesorter
 	$(function() {
-	    $("table#CallBackTable").tablesorter({ sortList: [[0,1]] });
+	    $("table#CallBackTable").tablesorter({sortList: [[0,1]] });
 	});
     } 
 });
