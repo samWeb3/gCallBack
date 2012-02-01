@@ -1,4 +1,5 @@
 <?php
+require_once 'class/gfDebug.php';
 require_once 'class/gfCallBackForm.class.php';
 require_once 'class/gfUser.class.php';
 require_once 'FirePHP/firePHP.php';
@@ -106,14 +107,12 @@ $instance = new gfInstances();
 	<h1>CallBack Form</h1>
 	<form action="CallBack.php" method="POST">
 	    <ul>
-		<li>
-		    <?php 
-			if (isset($errors['user_name'])) { 
-			    echo '<span class="warning">' . $errors['user_name'] . '</span><br />'; 				
-			} 
-		    ?>
+		<li>		    
+		    <?php if (isset($errors['user_name'])) { ?>
+			    <span class="warning"> <?php echo $errors['user_name'] ?></span><br /> 				
+		    <?php } ?>
 		    <span class="leftWidth">First Name:</span>
-			<input type="text" maxlength="32" size="20" name="user_name"
+			<input type="text" maxlength="32" size="20" name="user_name" 
 			   <?php
 				//Sticky Form: The Essential Guide to Dreamweaver CS4 with CSS, Ajax, and PHP
 				if (isset($missing)) { //if any field a are missing retain the info
@@ -121,14 +120,12 @@ $instance = new gfInstances();
 				    echo 'value ="'.htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8').'"';
 				}				
 			    ?>
-			/>
+			/>			
 		</li>		
 		<li>
-		    <?php 
-			if (isset($errors['user_email'])) { 
-			    echo '<span class="warning">' . $errors['user_email'] . '</span><br />'; 				
-			} 
-		    ?>
+		    <?php if (isset($errors['user_email'])) { ?>
+			    <span class="warning"> <?php echo $errors['user_email'] ?></span><br /> 				
+		    <?php } ?>
 		    <span class="leftWidth">Email: </span>
 			<input type="text" maxlength="96" size="20" name="user_email" 
 			   <?php				
@@ -139,11 +136,9 @@ $instance = new gfInstances();
 			/>
 		</li>
 		<li>
-		    <?php 
-			if (isset($errors['user_tel'])) { 
-			    echo '<span class="warning">' . $errors['user_tel'] . '</span><br />'; 				
-			} 
-		    ?>
+		    <?php if (isset($errors['user_tel'])) { ?>
+			    <span class="warning"><?php echo $errors['user_tel'] ?></span><br /> 				
+		    <?php } ?>
 		    <span class="leftWidth">Telephone via: </span>
 		    <input type="text" maxlength="96" size="20" name="user_tel" 
 			<?php				
@@ -153,12 +148,10 @@ $instance = new gfInstances();
 			?>						 
 		    />
 		</li>
-		<li>
-		    <?php 
-			if (isset($errors['user_enquiry'])) { 
-			    echo '<span class="warning">' . $errors['user_enquiry'] . '</span><br />'; 				
-			} 
-		    ?>
+		<li>		    
+		    <?php if (isset($errors['user_enquiry'])) { ?>
+			    <span class="warning"><?php echo $errors['user_enquiry'] ?></span><br /> 				
+		    <?php } ?>
 		    <span class="leftWidth">Nature of enquiry (what would you like us to call you about?): </span><textarea maxlength="500" cols="40" name="user_enquiry" rows="6"><?php 
 			if (isset($missing)) {			    
 			    echo htmlentities($_POST['user_enquiry'], ENT_COMPAT, 'UTF-8');

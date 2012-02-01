@@ -35,7 +35,7 @@ $crud = new CRUD();
 	$instanceId = 151; //instance of partner
 	$numLink = 10; //number of link
 	
-	DatePicker::setNoOfDays(3);
+	DatePicker::setNoOfDays(31);
 	$datePicker = new DatePicker($fromDate, $toDate, $dateRangeSet);
 
 	$cbStats = new CallBackStats($crud, $instanceId, $datePicker);
@@ -58,17 +58,14 @@ $crud = new CRUD();
 
 		$dateRangeSet = $_GET['dateRangeSet'];
 
-		if ($fromDate != "" && $toDate != "") {
-		    //$infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		if ($fromDate != "" && $toDate != "") {		    
 		    $infoMessage = $datePicker->displayDateRangeMsg($ukFromDate, $ukToDate);
 		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']);
-		} else {		    
-		    //$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		} else {		    		    
 		    $infoMessage = $datePicker->displayDateRangeMsg($datePicker->getUkFromDate(), $datePicker->getUkToDate());
 		    $cbStats->monthStats();
 		}
-	    } else {		
-		//$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+	    } else {				
 		$infoMessage = $datePicker->displayDateRangeMsg($datePicker->getUkFromDate(), $datePicker->getUkToDate());
 		$cbStats->monthStats();
 	    }
@@ -78,12 +75,10 @@ $crud = new CRUD();
 	    //Check if Callback link has been clicked
 	    if ((isset($_GET['enq_id']))) {
 		$adminCallBack->updateCallBackStatus($_GET['enq_id']);
-		if ($fromDate != "" && $toDate != "") {
-		    //$infoMessage = "Displaying Callback Records From <strong>$ukFromDate</strong> to <strong>$ukToDate</strong>";
+		if ($fromDate != "" && $toDate != "") {		    
 		    $infoMessage = $datePicker->displayDateRangeMsg($ukFromDate, $ukToDate);
 		    $cbStats->customStats($_GET['fromDate'], $_GET['toDate']);
-		} else {		    
-		    //$infoMessage = "Displaying Callback Records From <strong>".$datePicker->getUkFromDate()."</strong> to <strong>".$datePicker->getUkToDate()."</strong>";
+		} else {		    		    
 		    $infoMessage = $datePicker->displayDateRangeMsg($datePicker->getUkFromDate(), $datePicker->getUkToDate());
 		    $cbStats->monthStats();
 		}
@@ -245,7 +240,7 @@ $crud = new CRUD();
 			
 				<tr>
 				    <td>
-					<!--use unixtimestamp to sort date properly, then hide it using css-->
+					<!--use UnixTimeStamp to sort date properly, then hide it using css-->
 					<span class="unixDate"><?php echo $r[callBackDate]; ?></span>
 					<span class="qDate"><?php echo $datePicker->convertUnixToDMY($r[callBackDate]); ?></span>
 					<br /><span class="small unHighlight">
