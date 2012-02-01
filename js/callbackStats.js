@@ -1,4 +1,12 @@
-if (dayRange != 0 && totalRec != 0 && ansRec != 0){ //to avoid js error at begining
+/*
+ * Check Values
+ * console.log("DayRange: " + dayRange);
+ * console.log("CallBackRec: " + totalRec);
+ * console.log("Ans CB Rec: " + ansRec);
+ *
+ */
+ 
+if (dayRange != 0 /*&& totalRec != 0 && ansRec != 0*/){ //to avoid js error at begining
 		
     /**************************************************
      * CODE BELOW FOR GENERATING STATISTICS

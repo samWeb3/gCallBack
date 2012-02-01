@@ -87,7 +87,8 @@ class DatePicker {
 	     */
 	    return strtotime($this->getToDate()) + (86399);
 	} else {
-	    return strtotime('today') + 86399;//86400;
+	    //return strtotime('today') + 86399;//86400;
+	     return strtotime('today');//86400;
 	}
     }
     
