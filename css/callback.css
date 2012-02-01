@@ -15,7 +15,7 @@ ol#pagination li.prev {
 /* Custom Paginator Style */
 .cPaginator{
     height: 36px;
-    margin-bottom: 18px 0;
+    margin-bottom: 18px;
 }
 .pContainer{
     border: 1px solid rgba(0, 0, 0, 0.15);
@@ -30,8 +30,7 @@ ol#pagination li.prev {
 	padding: 0 14px;
 	text-decoration: none;
 	float: left;	
-    }
-   
+    }   
     .pContainer a:hover{
 	background-color: #C7EEFE;  
 	text-decoration: none;
@@ -58,9 +57,6 @@ ol#pagination li.prev {
     overflow: hidden;     
 }    
 /*CallBack statPlaceholder style*/
-#tooltipContainer{
-    display: none;
-}
 #statPlaceholder {
     margin: 10px auto;  
     width: 760px;
@@ -68,16 +64,19 @@ ol#pagination li.prev {
     margin-right: 25px;    
     margin-bottom: 20px;
 }
-.yAxis .tickLabel {   
-    padding-right: 5px;    
-}
-#statPlaceholder table{
-    width: 0px !important;
-}
-#statPlaceholder table td, #statPlaceholder table th{
-    padding: 5px 5px 4px;
-    background-color: rgba(241, 241, 241, 0.2);   
-}
+    .yAxis .tickLabel {   
+	padding-right: 5px;    
+    }
+    #statPlaceholder table{
+	width: 0px !important;
+    }
+    #statPlaceholder table td, #statPlaceholder table th{
+	padding: 5px 5px 4px;
+	background-color: rgba(241, 241, 241, 0.2);   
+    }
+    #tooltipContainer{
+	display: none;
+    }
 /*Extend some bootstrap css*/
 .btn:active{
     outline: none !important;
