@@ -1,7 +1,7 @@
 ul, ol, dl{padding:0;}
 #container{    
-    margin:0 auto;
-    width:818px;
+    /*margin:0 auto;
+    width:818px;*/
     text-align:left;
     position:relative;
     padding:2em 0;
@@ -25,7 +25,7 @@ ul#items{
     height:205px;
     overflow:hidden;
     clear: both;
-    margin-left: 10px;
+    margin-left: 0px;
 }
 ul#items li{
     list-style:none;

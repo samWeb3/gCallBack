@@ -1,3 +1,7 @@
+#container {
+     margin: 0px auto;
+     width: 818px;     
+}
 /*Search Button Style */
 #search label{
     text-align: left;
@@ -58,11 +62,10 @@ ol#pagination li.prev {
 }    
 /*CallBack statPlaceholder style*/
 #statPlaceholder {
-    margin: 10px auto;  
+    margin: 0px auto;  
     width: 760px;
-    height: 300px;
-    margin-right: 25px;    
-    margin-bottom: 20px;
+    height: 300px;    
+    margin-bottom: 20px;    
 }
     .yAxis .tickLabel {   
 	padding-right: 5px;    
@@ -77,6 +80,11 @@ ol#pagination li.prev {
     #tooltipContainer{
 	display: none;
     }
+/*Dashboard Pnl style*/
+#viewDashboardPnl{    
+    width: 804px;
+    margin: 0px auto;
+}
 /*Extend some bootstrap css*/
 .btn:active{
     outline: none !important;
