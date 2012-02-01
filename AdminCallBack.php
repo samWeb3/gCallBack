@@ -35,7 +35,7 @@ $crud = new CRUD();
 	$instanceId = 151; //instance of partner
 	$numLink = 10; //number of link
 	
-	DatePicker::setNoOfDays(30);
+	DatePicker::setNoOfDays(3);
 	$datePicker = new DatePicker($fromDate, $toDate, $dateRangeSet);
 
 	$cbStats = new CallBackStats($crud, $instanceId, $datePicker);
