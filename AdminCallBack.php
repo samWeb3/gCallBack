@@ -4,9 +4,10 @@ require_once 'class/gfAdminCallBack.class.php';
 require_once 'class/gfCallBackStats.class.php';
 require_once 'FirePHP/firePHP.php';
 require_once 'class/gfDatePicker.class.php';
+require_once 'class/gfDebug.php';
 
 //Set the Debugging mode to True
-Debug::setDebug(true);
+Debug::setDebug(false);
 
 $crud = new CRUD();
 ?>  

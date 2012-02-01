@@ -103,9 +103,7 @@ class AdminCallBack {
 	    $sql .= " AND cb_status = '$cbStatus'";
 	}
 	$sql .= " ORDER BY callbackuserenquiry.callBackDate DESC";
-	if (Debug::getDebug()) {
-	    fb($sql, "SQL: ", FirePHP::WARN);
-	}
+	
 	return $sql;
     }
     
@@ -127,8 +125,7 @@ class AdminCallBack {
      * 
      * @return int Number of answered Call Back 
      */
-    public function countAnsCB() {
-	Fb::info("Answered:");
+    public function countAnsCB() {	
 	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '1', 'callBackDate', 
 		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
@@ -139,8 +136,7 @@ class AdminCallBack {
      * 
      * @return int Number of Unanswered Call Back
      */
-    public function countUnAnsCB() {
-	Fb::info("Un Answered:");
+    public function countUnAnsCB() {	
 	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '0', 'callBackDate', 
 		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
@@ -152,8 +148,6 @@ class AdminCallBack {
      * @return int Number all Call Back
      */
     public function countTotCB() {
-	Fb::info("Total Call Back");
-
 	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, null, null, 'callBackDate', 
 		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);

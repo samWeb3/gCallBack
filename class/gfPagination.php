@@ -65,10 +65,7 @@ class PS_Pagination {
 
 		$this->_total_rows = count($result);
 		//Return FALSE if no rows found
-		if ($this->_total_rows == 0) {
-		    if (Debug::getDebug()){			
-			Fb::warn("Query returned zero rows.");
-		    }		    
+		if ($this->_total_rows == 0) {		    		    
 		    return FALSE;
 		}
 		
@@ -94,13 +91,11 @@ class PS_Pagination {
 		$reqResultSet = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		if (! $reqResultSet) {
-		    if (Debug::getDebug()){	
+		    /*if (Debug::getDebug()){	
 			fb(mysql_error(), 'Pagination query failed. Check your query.<br /><br />Error Returned:', FirePHP::ERROR);
 			//Fb::warn("Pagination query failed. Check your query.<br /><br />Error Returned: " . mysql_error());
-		    }
-			/*if ($this->_debug)
-				echo "Pagination query failed. Check your query.<br /><br />Error Returned: " . mysql_error();*/
-			return false;
+		    }*/			
+		    return false;
 		}				
 		return $reqResultSet;
 	}

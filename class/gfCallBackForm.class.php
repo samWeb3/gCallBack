@@ -11,15 +11,13 @@ class CallBackForm {
 
     private $_crud;
     private $_instance;
-    private $_user;      
-    
+    private $_user;
     private $_enquiry;
 
     public function __construct(Crud $crud, gfInstances $instances, User $user, $enquiry) {
 	$this->_crud = $crud;
 	$this->_user = $user;
-	$this->_instance = $instances;
-	
+	$this->_instance = $instances;	
 	$this->_enquiry = $enquiry;	
 	
 	$this->addCallBackRequest();
@@ -58,14 +56,6 @@ class CallBackForm {
      * @param type $dbTel 
      */
     private function updateExistingRecord($dbUserId, $dbTel) { 
-	if (Debug::getDebug()) {
-	    Fb::info("CallBackForm: Email exist!");
-	}
-
-	if (Debug::getDebug()) {
-	    $message = "CallBackForm: User Id is " . $dbUserId . " and Tel is: " . $dbTel;
-	    Fb::info($message);
-	}
 
 	//use the id of existing user to insert into the $enquiry database
 	$enquiry = array(
@@ -79,19 +69,8 @@ class CallBackForm {
 	$this->insertRow('callbackuserenquiry', $enquiry);
 
 	//if telephone retrived from database is not equal to one passed on the form
-	if ($dbTel != $this->_user->getTel()) {
-	    if (Debug::getDebug()) {
-		Fb::warn("Need to update the database!");
-		fb($dbUserId, "User ID");
-		fb($this->_user->getTel(), "New Telephone");
-		fb($dbTel, "Old Telephone");
-	    }
-
+	if ($dbTel != $this->_user->getTel()) { 
 	    $this->updateRow('callbackuser', 'telephone', $this->_user->getTel(), 'user_id', $dbUserId);
-	} else {
-	    if (Debug::getDebug()) {
-		Fb::info("Telephone no is same");
-	    }
 	}
     }
 
@@ -99,10 +78,6 @@ class CallBackForm {
      * 
      */
     private function updateNewRecord() {
-	if (Debug::getDebug()) {
-	    Fb::info("CallBackForm: Email doesn't exist:");
-	}
-
 	//Insert new user into the callbackuser table
 	$user = array(
 	    array('name' => $this->_user->getName(), 
@@ -167,7 +142,7 @@ class CallBackForm {
     }
     
     /**
-     *
+     * Return email address of an instance
      * @return type 
      */
     private function getOwnerEmail() {
@@ -179,7 +154,7 @@ class CallBackForm {
     }
 
     /**
-     * 
+     * Sends an email to the instance owner
      */
     private function sendEmail() {
 	$ow_email = $this->getOwnerEmail();
