@@ -1,14 +1,10 @@
-#container {
-    /* margin: 0px auto;
-     width: 900px;*/
-}
 /*Search Button Style */
-    #search label{
-	text-align: left;
-	font-weight: bolder;
-	width: auto !important;
-	padding-right: 7px;	
-    }
+#search label{
+    text-align: left;
+    font-weight: bolder;
+    width: auto !important;
+    padding-right: 7px;	
+}
 /* Dashboard Paginator */
 ol#pagination{     
     margin-left: 6px;
@@ -60,8 +56,7 @@ ol#pagination li.prev {
 #CallBackTable td, #CallBackTable th {
     max-width: 210px;
     overflow: hidden;     
-}
-    
+}    
 /*CallBack statPlaceholder style*/
 #tooltipContainer{
     display: none;
