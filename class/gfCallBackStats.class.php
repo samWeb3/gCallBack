@@ -1,7 +1,7 @@
 <?php
 
 require_once 'gfCRUD.class.php';
-require_once 'gfPagination.php';
+require_once 'gfPagination.class.php';
 require_once 'gfDatePicker.class.php';
 
 class CallBackStats {

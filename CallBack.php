@@ -1,5 +1,5 @@
 <?php
-require_once 'class/gfDebug.php';
+require_once 'class/gfDebug.class.php';
 require_once 'class/gfCallBackForm.class.php';
 require_once 'class/gfUser.class.php';
 require_once 'FirePHP/firePHP.php';
@@ -54,7 +54,7 @@ $instance = new gfInstances();
     
     if (filter_has_var(INPUT_POST, request_callback)){	//better than isset as it returns true even in case of an empty string 	
 	try {
-	    require_once 'class/gfValidator.php';
+	    require_once 'class/gfValidator.class.php';
 	    
 	    $required = array('user_name', 'user_email', 'user_tel', 'user_enquiry');
 	    

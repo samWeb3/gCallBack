@@ -3,7 +3,7 @@
 /**
  * http://www.phpro.org/classes/PDO-CRUD.html
  */
-//require_once 'gfDebug.php';
+//require_once 'gfDebug.class.php';
 require_once 'config/dbConn.inc.php';
 
 class CRUD {
