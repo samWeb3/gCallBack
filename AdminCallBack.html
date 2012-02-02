@@ -1,0 +1,194 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="css/dr/jquery.ui.all.css" rel="stylesheet" />
+	<link href="css/dr/demos.css" rel="stylesheet" />
+	<link href="css/callback.css" rel="stylesheet" />
+	<link href="css/hacks.css" rel="stylesheet" />
+	<link href="css/bootstrap.css" rel="stylesheet" />	
+	<link href="css/easypaginate.css" rel="stylesheet" />
+	    
+	<script>
+	    //need this until php sets the value, Therefore need here
+	    var dayRange = new Array();
+	    var totalRec = new Array();//To hold all request for Callback
+	    var ansRec = new Array();//To hold answered callback records
+	</script>
+    </head>
+    <body>		
+	<div id="container">
+	    <div id="datePickerHolder" class="group">
+		<div id="switchDisplay">
+		    <button id="viewStatBtn" class="btn default pull-left">{$_View Statistics}</button>		    
+		    <button id="viewDashboardBtn" class="btn default pull-left">{$_View Dashboard}</button>
+		</div>
+
+		<form action="" method="get" class="pull-right">
+		    <!--Used by JavaScript-->
+		    <input class="medium" type="text" id="from" name="from" placeholder="{_Date From}" />
+		    <input class="medium" type="text" id="to" name="to" placeholder="{_Date To}" />
+
+		    <!--Used by PHP-->
+		    <input type="hidden" id="fromDate" name="fromDate"/>
+		    <input type="hidden" id="toDate" name="toDate"/>
+
+		    <input type="submit" id="date" name="dateRangeSet" value="{_Display}" class="btn default"/>
+		</form>
+	    </div>
+
+	    <!--?php if (isset($infoMessage)) { ?-->
+		<div class='alert-message info fade in clear' id="dateRangeMsg" data-alert='alert'><a class='close' href='#'>&times;</a>
+		    {$infoMessage}		    
+		</div>
+	    <!--?php } ?-->
+	    
+	    <div id="viewStatPnl">
+		<div id="statPlaceholder"></div>
+	    </div>	    
+
+	    <p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>{$_Enable Tooltip}</p>
+
+	    <div id="viewDashboardPnl">
+		<ul id="items">
+		    <li>
+			<h3>{$_Total Callbacks}</h3>    	
+			<p class="dashboard">
+			    <span class="data">				
+				<a href="?cbStatus=2&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
+				   {$totalCB}
+				</a>
+			    </span>
+			</p>
+		    </li>
+
+		    <li>
+			<h3>{$_Answered Callbacks}</h3>    	
+			<p class="dashboard">
+			    <span class="data">				
+				<a href="?cbStatus=1&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
+				   {$ansCB}				   
+				</a>
+			    </span>
+			</p>
+		    </li>
+
+		    <li>
+			<h3>{$_Unanswered Callbacks}</h3>   <!-- {_Unanswered Callbacks} Language Variable--> 	
+			<p class="dashboard">
+			    <span class="data">				
+				<a href="?cbStatus=0&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
+				   {$unAnsCB} 				   
+				</a>
+			    </span>
+			</p>		  
+		    </li>
+		</ul>
+	    </div> 
+	    
+	    <!--?php if (isset($errorMessage)) { ?-->
+		<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>
+		   {$errorMessage}
+		</div>
+	    <!--?php } ?-->
+	    
+	    <div id="middle">
+		<div id="search" class="group">
+		    <div class="pull-left">
+			<label for="filter">{$_Filter Record:}</label> 
+			<input type="text" name="filter" value="" id="filter">			
+		    </div>
+		    <span id="dateFilter" class="pull-right">
+			    <form action="" method="get" class="pull-right">
+				<input type="hidden" name="cbStatus" id="cbStatus" value="{$cbStatus}">				
+				<input type="hidden" name="fromDate" value="{$fromDate}">
+				<input type="hidden" name="toDate" value="{$toDate}">
+				<input type="hidden" name="dateRangeSet" value="{$dateRangeSet}">	
+				<label id="disRecHelpText" class="help-inline">{_Enter valid number and press &#60;ENTER&#62; !&nbsp;}</label>
+				<input id="disRecord" class="input-small span2" type="text" size="15" placeholder="{_Display Record}" name="row_pp">				
+			    </form>
+			</span>
+		</div>	    
+		
+		<table class="zebra-striped tablesorter" id="CallBackTable">
+		    <thead>
+		    <tr>			
+			<th>{$_Date}</th>
+			<th>{$_Name}</th>
+			<th>{$_Email}</th>
+			<th>{$_Phone No}</th>
+			<th>{$_Enquiry}</th>
+			<th>{$_Status}</th>
+		    </tr>
+		    </thead>
+		    <tbody>
+			<!--?php					
+			if ($resultSet) {			    
+			    foreach ($resultSet as $r) {						
+				$status = "";
+				if ($r[cb_status] == 0) {
+				    $status = '<a href="?enq_id={$enqId}&page={$pageNo}&row_pp={$recordsPerPage}&cbStatus={$cbStatus}
+						    &param1=valu1&param2=value2&fromDate={$fromDate}&toDate={toDate}&dateRangeSet={$dateRangeSet}"
+						class="btn danger">{_Callback}</a>';
+				} else {
+				    $status = "<a href='#' class='btn success disabled'>{_Answered}</button>";
+				}				
+			?-->	
+			
+				<tr>
+				    <td>
+					<!--use UnixTimeStamp to sort date properly, then hide it using css-->
+					<span class="unixDate">{$callBackDate}</span>
+					<span class="qDate">{$convertUnixToDMY}</span>
+					<br />
+					<span class="small unHighlight qtime">{$convertUnixToTime}</span>
+				    </td>
+				    <td>{$userName}</td>
+				    <td>{$userEmail}</td>
+				    <td>{$userTel}</td>
+				    <td>{$userEnquiry}</td>
+				    <td>{$userStatus}</td>
+				</tr>			
+			    
+			<!--?php } } else { ?-->
+				<tr>
+				    <td colspan="6">
+					<div class='alert-message block-message error' data-alert='alert'>
+					    <div class="block-message-header">{_Oops! Records not available!}</div>
+					    <div class="block-message-body">{_Please enter valid date range and try again...}</div>					    
+					</div>
+				    </td>
+				</tr>			    
+			<!--?php } ?-->
+		    </tbody>
+		</table>
+		
+		<div class="cPaginator">
+		    {$paginatorNav}		    
+		</div>
+	    </div>	    
+	</div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script><!--For Date Range Picker-->
+	<script src="js/jquery.tablesorter.min.js"></script>	
+	<script type="text/javascript" src="js/jquery.cookies.2.2.0.js"></script>
+	<script type="text/javascript" src="js/easypaginate.js"></script>		
+	<script type="text/javascript" src="js/bootstrap-alerts.js"></script>		
+	<script type="text/javascript" src="js/recordFilter.js"></script>	
+	
+	<!--for Date Range Picker-->
+	<script src="js/dr/jquery.ui.widget.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/dr/jquery.ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--For Generating stats-->
+	<!--for the support on IE7 and IE8-->
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/stat/excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.symbol.js"></script>
+	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.stack.js"></script>
+	<script language="javascript" type="text/javascript" src="js/callbackStats.js"></script>
+	<script language="javascript" type="text/javascript" src="js/adminCallBack.js"></script>	
+    </body>
+</html>

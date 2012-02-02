@@ -231,7 +231,7 @@ $crud = new CRUD();
 				$status = "";
 				if ($r[cb_status] == 0) {
 				    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$adminCallBack->getPageNo()."&row_pp=".$adminCallBack->getRecordsPerPage().
-					      "&cbStatus=".$adminCallBack->getCbStatus()."&param1=valu1&param2=value2&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate().
+					      "&cbStatus=".$adminCallBack->getCbStatus()."&param1=value1&param2=value2&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate().
 					      "&dateRangeSet=".$datePicker->getDateRangeSet()."' class='btn danger'>Callback</a>";
 				} else {
 				    $status = "<a href='#' class='btn success disabled'>Answered</button>";
@@ -243,8 +243,8 @@ $crud = new CRUD();
 					<!--use UnixTimeStamp to sort date properly, then hide it using css-->
 					<span class="unixDate"><?php echo $r[callBackDate]; ?></span>
 					<span class="qDate"><?php echo $datePicker->convertUnixToDMY($r[callBackDate]); ?></span>
-					<br /><span class="small unHighlight">
-					<span class="qtime"><?php echo $datePicker->convertUnixToTime($r[callBackDate]); ?></span>
+					<br />
+					<span class="small unHighlight qtime"><?php echo $datePicker->convertUnixToTime($r[callBackDate]); ?></span>
 				    </td>
 				    <td><?php echo $r[name]; ?></td>
 				    <td><?php echo $r[email]; ?></td>

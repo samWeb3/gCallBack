@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+	    html, body, div, ol, ul, dl, dd, dt, fieldset, p, form, h1, h2, h3, h4, h5, iframe, blockquote, pre, img, label, legend, strong, span, em, table, caption, tbody, tfoot, thead, tr, th, td {
+		font-family: inherit;
+		font-style: inherit;
+		font-weight: inherit;
+		margin: 0;
+		padding: 0;
+	    }
+	    fieldset, input, select, textarea, button, table, th, td, pre {
+		font: 75%/1.6em "Lucida Grande",Verdana,Geneva,Helvetica,Arial,sans-serif;
+	    }
+	    ol, ul {
+		list-style: none outside none;
+	    }
+	    body {
+		font-family: Arial;
+		font-size: 12px;
+	    }
+	    ul li span.leftWidth{
+		float: left;
+		width: 125px !important;
+		list-style: none;		
+	    }
+	    li, h1 { padding-bottom: 20px;}
+	    .warning {
+		color: #f00;
+		font-weight: bold;
+	    }
+	</style>
+    </head>
+    <body>
+	<h1>{_CallBack Form}</h1>
+	<form action="CallBack.php" method="POST">
+	    <ul>
+		<li>		    
+		    <!--?php if (isset($errors['user_name'])) { ?-->
+			    <span class="warning">{$errUserName}</span><br /> 				
+		    <!--?php } ?-->
+		    <span class="leftWidth">{_First Name:}</span>
+			<input type="text" maxlength="32" size="20" name="user_name" 
+			   <!--?php				
+				if (isset($missing)) {				
+				    echo 'value ="'.htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8').'"';
+				}				
+			    ?-->
+			/>			
+		</li>		
+		<li>
+		    <?php if (isset($errors['user_email'])) { ?>
+			    <span class="warning">{$errUserEmail}</span><br /> 				
+		    <?php } ?>
+		    <span class="leftWidth">{_Email:}</span>
+			<input type="text" maxlength="96" size="20" name="user_email" 
+			   <!--?php				
+				if (isset($missing)) {				    
+				    echo 'value ="'.htmlentities($_POST['user_email'], ENT_COMPAT, 'UTF-8').'"';
+				}
+			    ?-->
+			/>
+		</li>
+		<li>
+		    <?php if (isset($errors['user_tel'])) { ?>
+			    <span class="warning">{$errUserTel}</span><br /> 				
+		    <?php } ?>
+		    <span class="leftWidth">{_Telephone via:}</span>
+		    <input type="text" maxlength="96" size="20" name="user_tel" 
+			<!--?php				
+			    if (isset($missing)) {				    
+				echo 'value ="'.htmlentities($_POST['user_tel'], ENT_COMPAT, 'UTF-8').'"';
+			    }
+			?-->						 
+		    />
+		</li>
+		<li>		    
+		    <?php if (isset($errors['user_enquiry'])) { ?>
+			    <span class="warning">{$errUserEnquiry}</span><br /> 				
+		    <?php } ?>
+		    <span class="leftWidth">{_Nature of enquiry (what would you like us to call you about?):}</span><textarea maxlength="500" cols="40" name="user_enquiry" rows="6">
+		    <!--?php 
+			if (isset($missing)) {			    
+			    echo htmlentities($_POST['user_enquiry'], ENT_COMPAT, 'UTF-8');
+			} //It's important to position the opening and closing PHP tags right up agains the <textarea> tags. Else you get unwanted whitespace in the text area.
+		    ?--></textarea>
+		</li>
+		<li><span class="leftWidth">&nbsp; </span>
+		    <input class="buttonBackground" type="submit" value="{_Request Callback}" name="request_callback" />
+		    <input class="buttonBackground" type="reset" value="{_Reset}" id="reset" name="reset">
+		</li>
+	    </ul>
+	</form>
+    </body>
+</html>
