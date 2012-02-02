@@ -177,7 +177,7 @@ $crud = new CRUD();
 		    </li>
 
 		    <li>
-			<h3>Unanswered Callbacks</h3>    	
+			<h3>Unanswered Callbacks</h3>   <!-- {_Unanswered Callbacks} Language Variable--> 	
 			<p class="dashboard">
 			    <span class="data">
 				<a href="<?php echo $_SERVER['PHP_SELF'] . "?cbStatus=0&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate()."&dateRangeSet=".$datePicker->getDateRangeSet().'"' ?>" class="dashboardLink" id="unAnsCB">
@@ -191,7 +191,7 @@ $crud = new CRUD();
 	    
 	    <?php if (isset($errorMessage)) { ?>
 		<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>
-		    <?php echo "$errorMessage"; ?>
+		    <?php echo "$errorMessage"; ?><!-- {$errorMessage}-->
 		</div>
 	    <?php } ?>
 	    
