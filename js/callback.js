@@ -2,17 +2,16 @@
  * Highlight Dashboard Link Based on current Status 
  **************************************************/
 //Get the php variable set above	   	   
-var quoteStatus = $('#quoteStatus').val();
+var cbStatus = $('#cbStatus').val();
 
-switch (quoteStatus){
+switch (cbStatus){
     case '0':		   	
-	$('#unAnsQtReq').addClass('activeLink');
+	$('#unAnsCB').addClass('activeLink');
 	break;
     case '1':		    	
-	$('#ansQtReq').addClass('activeLink');		    
+	$('#ansCB').addClass('activeLink');		    
 	break;
     case '2': 		
-	$('#totQtReq').addClass('activeLink');
+	$('#totCB').addClass('activeLink');
 	break;
 }
-
