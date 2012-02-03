@@ -1,8 +1,8 @@
 /*
  * Check Values
  * console.log("DayRange: " + dayRange);
- * console.log("CallBackRec: " + totalRec);
- * console.log("Ans CB Rec: " + ansRec);
+ * console.log("totalRecRec: " + totalRec);
+ * console.log("ansRec: " + ansRec);
  *
  */
  
@@ -36,7 +36,7 @@ if (dayRange != 0 /*&& totalRec != 0 && ansRec != 0*/){ //to avoid js error at b
     }	   		
 	   
     //Following Script is for generating callback statistics
-    var callbackData = multiDimenArray(dayRange, totalRec);		
+    var unAnsweredData = multiDimenArray(dayRange, totalRec);		
 	    
     //To be Used when data for answered call retrieved
     var answeredData = multiDimenArray(dayRange, ansRec);	    
@@ -68,7 +68,7 @@ if (dayRange != 0 /*&& totalRec != 0 && ansRec != 0*/){ //to avoid js error at b
     { 
 	color: "#CB413B", 
 	label: "CallBacks", 		    
-	data: callbackData, 
+	data: unAnsweredData, 
 	shadowSize: 4
 				
     },
