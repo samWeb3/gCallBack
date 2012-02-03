@@ -44,7 +44,7 @@
 		    <span class="leftWidth">{_First Name:}</span>
 			<input type="text" maxlength="32" size="20" name="user_name" 
 			    <!--?php if (isset($missing)) { ?-->				
-				value ="<!--?php echo htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8') ?-->"
+				value ="{$htmEntUserName}"
 			    <!--?php } ?-->
 			/>			
 		</li>		
@@ -55,7 +55,7 @@
 		    <span class="leftWidth">{_Email:}</span>
 			<input type="text" maxlength="96" size="20" name="user_email" 
 			    <!--?php if (isset($missing)) { ?-->				
-				value ="<!--?php echo htmlentities($_POST['user_email'], ENT_COMPAT, 'UTF-8') ?-->"
+				value ="{$htmEntUserEmail}"
 			    <!--?php } ?-->
 			/>
 		</li>
@@ -66,7 +66,7 @@
 		    <span class="leftWidth">{_Telephone via:}</span>
 		    <input type="text" maxlength="96" size="20" name="user_tel" 
 			<!--?php if (isset($missing)) { ?-->				
-			    value ="<!--?php echo htmlentities($_POST['user_tel'], ENT_COMPAT, 'UTF-8') ?-->"
+			    value ="{$htmEntUserTel}"
 			<!--?php } ?-->						 
 		    />
 		</li>
