@@ -113,13 +113,9 @@ $instance = new gfInstances();
 		    <?php } ?>
 		    <span class="leftWidth">First Name:</span>
 			<input type="text" maxlength="32" size="20" name="user_name" 
-			   <?php
-				//Sticky Form: The Essential Guide to Dreamweaver CS4 with CSS, Ajax, and PHP
-				if (isset($missing)) { //if any field a are missing retain the info
-				    //ENT_COMPAT: converts double quote to $quote; but lives single quote alone
-				    echo 'value ="'.htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8').'"';
-				}				
-			    ?>
+			<?php if (isset($missing)) { ?>				
+			    value ="<?php echo htmlentities($_POST['user_name'], ENT_COMPAT, 'UTF-8') ?>"
+			<?php } ?>
 			/>			
 		</li>		
 		<li>
@@ -128,11 +124,9 @@ $instance = new gfInstances();
 		    <?php } ?>
 		    <span class="leftWidth">Email: </span>
 			<input type="text" maxlength="96" size="20" name="user_email" 
-			   <?php				
-				if (isset($missing)) {				    
-				    echo 'value ="'.htmlentities($_POST['user_email'], ENT_COMPAT, 'UTF-8').'"';
-				}
-			    ?>
+			    <?php if (isset($missing)) { ?>
+				value ="<?php echo htmlentities($_POST['user_email'], ENT_COMPAT, 'UTF-8')?>"
+			    <?php } ?>
 			/>
 		</li>
 		<li>
@@ -141,11 +135,9 @@ $instance = new gfInstances();
 		    <?php } ?>
 		    <span class="leftWidth">Telephone via: </span>
 		    <input type="text" maxlength="96" size="20" name="user_tel" 
-			<?php				
-			    if (isset($missing)) {				    
-				echo 'value ="'.htmlentities($_POST['user_tel'], ENT_COMPAT, 'UTF-8').'"';
-			    }
-			?>						 
+			<?php if (isset($missing)) { ?>				
+			    value ="<?php echo htmlentities($_POST['user_tel'], ENT_COMPAT, 'UTF-8') ?>"
+			<?php } ?>						 
 		    />
 		</li>
 		<li>		    
