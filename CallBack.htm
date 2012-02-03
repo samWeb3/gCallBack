@@ -51,9 +51,9 @@
 			/>			
 		</li>		
 		<li>
-		    <?php if (isset($errors['user_email'])) { ?>
+		    <!--?php if (isset($errors['user_email'])) { ?-->
 			    <span class="warning">{$errUserEmail}</span><br /> 				
-		    <?php } ?>
+		    <!--?php } ?-->
 		    <span class="leftWidth">{_Email:}</span>
 			<input type="text" maxlength="96" size="20" name="user_email" 
 			   <!--?php				
@@ -64,9 +64,9 @@
 			/>
 		</li>
 		<li>
-		    <?php if (isset($errors['user_tel'])) { ?>
+		    <!--?php if (isset($errors['user_tel'])) { ?-->
 			    <span class="warning">{$errUserTel}</span><br /> 				
-		    <?php } ?>
+		    <!--?php } ?-->
 		    <span class="leftWidth">{_Telephone via:}</span>
 		    <input type="text" maxlength="96" size="20" name="user_tel" 
 			<!--?php				
@@ -77,9 +77,9 @@
 		    />
 		</li>
 		<li>		    
-		    <?php if (isset($errors['user_enquiry'])) { ?>
+		    <!--?php if (isset($errors['user_enquiry'])) { ?-->
 			    <span class="warning">{$errUserEnquiry}</span><br /> 				
-		    <?php } ?>
+		    <!--?php } ?-->
 		    <span class="leftWidth">{_Nature of enquiry (what would you like us to call you about?):}</span><textarea maxlength="500" cols="40" name="user_enquiry" rows="6">
 		    <!--?php 
 			if (isset($missing)) {			    

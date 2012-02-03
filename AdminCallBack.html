@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
 	<title></title>
@@ -123,19 +123,8 @@
 		    </tr>
 		    </thead>
 		    <tbody>
-			<!--?php					
-			if ($resultSet) {			    
-			    foreach ($resultSet as $r) {						
-				$status = "";
-				if ($r[cb_status] == 0) {
-				    $status = '<a href="?enq_id={$enqId}&page={$pageNo}&row_pp={$recordsPerPage}&cbStatus={$cbStatus}
-						    &param1=valu1&param2=value2&fromDate={$fromDate}&toDate={toDate}&dateRangeSet={$dateRangeSet}"
-						class="btn danger">{_Callback}</a>';
-				} else {
-				    $status = "<a href='#' class='btn success disabled'>{_Answered}</button>";
-				}				
-			?-->	
-			
+			<!--?php if ($resultSet) { ?-->
+			    <!--?php foreach ($resultSet as $r) { ?-->						
 				<tr>
 				    <td>
 					<!--use UnixTimeStamp to sort date properly, then hide it using css-->
@@ -148,7 +137,23 @@
 				    <td>{$userEmail}</td>
 				    <td>{$userTel}</td>
 				    <td>{$userEnquiry}</td>
-				    <td>{$userStatus}</td>
+				    <td>
+					<!--?php if ($r[cb_status] == 0) { ?-->
+					    <a href="?
+						enq_id={$enqId}
+						&page={$pageNo}
+						&row_pp={$recordsPerPage}
+						&cbStatus={$cbStatus}
+						&param1=value1
+						&param2=value2
+						&fromDate={$fromDate}
+						&toDate={$toDate}
+						&dateRangeSet={$dateRangeSet}"
+					        class="btn danger">Callback</a>
+					<!--?php } else { ?-->
+						<a href="#" class="btn success disabled">Answered</a>
+					<!--?php } ?-->
+				    </td>
 				</tr>			
 			    
 			<!--?php } } else { ?-->

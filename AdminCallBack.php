@@ -224,20 +224,9 @@ $crud = new CRUD();
 			<th>Status</th>
 		    </tr>
 		    </thead>
-		    <tbody>
-			<?php					
-			if ($resultSet) {			    
-			    foreach ($resultSet as $r) {						
-				$status = "";
-				if ($r[cb_status] == 0) {
-				    $status = "<a href='".$_SERVER['PHP_SELF']."?enq_id=".$r[enq_id]."&page=".$adminCallBack->getPageNo()."&row_pp=".$adminCallBack->getRecordsPerPage().
-					      "&cbStatus=".$adminCallBack->getCbStatus()."&param1=value1&param2=value2&fromDate=".$datePicker->getFromDate()."&toDate=".$datePicker->getToDate().
-					      "&dateRangeSet=".$datePicker->getDateRangeSet()."' class='btn danger'>Callback</a>";
-				} else {
-				    $status = "<a href='#' class='btn success disabled'>Answered</button>";
-				}				
-			?>	
-			
+		    <tbody>			
+			<?php if ($resultSet) { ?>
+			    <?php foreach ($resultSet as $r) { ?>
 				<tr>
 				    <td>
 					<!--use UnixTimeStamp to sort date properly, then hide it using css-->
@@ -250,7 +239,23 @@ $crud = new CRUD();
 				    <td><?php echo $r[email]; ?></td>
 				    <td><?php echo $r[telephone]; ?></td>
 				    <td><?php echo $r[enquiry]; ?></td>
-				    <td><?php echo $status; ?></td>
+				    <td>
+					<?php if ($r[cb_status] == 0) { ?>
+					    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?
+						enq_id=<?php echo $r[enq_id]; ?>
+						&page=<?php echo $adminCallBack->getPageNo();?>
+						&row_pp=<?php echo $adminCallBack->getRecordsPerPage(); ?>
+						&cbStatus=<?php echo $adminCallBack->getCbStatus(); ?>
+						&param1=value1
+						&param2=value2
+						&fromDate=<?php echo $datePicker->getFromDate(); ?>
+						&toDate=<?php echo $datePicker->getToDate(); ?>
+						&dateRangeSet=<?php echo $datePicker->getDateRangeSet() ?>"
+					        class="btn danger">Callback</a>
+					<?php } else { ?>
+						<a href="#" class="btn success disabled">Answered</a>
+					<?php } ?>				    
+				    </td>
 				</tr>			
 			    
 			<?php } } else { ?>
