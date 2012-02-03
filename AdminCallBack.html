@@ -21,8 +21,8 @@
 	<div id="container">
 	    <div id="datePickerHolder" class="group">
 		<div id="switchDisplay">
-		    <button id="viewStatBtn" class="btn default pull-left">{$_View Statistics}</button>		    
-		    <button id="viewDashboardBtn" class="btn default pull-left">{$_View Dashboard}</button>
+		    <button id="viewStatBtn" class="btn default pull-left">{_View Statistics}</button>		    
+		    <button id="viewDashboardBtn" class="btn default pull-left">{_View Dashboard}</button>
 		</div>
 
 		<form action="" method="get" class="pull-right">
@@ -48,12 +48,12 @@
 		<div id="statPlaceholder"></div>
 	    </div>	    
 
-	    <p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>{$_Enable Tooltip}</p>
+	    <p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>{_Enable Tooltip}</p>
 
 	    <div id="viewDashboardPnl">
 		<ul id="items">
 		    <li>
-			<h3>{$_Total Callbacks}</h3>    	
+			<h3>{_Total Callbacks}</h3>    	
 			<p class="dashboard">
 			    <span class="data">				
 				<a href="?cbStatus=2&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
@@ -64,7 +64,7 @@
 		    </li>
 
 		    <li>
-			<h3>{$_Answered Callbacks}</h3>    	
+			<h3>{_Answered Callbacks}</h3>    	
 			<p class="dashboard">
 			    <span class="data">				
 				<a href="?cbStatus=1&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
@@ -75,7 +75,7 @@
 		    </li>
 
 		    <li>
-			<h3>{$_Unanswered Callbacks}</h3>   <!-- {_Unanswered Callbacks} Language Variable--> 	
+			<h3>{_Unanswered Callbacks}</h3>
 			<p class="dashboard">
 			    <span class="data">				
 				<a href="?cbStatus=0&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
@@ -96,7 +96,7 @@
 	    <div id="middle">
 		<div id="search" class="group">
 		    <div class="pull-left">
-			<label for="filter">{$_Filter Record:}</label> 
+			<label for="filter">{_Filter Record:}</label> 
 			<input type="text" name="filter" value="" id="filter">			
 		    </div>
 		    <span id="dateFilter" class="pull-right">
@@ -114,12 +114,12 @@
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
 		    <tr>			
-			<th>{$_Date}</th>
-			<th>{$_Name}</th>
-			<th>{$_Email}</th>
-			<th>{$_Phone No}</th>
-			<th>{$_Enquiry}</th>
-			<th>{$_Status}</th>
+			<th>{_Date}</th>
+			<th>{_Name}</th>
+			<th>{_Email}</th>
+			<th>{_Phone No}</th>
+			<th>{_Enquiry}</th>
+			<th>{_Status}</th>
 		    </tr>
 		    </thead>
 		    <tbody>
@@ -149,9 +149,9 @@
 						&fromDate={$fromDate}
 						&toDate={$toDate}
 						&dateRangeSet={$dateRangeSet}"
-					        class="btn danger">Callback</a>
+					        class="btn danger">{_Callback}</a>
 					<!--?php } else { ?-->
-						<a href="#" class="btn success disabled">Answered</a>
+						<a href="#" class="btn success disabled">{_Answered}</a>
 					<!--?php } ?-->
 				    </td>
 				</tr>			
