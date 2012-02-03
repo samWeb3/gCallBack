@@ -28,6 +28,7 @@ $crud = new CRUD();
 	    var dayRange = new Array();
 	    var totalRec = new Array();//To hold all request for Callback
 	    var ansRec = new Array();//To hold answered callback records
+	    var recType = "CallBacks"; //For Label
 	</script>
     </head>
     <body>
@@ -296,7 +297,7 @@ $crud = new CRUD();
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.js"></script>
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.symbol.js"></script>
 	<script language="javascript" type="text/javascript" src="js/stat/jquery.flot.stack.js"></script>
-	<script language="javascript" type="text/javascript" src="js/callbackStats.js"></script>
+	<script language="javascript" type="text/javascript" src="js/graphicalStats.js"></script>
 	<script language="javascript" type="text/javascript" src="js/adminCallBack.js"></script>	
     </body>
 </html>
