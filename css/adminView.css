@@ -1,0 +1,123 @@
+/*Search Button Style */
+#search label{
+    text-align: left;
+    font-weight: bolder;
+    width: auto !important;
+    padding-right: 7px;	
+}
+/* Dashboard Paginator */
+ol#pagination{     
+    margin-left: 6px;
+}
+    ol#pagination li.prev {
+	left: -34px !important;
+    }
+    /* Custom Paginator Style */
+    .cPaginator{
+	height: 36px;
+	margin-bottom: 18px;
+    }
+    .pContainer{
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	float: right;
+	margin: 0;       
+    }
+    .pContainer a {        
+	border-right: 1px solid rgba(0, 0, 0, 0.15);
+	line-height: 34px;
+	padding: 0 14px;
+	text-decoration: none;
+	float: left;	
+    }   
+    .pContainer a:hover{
+	background-color: #C7EEFE;  
+	text-decoration: none;
+    }
+    .pContainer .disabled a, .pContainer .disabled a:hover {
+	background-color: transparent;
+	color: #BFBFBF;
+    }
+    .pContainer a.active , .pContainer a.active:hover {
+	background-color: #C7EEFE;    
+    }
+    .pContainer .last a, .pContainer .last a:hover {
+	border: none !important;
+    } 
+/*AdminView Style*/
+#dateRange {
+    border: 0px solid red;
+}
+    #CallBackTable  td {
+	color: #808080;
+    }
+    #CallBackTable td, #CallBackTable th {    
+	overflow: hidden;     
+    }    
+/*Graphical statPlaceholder style*/
+#statPlaceholder {
+    margin: 0px auto;  
+    width: 760px;
+    height: 300px;    
+    margin-bottom: 20px;    
+}
+    .yAxis .tickLabel {   
+	padding-right: 5px;    
+    }
+    #statPlaceholder table{
+	width: 0px !important;
+    }
+    #statPlaceholder table td, #statPlaceholder table th{
+	padding: 5px 5px 4px;
+	background-color: rgba(241, 241, 241, 0.2);   
+    }
+    #tooltipContainer{
+	display: none;
+    }
+/*Dashboard Pnl style*/
+#viewDashboardPnl{    
+    width: 804px;
+    margin: 0px auto;
+    margin-bottom: 15px;
+}
+/*Extend some bootstrap css*/
+.btn:active{
+    outline: none !important;
+}
+.btn:focus{
+    outline: none !important;
+}
+.btn.disabled{
+    outline: none !important;
+}
+.small {
+    font-size: 11px !important;
+}
+.unHighlight{
+    color: #BFBFBF;
+}
+.block-message-header{
+    color: #666666;
+    border-bottom: 1px solid #DDDDDD;
+    font-weight: bold;
+}
+.block-message-body{
+    color: #666666;
+}
+.group:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.highlightDate{
+    color: khaki;   
+}
+.unixDate{
+    display: none;
+}
+.qDate{
+    white-space: nowrap;
+}

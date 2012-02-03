@@ -18,10 +18,12 @@ $crud = new CRUD();
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="css/dr/jquery.ui.all.css" rel="stylesheet" />
 	<link href="css/dr/demos.css" rel="stylesheet" />
-	<link href="css/callback.css" rel="stylesheet" />
+	<link href="css/adminView.css" rel="stylesheet" />
 	<link href="css/hacks.css" rel="stylesheet" />
 	<link href="css/bootstrap.css" rel="stylesheet" />	
 	<link href="css/easypaginate.css" rel="stylesheet" />
+	<!--Diff css-->
+	<link href="css/adminCallback.css" rel="stylesheet" />
 	    
 	<script>
 	    //need this until php sets the value, Therefore need here

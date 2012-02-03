@@ -1,0 +1,10 @@
+#container {
+     margin: 0px auto;
+     width: 818px;     
+}
+#CallBackTable  td, #CallBackTable  th {
+    max-width: 210px;
+}
+#CallBackTable  .alert-message div{
+    margin-top: 0px;
+}
