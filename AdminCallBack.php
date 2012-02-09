@@ -5,11 +5,13 @@ require_once 'class/gfCallBackStats.class.php';
 require_once 'FirePHP/firePHP.php';
 require_once 'class/gfDatePicker.class.php';
 require_once 'class/gfDebug.class.php';
+require_once 'class/gfInstances.class.php';
 
 //Set the Debugging mode to True
 Debug::setDebug(false);
 
 $crud = new CRUD();
+$instance = new gfInstances();
 ?>  
 <!DOCTYPE html>
 <html>
@@ -35,13 +37,13 @@ $crud = new CRUD();
     </head>
     <body>
 	<?php
-	$instanceId = 151; //instance of partner
+	
 	$numLink = 10; //number of link
 	
 	DatePicker::setNoOfDays(31);
+	
 	$datePicker = new DatePicker($fromDate, $toDate, $dateRangeSet);
-
-	$cbStats = new CallBackStats($crud, $instanceId, $datePicker);
+	$cbStats = new CallBackStats($crud, $datePicker, $instance);
 	try {
 
 	    //Get the From and To Date Range
@@ -73,7 +75,7 @@ $crud = new CRUD();
 		$cbStats->monthStats();
 	    }
 
-	    $adminCallBack = new AdminCallBack($crud, $instanceId, $datePicker);
+	    $adminCallBack = new AdminCallBack($crud, $datePicker, $instance);
 
 	    //Check if Callback link has been clicked
 	    if ((isset($_GET['enq_id']))) {

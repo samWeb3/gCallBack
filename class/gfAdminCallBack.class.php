@@ -8,7 +8,7 @@ class AdminCallBack {
 
     private $_crud;
     private $_datePicker;
-    private $_instanceId;
+    private $_instance;
     private $_cbStatus;    
     private $_pager;   
     
@@ -18,18 +18,18 @@ class AdminCallBack {
      * @param type $instanceId		Instance Id of Partner
      * @param DatePicker $datePicker	reference to datePicker object
      */
-    public function __construct(Crud $crud, $instanceId, DatePicker $datePicker) {
+    public function __construct(Crud $crud, DatePicker $datePicker, gfInstances $instance) {
 	if (empty($crud)) {
 	    throw new Exception("Crud Object not provided");
 	}
-	if (empty($instanceId)) {
+	if (empty($instance)) {
 	    throw new Exception("Partner ID Not provided");
 	}
 	if (empty($datePicker)) {
 	    throw new Exception("Date Object Not provided");
 	}
 	$this->_datePicker = $datePicker;	
-	$this->_instanceId = $instanceId;
+	$this->_instance = $instance;
 	$this->_crud = $crud;
     }
 
@@ -94,7 +94,7 @@ class AdminCallBack {
 	$sql = "SELECT callbackuser.user_id, enq_id, instanceId, name, email, telephone, enquiry, callBackDate, cb_status
 		FROM callbackuserenquiry, callbackuser		
 		WHERE callbackuser.user_id = callbackuserenquiry.user_id
-		AND callbackuserenquiry.instanceId = $this->_instanceId";
+		AND callbackuserenquiry.instanceId =". $this->getInstId();
 	if ($this->_datePicker->getUnixFromDate() != "" && $this->_datePicker->getUnixToDate() != "") {	    
 	    $sql .= " AND callBackDate > ".$this->_datePicker->getUnixFromDate().
 		    " AND callBackDate < ". $this->_datePicker->getUnixToDate();
@@ -126,7 +126,7 @@ class AdminCallBack {
      * @return int Number of answered Call Back 
      */
     public function countAnsCB() {	
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '1', 'callBackDate', 
+	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->getInstId(), 'cb_status', '1', 'callBackDate', 
 		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
     }
@@ -137,7 +137,7 @@ class AdminCallBack {
      * @return int Number of Unanswered Call Back
      */
     public function countUnAnsCB() {	
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, 'cb_status', '0', 'callBackDate', 
+	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->getInstId(), 'cb_status', '0', 'callBackDate', 
 		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
     }
@@ -148,7 +148,7 @@ class AdminCallBack {
      * @return int Number all Call Back
      */
     public function countTotCB() {
-	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->_instanceId, null, null, 'callBackDate', 
+	$rs = $this->_crud->dbSelectFromTo('callbackuserenquiry', $this->getInstId(), null, null, 'callBackDate', 
 		$this->_datePicker->getUnixFromDate(), $this->_datePicker->getUnixToDate());
 	return count($rs);
     }
@@ -167,6 +167,14 @@ class AdminCallBack {
     public function getRecordsPerPage(){
 	return $this->_pager->getRowsPerPage();
     }    
+    
+    /**************************************************
+     * DELEGATION METHOD
+     **************************************************/
+    private function getInstId(){
+	return $this->_instance->getInstanceId();
+    }
+
 }
 
 ?>

@@ -8,21 +8,21 @@ class CallBackStats {
 
     private $_crud;
     private $_datePicker;
-    private $_instanceId;        
+    private $_instance;        
 
     /**
      *
      * @param int $instanceId	Instance Id of a partner website
      */
-    public function __construct(CRUD $crud, $instanceId, DatePicker $datePicker) {	
-	if (empty($instanceId)){
+    public function __construct(Crud $crud, DatePicker $datePicker, gfInstances $instance) {	
+	if (empty($instance)){
 	    throw new Exception("Partner ID Not provided");
 	}
 	if (empty($datePicker)) {
 	    throw new Exception("Date Object Not provided");
 	}
 	$this->_datePicker = $datePicker;
-	$this->_instanceId = $instanceId;
+	$this->_instance = $instance;
 	$this->_crud = $crud;
     }
 
@@ -144,7 +144,7 @@ class CallBackStats {
 	} 			
 		
 	$stmt = $this->_crud->getDbConn()->prepare($sql);
-	$stmt->bindParam(':insId', $this->_instanceId, PDO::PARAM_STR);
+	$stmt->bindParam(':insId', $this->getInstId(), PDO::PARAM_STR);
 	$stmt->bindParam(':fromDate', $fromDate, PDO::PARAM_STR);
 	$stmt->bindParam(':fromDateEnd', $fromDateEnd, PDO::PARAM_STR);
 	$stmt->execute();
@@ -181,6 +181,13 @@ class CallBackStats {
     
     public function getToDate(){
 	return $this->_datePicker->getUnixToDate();
+    }
+    
+     /**************************************************
+     * DELEGATION METHOD
+     **************************************************/
+    private function getInstId(){
+	return $this->_instance->getInstanceId();
     }
 }
 
