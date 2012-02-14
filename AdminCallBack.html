@@ -23,26 +23,26 @@
 	<div id="container">
 	    <div id="datePickerHolder" class="group">
 		<div id="switchDisplay">
-		    <button id="viewStatBtn" class="btn default pull-left">{_View Statistics}</button>		    
-		    <button id="viewDashboardBtn" class="btn default pull-left">{_View Dashboard}</button>
+		    <button id="viewStatBtn" class="btn default pull-left">{{_View Statistics}}</button>		    
+		    <button id="viewDashboardBtn" class="btn default pull-left">{{_View Dashboard}}</button>
 		</div>
 
 		<form action="" method="get" class="pull-right">
 		    <!--Used by JavaScript-->
-		    <input class="medium" type="text" id="from" name="from" placeholder="{_Date From}" />
-		    <input class="medium" type="text" id="to" name="to" placeholder="{_Date To}" />
+		    <input class="medium" type="text" id="from" name="from" placeholder="{{_Date From}}" />
+		    <input class="medium" type="text" id="to" name="to" placeholder="{{_Date To}}" />
 
 		    <!--Used by PHP-->
 		    <input type="hidden" id="fromDate" name="fromDate"/>
 		    <input type="hidden" id="toDate" name="toDate"/>
 
-		    <input type="submit" id="date" name="dateRangeSet" value="{_Display}" class="btn default"/>
+		    <input type="submit" id="date" name="dateRangeSet" value="{{_Display}}" class="btn default"/>
 		</form>
 	    </div>
 
 	    <!--?php if (isset($infoMessage)) { ?-->
 		<div class='alert-message info fade in clear' id="dateRangeMsg" data-alert='alert'><a class='close' href='#'>&times;</a>
-		    {$infoMessage}		    
+		    {{$infoMessage}}		    
 		</div>
 	    <!--?php } ?-->
 	    
@@ -50,38 +50,38 @@
 		<div id="statPlaceholder"></div>
 	    </div>	    
 
-	    <p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>{_Enable Tooltip}</p>
+	    <p id="tooltipContainer"><input id="enableTooltip" type="checkbox" checked>{{_Enable Tooltip}}</p>
 
 	    <div id="viewDashboardPnl">
 		<ul id="items">
 		    <li>
-			<h3>{_Total Callbacks}</h3>    	
+			<h3>{{_Total Callbacks}}</h3>    	
 			<p class="dashboard">
 			    <span class="data">				
-				<a href="?cbStatus=2&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
-				   {$totalCB}
+				<a href="?cbStatus=2&fromDate={{$fromDate}}&toDate={{$toDate}}&dateRangeSet={{$dateRangeSet}}" class="dashboardLink" id="totCB">
+				   {{$totalCB}}
 				</a>
 			    </span>
 			</p>
 		    </li>
 
 		    <li>
-			<h3>{_Answered Callbacks}</h3>    	
+			<h3>{{_Answered Callbacks}}</h3>    	
 			<p class="dashboard">
 			    <span class="data">				
-				<a href="?cbStatus=1&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
-				   {$ansCB}				   
+				<a href="?cbStatus=1&fromDate={{$fromDate}}&toDate={{$toDate}}&dateRangeSet={{$dateRangeSet}}" class="dashboardLink" id="totCB">
+				   {{$ansCB}}				   
 				</a>
 			    </span>
 			</p>
 		    </li>
 
 		    <li>
-			<h3>{_Unanswered Callbacks}</h3>
+			<h3>{{_Unanswered Callbacks}}</h3>
 			<p class="dashboard">
 			    <span class="data">				
-				<a href="?cbStatus=0&fromDate={$fromDate}&toDate={$toDate}&dateRangeSet={$dateRangeSet}" class="dashboardLink" id="totCB">
-				   {$unAnsCB} 				   
+				<a href="?cbStatus=0&fromDate={{$fromDate}}&toDate={{$toDate}}&dateRangeSet={{$dateRangeSet}}" class="dashboardLink" id="totCB">
+				   {{$unAnsCB}} 				   
 				</a>
 			    </span>
 			</p>		  
@@ -91,24 +91,24 @@
 	    
 	    <!--?php if (isset($errorMessage)) { ?-->
 		<div class='alert-message warning fade in' data-alert='alert'><a class='close' href='#'>&times;</a>
-		   {$errorMessage}
+		   {{$errorMessage}}
 		</div>
-	    <!--?php } ?-->
+	    <!--?php }} ?-->
 	    
 	    <div id="middle">
 		<div id="search" class="group">
 		    <div class="pull-left">
-			<label for="filter">{_Filter Record:}</label> 
+			<label for="filter">{{_Filter Record:}}</label> 
 			<input type="text" name="filter" value="" id="filter">			
 		    </div>
 		    <span id="dateFilter" class="pull-right">
 			    <form action="" method="get" class="pull-right">
-				<input type="hidden" name="cbStatus" id="cbStatus" value="{$cbStatus}">				
-				<input type="hidden" name="fromDate" value="{$fromDate}">
-				<input type="hidden" name="toDate" value="{$toDate}">
-				<input type="hidden" name="dateRangeSet" value="{$dateRangeSet}">	
-				<label id="disRecHelpText" class="help-inline">{_Enter valid number and press &#60;ENTER&#62; !&nbsp;}</label>
-				<input id="disRecord" class="input-small span2" type="text" size="15" placeholder="{_Display Record}" name="row_pp">				
+				<input type="hidden" name="cbStatus" id="cbStatus" value="{{$cbStatus}}">				
+				<input type="hidden" name="fromDate" value="{{$fromDate}}">
+				<input type="hidden" name="toDate" value="{{$toDate}}">
+				<input type="hidden" name="dateRangeSet" value="{{$dateRangeSet}}">	
+				<label id="disRecHelpText" class="help-inline">{{_Enter valid number and press &#60;ENTER&#62; !&nbsp;}}</label>
+				<input id="disRecord" class="input-small span2" type="text" size="15" placeholder="{{_Display Record}}" name="row_pp">				
 			    </form>
 			</span>
 		</div>	    
@@ -116,12 +116,12 @@
 		<table class="zebra-striped tablesorter" id="CallBackTable">
 		    <thead>
 		    <tr>			
-			<th>{_Date}</th>
-			<th>{_Name}</th>
-			<th>{_Email}</th>
-			<th>{_Phone No}</th>
-			<th>{_Enquiry}</th>
-			<th>{_Status}</th>
+			<th>{{_Date}}</th>
+			<th>{{_Name}}</th>
+			<th>{{_Email}}</th>
+			<th>{{_Phone No}}</th>
+			<th>{{_Enquiry}}</th>
+			<th>{{_Status}}</th>
 		    </tr>
 		    </thead>
 		    <tbody>
@@ -130,30 +130,30 @@
 				<tr>
 				    <td>
 					<!--use UnixTimeStamp to sort date properly, then hide it using css-->
-					<span class="unixDate">{$callBackDate}</span>
-					<span class="qDate">{$convertUnixToDMY}</span>
+					<span class="unixDate">{{$callBackDate}}</span>
+					<span class="qDate">{{$convertUnixToDMY}}</span>
 					<br />
-					<span class="small unHighlight qtime">{$convertUnixToTime}</span>
+					<span class="small unHighlight qtime">{{$convertUnixToTime}}</span>
 				    </td>
-				    <td>{$userName}</td>
-				    <td>{$userEmail}</td>
-				    <td>{$userTel}</td>
-				    <td>{$userEnquiry}</td>
+				    <td>{{$userName}}</td>
+				    <td>{{$userEmail}}</td>
+				    <td>{{$userTel}}</td>
+				    <td>{{$userEnquiry}}</td>
 				    <td>
 					<!--?php if ($r[cb_status] == 0) { ?-->
 					    <a href="?
-						enq_id={$enqId}
-						&page={$pageNo}
-						&row_pp={$recordsPerPage}
-						&cbStatus={$cbStatus}
+						enq_id={{$enqId}}
+						&page={{$pageNo}}
+						&row_pp={{$recordsPerPage}}
+						&cbStatus={{$cbStatus}}
 						&param1=value1
 						&param2=value2
-						&fromDate={$fromDate}
-						&toDate={$toDate}
-						&dateRangeSet={$dateRangeSet}"
-					        class="btn danger">{_Callback}</a>
+						&fromDate={{$fromDate}}
+						&toDate={{$toDate}}
+						&dateRangeSet={{$dateRangeSet}}"
+					        class="btn danger">{{_Callback}}</a>
 					<!--?php } else { ?-->
-						<a href="#" class="btn success disabled">{_Answered}</a>
+						<a href="#" class="btn success disabled">{{_Answered}}</a>
 					<!--?php } ?-->
 				    </td>
 				</tr>			
@@ -162,8 +162,8 @@
 				<tr>
 				    <td colspan="6">
 					<div class='alert-message block-message error' data-alert='alert'>
-					    <div class="block-message-header">{_Oops! Records not available!}</div>
-					    <div class="block-message-body">{_Please enter valid date range and try again...}</div>					    
+					    <div class="block-message-header">{{_Oops! Records not available!}}</div>
+					    <div class="block-message-body">{{_Please enter valid date range and try again...}}</div>					    
 					</div>
 				    </td>
 				</tr>			    
@@ -172,7 +172,7 @@
 		</table>
 		
 		<div class="cPaginator">
-		    {$paginatorNav}		    
+		    {{$paginatorNav}}		    
 		</div>
 	    </div>	    
 	</div>

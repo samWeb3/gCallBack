@@ -29,11 +29,17 @@ class CallBackForm {
      */
     public function addCallBackRequest() {
 	$dbRow = $this->getRow('callbackuser', 'email', $this->_user->getEmail());
-
+	
 	//if email exist
 	if ($dbRow[email] == $this->_user->getEmail()) {
+	    echo "DBEmail: ".$dbRow[email]."<br>";
+	    echo "DBUser: ".$dbRow[user_id]."<br>";
+	    echo "DBTel: ".$dbRow[telephone]."<br>";
 	    $this->updateExistingRecord($dbRow[user_id], $dbRow[telephone]);
 	} else {
+	    echo "DBEmail: ".$dbRow[email]."<br>";
+	    echo "DBUser: ".$dbRow[user_id]."<br>";
+	    echo "DBTel: ".$dbRow[telephone]."<br>";
 	    $this->updateNewRecord();
 	}
     }
